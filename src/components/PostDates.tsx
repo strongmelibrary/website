@@ -1,4 +1,4 @@
-import DateTime from "./DateTime";
+import DateTime from "./DateTime/DateTime";
 
 import React from "react";
 const PostDates = ({

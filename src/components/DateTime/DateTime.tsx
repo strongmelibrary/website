@@ -1,4 +1,5 @@
 import React from "react";
+
 const DateTime = ({ date }: { date: string }) => {
   return (
     <time dateTime={date}>

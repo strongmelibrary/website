@@ -1,4 +1,4 @@
-import DateTime from "./DateTime";
+import DateTime from "./DateTime/DateTime";
 import Tag from "./Tag";
 import React from "react";
 
