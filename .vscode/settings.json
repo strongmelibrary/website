@@ -1,0 +1,12 @@
+{
+    "dotenv.enableAutocloaking": true,
+    "conventionalCommits.scopes": [
+        "readme",
+        "ui",
+        "config",
+        "extensions",
+        "rss",
+        "routes",
+        "deps"
+    ]
+}
