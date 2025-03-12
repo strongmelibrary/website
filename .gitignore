@@ -268,3 +268,5 @@ sketch
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,jetbrains+all,react,node
+
+*storybook.log

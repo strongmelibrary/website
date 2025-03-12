@@ -1,13 +1,14 @@
-function DateTime({ date }: { date: string }) {
+import React from "react";
+const DateTime = ({ date }: { date: string }) => {
   return (
     <time dateTime={date}>
-      {new Date(date).toLocaleDateString('en-us', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
+      {new Date(date).toLocaleDateString("en-us", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
       })}
     </time>
   );
-}
+};
 
 export default DateTime;

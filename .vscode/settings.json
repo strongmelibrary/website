@@ -1,12 +1,13 @@
 {
-    "dotenv.enableAutocloaking": true,
-    "conventionalCommits.scopes": [
-        "readme",
-        "ui",
-        "config",
-        "extensions",
-        "rss",
-        "routes",
-        "deps"
-    ]
+  "dotenv.enableAutocloaking": true,
+  "conventionalCommits.scopes": [
+    "readme",
+    "ui",
+    "config",
+    "extensions",
+    "rss",
+    "routes",
+    "deps"
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

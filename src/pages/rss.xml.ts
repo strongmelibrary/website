@@ -1,8 +1,10 @@
-import rss from '@astrojs/rss';
+import rss from "@astrojs/rss";
 
-import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
+import { SITE_TITLE, SITE_DESCRIPTION } from "../config";
 
-const postImportResult = import.meta.glob('./blog/**/*.{md,mdx}', { eager: true });
+const postImportResult = import.meta.glob("./blog/**/*.{md,mdx}", {
+  eager: true,
+});
 const posts = Object.values(postImportResult);
 
 export const get = () =>

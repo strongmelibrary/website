@@ -1,6 +1,6 @@
-@import '@fontsource/jetbrains-mono/variable';
-@import '@fontsource/lexend/variable';
-@import 'shiki.css';
+@import "@fontsource/jetbrains-mono/variable";
+@import "@fontsource/lexend/variable";
+@import "shiki.css";
 
 /* The integration's default injected base.css file */
 @tailwind base;

@@ -1,3 +1,4 @@
+import React from "react";
 interface HeaderProps
   extends React.DetailedHTMLProps<
     React.AnchorHTMLAttributes<HTMLAnchorElement>,
@@ -9,7 +10,9 @@ function HeaderLink(props: HeaderProps) {
   return (
     <a
       href={href}
-      className={[className, 'px-4 hover:text-rose-600 opacity-100'].filter(Boolean).join(' ')}
+      className={[className, "px-4 hover:text-rose-600 opacity-100"]
+        .filter(Boolean)
+        .join(" ")}
       {...props}
     >
       {children}

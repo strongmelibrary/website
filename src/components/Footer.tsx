@@ -1,14 +1,28 @@
-import { GITHUB, LICENSE_NOTICE, MAINTENANCE_NOTICE, OWNER, START_YEAR, TWITTER } from '../config';
+import {
+  GITHUB,
+  LICENSE_NOTICE,
+  MAINTENANCE_NOTICE,
+  OWNER,
+  START_YEAR,
+  TWITTER,
+} from "../config";
+import React from "react";
 
-function Footer() {
+const Footer = () => {
   return (
     <footer className="py-8 mt-24 bg-slate-900">
       <div className="mx-32 mt-8 flex flex-row justify-between">
         <div className="flex flex-col">
-          <a href={`https://twitter.com/${TWITTER}`} className="text-slate-400 hover:text-rose-600">
+          <a
+            href={`https://twitter.com/${TWITTER}`}
+            className="text-slate-400 hover:text-rose-600"
+          >
             Twitter
           </a>
-          <a href={`https://github.com/${GITHUB}`} className="text-slate-400 hover:text-rose-600">
+          <a
+            href={`https://github.com/${GITHUB}`}
+            className="text-slate-400 hover:text-rose-600"
+          >
             GitHub
           </a>
           <a href="/license/" className="text-slate-400 hover:text-rose-600">
@@ -25,6 +39,6 @@ function Footer() {
       </div>
     </footer>
   );
-}
+};
 
 export default Footer;

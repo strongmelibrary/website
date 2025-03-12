@@ -1,4 +1,5 @@
-import Tile from './Tile';
+import Tile from "./Tile";
+import React from "react";
 
 function PostsList({ posts }: { posts: Record<string, any>[] }) {
   return (
