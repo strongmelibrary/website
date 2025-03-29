@@ -17,8 +17,15 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages-build
+    env:
+      PUBLIC_SITE_TITLE: ${{ vars.PUBLIC_SITE_TITLE }}
+      PUBLIC_SITE_DESCRIPTION: ${{ vars.PUBLIC_SITE_DESCRIPTION }}
+      PUBLIC_OWNER: ${{ vars.PUBLIC_OWNER }}
+      PUBLIC_START_YEAR: ${{ vars.PUBLIC_START_YEAR }}
+      PUBLIC_LICENSE_NOTICE: ${{ vars.PUBLIC_LICENSE_NOTICE }}
+      PUBLIC_TWITTER: ${{ vars.PUBLIC_TWITTER }}
+      PUBLIC_GITHUB: ${{ vars.PUBLIC_GITHUB }}
+      PUBLIC_LIBRARY_HOURS: ${{ vars.PUBLIC_LIBRARY_HOURS }}
     steps:
       - name: Check Env vars
         run: env
