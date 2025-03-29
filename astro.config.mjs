@@ -10,7 +10,7 @@ import { remarkReadingTime } from "./remark-reading-time.mjs";
 // https://astro.build/config
 export default defineConfig({
   base: '/website',
-  site: "https://strongmelibrary.github.io/website",
+  site: "https://strongmelibrary.github.io",
   markdown: {
     syntaxHighlight: false,
     remarkPlugins: [
@@ -29,5 +29,4 @@ export default defineConfig({
     plugins: [tailwindcss({ config: { applyBaseStyles: false } })],
   },
   integrations: [mdx(), react(), sitemap()],
-  outDir: "./docs",
 });
