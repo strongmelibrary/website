@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React from "react";
-import brandMark from "../../assets/brand/variant_mark.svg";
-import brandTitle from "../../assets/brand/title.svg";
+import brandMark from "../../../public/brand/variant_mark.svg";
+import brandTitle from "../../../public/brand/title.svg";
 
 import { SITE_TITLE } from "../../config";
 

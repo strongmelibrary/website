@@ -4,7 +4,7 @@ import { ReadMoreBlock } from "../ReadMoreBlock/ReadMoreBlock";
 import { Button, Input } from '@headlessui/react';
 import { PiMagnifyingGlassBold } from 'react-icons/pi';
 
-import heroImage from "../../assets/photos/unsplash/annie-spratt-wseixWvrsD4-unsplash.jpg"; // Example image import
+import heroImage from "../../../public/photos/unsplash/annie-spratt-unsplash.jpg"; // Example image import
 
 export interface Post {
   title: string;
