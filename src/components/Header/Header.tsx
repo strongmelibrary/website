@@ -1,6 +1,6 @@
 import HeaderLink from "../HeaderLink/HeaderLink";
 import React from "react";
-import { SITE_TITLE } from "../../config";
+import { BASE_URL, SITE_TITLE } from "../../config";
 import { HeaderLogo } from "../HeaderLogo/HeaderLogo";
 import clsx from "clsx";
 import { Brands, SocialButton } from "../SocialButton/SocialButton";
@@ -64,7 +64,7 @@ export const Header = ({
             "lg:mx-0",
           )}
         >
-          <a href="/">
+          <a href={BASE_URL}>
             <HeaderLogo />
           </a>
           <div className="flex-grow" />

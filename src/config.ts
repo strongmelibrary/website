@@ -5,7 +5,7 @@ import { z } from 'zod';
 // Place any global data in this file.
 // You can import this data from anywhere in your site by using the `import` keyword.
 
-export const BASE_URL = import.meta.env.BASE_URL;
+export const BASE_URL = import.meta.env.BASE_URL || '';
 export const SITE_TITLE = import.meta.env.PUBLIC_SITE_TITLE;
 export const SITE_DESCRIPTION = import.meta.env.PUBLIC_SITE_DESCRIPTION;
 export const OWNER = import.meta.env.PUBLIC_OWNER;

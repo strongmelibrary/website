@@ -3,7 +3,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 
-import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
+import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL } from '../config';
 import { HeroIndex, Post } from '../components/HeroIndex/HeroIndex';
 import TodaysHours from '../components/TodaysHours/TodaysHours';
 
@@ -50,13 +50,13 @@ const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
   </head>
   <body class="dark:bg-slate-900">
     <Header links={[
-      { href: '/', label: 'Home', isActive: true },
-      { href: '/events', label: 'Events' },
-      { href: '/catalog', label: 'Catalog' },
-      { href: '/policies', label: 'Policies' },
-      { href: '/services', label: 'Services' },
-      { href: '/links', label: 'Links' },
-      { href: '/friends', label: 'Friends' },
+      { href: BASE_URL, label: 'Home', isActive: true },
+      { href: BASE_URL+'events', label: 'Events' },
+      { href: BASE_URL+'catalog', label: 'Catalog' },
+      { href: BASE_URL+'policies', label: 'Policies' },
+      { href: BASE_URL+'services', label: 'Services' },
+      { href: BASE_URL+'links', label: 'Links' },
+      { href: BASE_URL+'friends', label: 'Friends' },
     ]} 
     socialLinks={[
       { href: 'https://www.facebook.com/StrongMaine/', brand: 'facebook'}
