@@ -8,6 +8,7 @@ import { HeroIndex, Post } from '../components/HeroIndex/HeroIndex';
 import TodaysHours from '../components/TodaysHours/TodaysHours';
 
 import clsx from 'clsx';
+import { LibraryHoursBlock } from '../components/LibraryHoursBlock/LibraryHoursBlock';
 
 const news: Post[] = (await Astro.glob('./news/**/*.{md,mdx}')).sort(
   (a, b) =>
@@ -65,10 +66,22 @@ const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
       <TodaysHours client:only />
     </HeroIndex>
     <main
-      class={clsx("grid", "lg:grid-cols-3", "grid-cols-1", "w-full", "md:w-3/4", "mx-auto", "gap-6", "p-4", "mt-4")}
+      class={clsx(
+        "grid",
+        "mt-8",
+        "md:grid-cols-3",
+        "grid-cols-1",
+        "gap-y-[32px]",
+        "gap-x-[32px]",
+        "lg:w-4xl",
+        "lg:mx-auto",
+        "lg:px-0",
+        "px-[16px]",
+        "w-full"
+      )}
     >
       <div class={clsx(
-        "lg:col-span-2",
+        "md:col-span-2",
         "col-span-1",
         "flex",
         "flex-col",
@@ -121,7 +134,7 @@ const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
         </p>
       </div>
       <div
-      className={clsx(
+      class={clsx(
         "col-span-1",
         "flex",
         "flex-col",
@@ -130,19 +143,27 @@ const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
         "gap-2"
       )}
     >
-        <h2 class="text-2xl font-bold mb-4">Latest News</h2>
-        {news.length > 0 ? (
-          news.map((post) => (
-            <div key={post.url} class="mb-4">
-              <h3 class="text-xl font-semibold">{post.title}</h3>
-              <p class="text-sm text-gray-500">{post.date} - {post.category}</p>
-              <p>{post.description}</p>
-              <a href={post.url} class="text-blue-500 hover:underline">Read more</a>
-            </div>
-          ))
-        ) : (
-          <p>No news available.</p>
-        )}
+        <div class={clsx(
+          "w-full",
+          "md:order-first",
+          "order-last"
+        )}>
+          <h2 class="text-2xl font-bold mb-4">Latest News</h2>
+          {news.length > 0 ? (
+            news.map((post) => (
+              <div key={post.url} class="mb-4">
+                <h3 class="text-xl font-semibold">{post.title}</h3>
+                <p class="text-sm text-gray-500">{post.date} - {post.category}</p>
+                <p>{post.description}</p>
+                <a href={post.url} class="text-blue-500 hover:underline">Read more</a>
+              </div>
+            ))
+          ) : (
+            <p>No news available.</p>
+          )}
+        </div>
+
+        <LibraryHoursBlock />
       </div>
 
     </main>

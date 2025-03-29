@@ -61,7 +61,7 @@ export const LibraryHoursBlock = ({
       "relative", // to position the pseudo-element
       "text-info-light",
       "w-full",
-      "min-w-[300px]", // Ensure a minimum width
+      // "min-w-[300px]", // Ensure a minimum width
     )}
   >
     <div className={clsx(
