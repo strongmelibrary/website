@@ -4,7 +4,8 @@ import { ReadMoreBlock } from "../ReadMoreBlock/ReadMoreBlock";
 import { Button, Input } from '@headlessui/react';
 import { PiMagnifyingGlassBold } from 'react-icons/pi';
 
-import heroImage from "../../../public/photos/unsplash/annie-spratt-unsplash.jpg"; // Example image import
+import heroImage from "../../../public/photos/unsplash/annie-spratt-unsplash.jpg"; 
+import flyingBooks from "../../../public/flying_books.svg"; 
 
 export interface Post {
   title: string;
@@ -160,6 +161,7 @@ export const HeroIndex = ({
         </div>
         <div
           className={clsx(
+            "relative",
             "flex",
             "flex-row",
             "items-center",
@@ -170,12 +172,29 @@ export const HeroIndex = ({
             "h-auto",
             "w-full",
             "py-10",
-            "bg-accent",
+            // bg gradient accent -> accent-light
+            "bg-gradient-to-r",
+            "from-accent",
+            "to-accent-light",
             "text-neutral-0",
           )}
         >
-          {children}
+          <img src={flyingBooks} alt="Flying Books" className={clsx(
+            "w-full", 
+            "h-full", 
+            "object-contain",
+            "absolute",
+            "top-0",
+            "left-0",
+            "z-0",
+            )} />
+          <div className={clsx(
+            "relative",
+            "z-10",
+          )}>
+            {children}
           </div>
+        </div>
       </div>
     </div>
   );

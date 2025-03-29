@@ -148,6 +148,8 @@
   --color-base-violet: #3a0469;
 
   --color-accent: #C26A46;
+  --color-accent-light: #DD845F; /* Lighter shade of the accent color */
+  --color-accent-dark: #A4573B; /* Darker shade of the accent color */
   --color-accent-lilac: #a57ce4;
   --color-accent-teal: #1abab0;
   --color-accent-umber: #C26A46;
