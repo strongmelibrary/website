@@ -4,6 +4,8 @@ import { ReadMoreBlock } from "../ReadMoreBlock/ReadMoreBlock";
 import { Button, Input } from '@headlessui/react';
 import { PiMagnifyingGlassBold } from 'react-icons/pi';
 
+import heroImage from "../../assets/photos/unsplash/annie-spratt-wseixWvrsD4-unsplash.jpg"; // Example image import
+
 export interface Post {
   title: string;
   url: string;
@@ -54,7 +56,7 @@ export const HeroIndex = ({
           )}
         >
           <img
-            src="/photos/unsplash/annie-spratt-wseixWvrsD4-unsplash.jpg"
+            src={heroImage}
             alt="Hero Image"
             className={clsx(
               "w-full",

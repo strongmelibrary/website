@@ -1,5 +1,7 @@
 import clsx from "clsx";
 import React from "react";
+import brandMark from "../../assets/brand/variant_mark.svg";
+import brandTitle from "../../assets/brand/title.svg";
 
 import { SITE_TITLE } from "../../config";
 
@@ -19,12 +21,12 @@ export const HeaderLogo = ({ className }: { className?: string }) => {
       )}
     >
       <img
-        src="/brand/variant_mark.svg"
+        src={brandMark}
         alt="Logo Mark"
         className="w-[60px] h-full"
       />
       <img
-        src="/brand/title.svg"
+        src={brandTitle}
         alt={SITE_TITLE}
         className="w-auto h-[80%] mt-[1%] max-w-[calc(100%_-_60px)]"
       />
