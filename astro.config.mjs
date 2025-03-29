@@ -9,6 +9,7 @@ import { remarkReadingTime } from "./remark-reading-time.mjs";
 
 // https://astro.build/config
 export default defineConfig({
+  base: '/website',
   site: "https://strongmelibrary.github.io/website",
   markdown: {
     syntaxHighlight: false,
