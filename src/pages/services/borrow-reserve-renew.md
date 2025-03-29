@@ -1,7 +1,7 @@
 ---
 layout: "../../layouts/BlogPost.astro"
-title: "Second post"
-description: "Lorem ipsum dolor sit amet"
+title: "Borrow, Reserve, Renew"
+description: "Get advanced research assistance in dozens of subject areas."
 publishedAt: "Jul 22 2022"
 heroImage: "/placeholder-hero.jpg"
 tags: ["markdown", "blog", "latin"]

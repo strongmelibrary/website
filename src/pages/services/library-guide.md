@@ -1,7 +1,7 @@
 ---
 layout: "../../layouts/BlogPost.astro"
-title: "Third post"
-description: "Lorem ipsum dolor sit amet"
+title: "Library Guide"
+description: "Find books, media, databases, e-journals and digital resources."
 publishedAt: "Jul 15 2022"
 # heroImage: "/placeholder-hero.jpg"
 tags: ["markdown", "blog", "latin"]

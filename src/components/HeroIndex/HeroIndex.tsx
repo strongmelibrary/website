@@ -5,7 +5,7 @@ import { Button, Input } from '@headlessui/react';
 import { PiMagnifyingGlassBold } from 'react-icons/pi';
 
 import heroImage from "../../../public/photos/unsplash/annie-spratt-unsplash.jpg"; 
-import flyingBooks from "../../../public/flying_books.svg"; 
+import flyingBooks from "../../../public/illustrations/flying_books.svg"; 
 
 export interface Post {
   title: string;
@@ -125,7 +125,7 @@ export const HeroIndex = ({
             "h-full",
             "py-10",
             "px-4",
-            "bg-neutral-100"
+            "bg-info-dark"
           )}
         >
           <Input

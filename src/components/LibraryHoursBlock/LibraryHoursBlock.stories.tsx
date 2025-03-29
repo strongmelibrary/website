@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import { LibraryHoursBlock } from './LibraryHoursBlock';
+import clsx from 'clsx';
 
 // Mocking the DAY_MAP and LIBRARY_HOURS inside the Storybook context
 const mockDayMap = {
@@ -22,6 +23,10 @@ const meta: Meta<typeof LibraryHoursBlock> = {
   parameters: {
     layout: 'centered',
   },
+  render: (args) => {
+    // Simulating the LIBRARY_HOURS with the provided overrideLibraryHours
+    return <div className={clsx('w-[300px]')}> <LibraryHoursBlock {...args} /></div>;
+  }
 };
 
 export default meta;
@@ -37,7 +42,7 @@ export const Overriding: Story = {
       { day: 'Monday', hourOpen: '9:00 AM', hourClose: '5:00 PM' },
       { day: 'Tuesday', hourOpen: '10:00 AM', hourClose: '6:00 PM' },
       { day: 'Wednesday', hourOpen: '9:00 AM', hourClose: '5:00 PM' },
-      { day: 'Thursday', hourOpen: '10:00 AM', hourClose: '6:00 PM' },
+      { day: 'Thursday', hourOpen: '10:30 AM', hourClose: '6:00 PM' },
       { day: 'Friday', hourOpen: '9:00 AM', hourClose: '3:00 PM' },
       { day: 'Saturday', hourOpen: 'Closed', hourClose: 'Closed' },
       { day: 'Sunday', hourOpen: 'Closed', hourClose: 'Closed' },
@@ -67,4 +72,15 @@ export const VariedHours: Story = {
       { day: 'Sunday', hourOpen: 'Closed', hourClose: 'Closed' },
     ]
   },
+};
+
+export const WideContainer: Story = {
+  render: (args) => {
+    // Simulating a wider container for the LibraryHoursBlock
+    return (
+      <div className={clsx('w-[500px]')}>
+        <LibraryHoursBlock {...args} />
+      </div>
+    );
+  }
 };
