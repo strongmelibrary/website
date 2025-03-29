@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import dayjs from 'dayjs';
 
 export interface ReadMoreBlockBase {
   title: string;
@@ -77,7 +78,7 @@ export const ReadMoreBlock = ({
         />
       )}
       <div
-        className={clsx("flex", "flex-col", "p-4", {
+        className={clsx("flex", "flex-col", "py-4", {
           "order-1": imageUrl && imageSide === "left",
           "order-2": imageUrl && imageSide === "right",
           "w-1/2": imageUrl,
@@ -87,16 +88,18 @@ export const ReadMoreBlock = ({
         {category && (
           <span className="text-sm text-gray-500 type-caps">{category}</span>
         )}
-        <h2
+        <a
           className={clsx({
             "type-heading-xs": titleSize === "xs",
             "type-heading-sm": titleSize === "sm",
             "type-heading-md": titleSize === "md",
             "type-heading-lg": titleSize === "lg",
+            "pointer-events-none": separator
           })}
+          href={url}
         >
           {title}
-        </h2>
+        </a>
         {separator && (
           <div className={clsx("w-full", "relative")}>
             <hr className={clsx("pb-[16px]", "mt-[16px]")} />
@@ -115,8 +118,18 @@ export const ReadMoreBlock = ({
         )}
         {subtitle && <p className="text-gray-700">{subtitle}</p>}
         {children && <div className="mt-2">{children}</div>}
+        {/* Link to the full post */}
 
-        <a href={url} className="mt-4 inline-block text-accent hover:underline">
+        <a href={url} className={clsx(
+          "mt-4",
+          "inline-block",
+          "text-accent",
+          "hover:underline",
+          {
+            "type-body-xs": titleSize === "xs",
+            "type-body-md": titleSize !== "xs",
+          }
+          )}>
           {linkText}
         </a>
       </div>

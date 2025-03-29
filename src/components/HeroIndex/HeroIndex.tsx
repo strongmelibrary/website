@@ -84,7 +84,8 @@ export const HeroIndex = ({
             "flex-col",
             "items-start",
             "justify-start",
-            "gap-2"
+            "gap-2",
+            "px-[16px]",
           )}
         >
           {posts?.map((post) => (

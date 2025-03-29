@@ -9,6 +9,8 @@ import TodaysHours from '../components/TodaysHours/TodaysHours';
 
 import clsx from 'clsx';
 import { LibraryHoursBlock } from '../components/LibraryHoursBlock/LibraryHoursBlock';
+import { ReadMoreBlock } from '../components/ReadMoreBlock/ReadMoreBlock';
+import dayjs from 'dayjs';
 
 const news: Post[] = (await Astro.glob('./news/**/*.{md,mdx}')).sort(
   (a, b) =>
@@ -151,12 +153,16 @@ const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
           <h2 class="text-2xl font-bold mb-4">Latest News</h2>
           {news.length > 0 ? (
             news.map((post) => (
-              <div key={post.url} class="mb-4">
-                <h3 class="text-xl font-semibold">{post.title}</h3>
-                <p class="text-sm text-gray-500">{post.date} - {post.category}</p>
-                <p>{post.description}</p>
-                <a href={post.url} class="text-blue-500 hover:underline">Read more</a>
-              </div>
+              <ReadMoreBlock
+                title={post.title}
+                titleSize="xs"
+                subtitle={post.description}
+                category={post.category}
+                url={post.url}
+                linkText={
+                  `Posted on: ${dayjs(post.date).format('MMMM D, YYYY')}`
+                }
+              />
             ))
           ) : (
             <p>No news available.</p>

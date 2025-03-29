@@ -36,6 +36,19 @@
     border-color: var(--color-gray-400, currentColor);
     @apply box-border;
   }
+
+  a {
+    transition: color 0.1s ease-in-out;
+    text-decoration: none; /* Remove underline on focus */
+  }
+
+  a:hover,
+  a:focus,
+  a:focus-visible,
+  a:focus-within,
+  a:active {
+    color: var(--color-accent-light, currentColor);
+  }
 }
 
 .glass {
