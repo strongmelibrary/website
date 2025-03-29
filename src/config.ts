@@ -20,3 +20,16 @@ export const LIBRARY_HOURS = stringToJSON()
   .default('[{"day":"Tuesday","hourOpen":"01:00pm","hourClose":"05:00pm"},{"day":"Wednesday","hourOpen":"01:00pm","hourClose":"07:00pm"},{"day":"Saturday","hourOpen":"10:00am","hourClose":"02:00pm"}]')
   .describe("JSON config containing API Keys for external calls to comms-bot")
   .parse(import.meta.env.PUBLIC_LIBRARY_HOURS)
+
+console.log({
+  BASE_URL,
+  SITE_TITLE,
+  SITE_DESCRIPTION,
+  OWNER,
+  START_YEAR,
+  MAINTENANCE_NOTICE,
+  LICENSE_NOTICE,
+  TWITTER,
+  GITHUB,
+  LIBRARY_HOURS,
+})
