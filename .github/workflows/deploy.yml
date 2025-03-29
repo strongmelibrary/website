@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment:
-      name: github-pages
+      name: github-pages-build
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
