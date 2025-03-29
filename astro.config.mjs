@@ -28,4 +28,5 @@ export default defineConfig({
     plugins: [tailwindcss({ config: { applyBaseStyles: false } })],
   },
   integrations: [mdx(), react(), sitemap()],
+  outDir: "./docs",
 });
