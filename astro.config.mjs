@@ -7,12 +7,12 @@ import tailwindcss from "@tailwindcss/vite";
 
 import { remarkReadingTime } from "./remark-reading-time.mjs";
 
-const isLocal = process.env.ENVIRONMENT === "local";
+const isLocal = import.meta.env.DEV;
 
 // https://astro.build/config
 export default defineConfig({
-  base: isLocal ? '/' : '/website',
-  site: "https://strongmelibrary.github.io",
+  base: isLocal ? undefined : '/website',
+  site: isLocal ? 'http://localhost:3000' : "https://strongmelibrary.github.io",
   markdown: {
     syntaxHighlight: false,
     remarkPlugins: [
