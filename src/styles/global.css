@@ -1,27 +1,40 @@
-@import '@fontsource/jetbrains-mono/variable' layer(base);
-@import '@fontsource/lexend/variable' layer(base);
-@import './shiki.css' layer(base);
+@import "@fontsource/jetbrains-mono/variable" layer(base);
+@import "@fontsource/lexend/variable" layer(base);
+@import "./shiki.css" layer(base);
+@import "tailwindcss";
+@import "./theme.css";
+@import "./utilities.css";
 
-/* The integration's default injected base.css file */
-@import 'tailwindcss';
+@layer components, theme, base, utilities;
 
 @config '../../tailwind.config.cjs';
 
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
+@custom-variant dark (&:is(.dark *));
 
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
+  div,
+  span,
+  label,
+  input,
+  textarea,
+  select {
+    @apply type-body;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply type-heading;
+  }
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    border-color: var(--color-gray-400, currentColor);
+    @apply box-border;
   }
 }
 

@@ -4,12 +4,13 @@
   "version": "0.3.0",
   "private": true,
   "scripts": {
-    "dev": "astro dev --host --open",
+    "dev": "run-pty % npm run dev:astro % npm run dev:storybook",
+    "dev:astro": "astro dev --host --open",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "storybook": "storybook dev -p 6006",
+    "dev:storybook": "storybook dev -p 6007",
     "build-storybook": "storybook build"
   },
   "dependencies": {
@@ -17,18 +18,26 @@
     "@astrojs/react": "2.3.2",
     "@astrojs/rss": "2.4.4",
     "@astrojs/sitemap": "1.4.0",
-    "@astrojs/tailwind": "3.1.3",
     "@fontsource/jetbrains-mono": "4.5.12",
     "@fontsource/lexend": "4.5.15",
+    "@headlessui/react": "^2.2.0",
+    "@tailwindcss/postcss": "^4.0.13",
     "@tailwindcss/typography": "0.5.16",
+    "@tailwindcss/vite": "^4.0.13",
     "astro": "2.10.15",
+    "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
     "mdast-util-to-string": "3.2.0",
+    "postcss-google-font": "^1.1.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-icons": "^5.5.0",
     "reading-time": "1.5.0",
     "rollup": "3.29.5",
     "shiki": "0.14.7",
-    "tailwindcss": "^4.0.13"
+    "tailwindcss": "^4.0.13",
+    "zod": "^3.24.2",
+    "zod_utilz": "^0.8.3"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.5",
@@ -47,7 +56,9 @@
     "playwright": "^1.51.0",
     "prettier": "3.5.3",
     "remark-shiki-twoslash": "3.1.3",
+    "run-pty": "^5.0.0",
     "storybook": "^8.6.4",
+    "storybook-addon-viewport-resizer": "^1.2.0",
     "typescript": "^5.8.2",
     "vitest": "^3.0.8"
   }

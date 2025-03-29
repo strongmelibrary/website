@@ -1,0 +1,119 @@
+@layer utilities {
+  @import "tailwindcss/utilities.css";
+}
+
+@utility type {
+  @apply text-base-neutral;
+}
+/* Inverse type class */
+@utility type-inverse {
+  @apply text-neutral-0;
+}
+/* Type Display */
+@utility type-display {
+  @apply font-display;
+}
+@utility type-display-lg {
+  @apply font-display text-display-108;
+}
+@utility type-display-lg-bold {
+  @apply font-display text-display-108-medium;
+}
+@utility type-display-lg-bold-italic {
+  @apply font-display text-display-108-medium-italic italic;
+}
+@utility type-display-md {
+  @apply font-display text-display-72;
+}
+@utility type-display-md-bold {
+  @apply font-display text-display-72-medium;
+}
+/* Type Heading */
+@utility type-heading {
+  @apply font-heading;
+}
+@utility type-heading-xl {
+  @apply font-heading text-heading-60;
+}
+@utility type-heading-xl-bold {
+  @apply font-heading text-heading-60-medium;
+}
+@utility type-heading-lg {
+  @apply font-heading text-heading-48;
+}
+@utility type-heading-lg-bold {
+  @apply font-heading text-heading-48-medium;
+}
+@utility type-heading-md {
+  @apply font-heading text-heading-36;
+}
+@utility type-heading-md-bold {
+  @apply font-heading text-heading-36-medium;
+}
+@utility type-heading-sm {
+  @apply font-heading text-heading-24;
+}
+@utility type-heading-sm-bold {
+  @apply font-heading text-heading-24-medium;
+}
+@utility type-heading-xs {
+  @apply font-heading text-heading-20;
+}
+@utility type-heading-xs-bold {
+  @apply font-heading text-heading-20-medium;
+}
+@utility type-heading-xxs {
+  @apply font-heading text-heading-16;
+}
+@utility type-heading-xxs-bold {
+  @apply font-heading text-heading-16-medium;
+}
+/* Type Body */
+@utility type-body {
+  @apply font-body;
+}
+@utility type-body-lg {
+  @apply font-body text-body-20;
+}
+@utility type-body-lg-bold {
+  @apply font-body text-body-20-bold;
+}
+@utility type-body-md {
+  @apply font-body text-body-16;
+}
+@utility type-body-md-bold {
+  @apply font-body text-body-16-bold;
+}
+@utility type-body-sm {
+  @apply font-body text-body-14;
+}
+@utility type-body-sm-bold {
+  @apply font-body text-body-14-bold;
+}
+@utility type-body-xs {
+  @apply font-body text-body-12;
+}
+@utility type-body-xs-bold {
+  @apply font-body text-body-12-bold;
+}
+@utility type-body-xxs {
+  @apply font-body text-body-10;
+}
+@utility type-body-xxs-bold {
+  @apply font-body text-body-10-bold;
+}
+/* Type Button */
+@utility type-button {
+  @apply font-button text-button-16;
+}
+@utility type-button-sm {
+  @apply font-button text-button-14;
+}
+
+@utility type-caps {
+  @apply font-body;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-variant: all-small-caps;
+  font-feature-settings: "smcp";
+}

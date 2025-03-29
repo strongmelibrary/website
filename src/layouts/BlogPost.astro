@@ -1,9 +1,9 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import Tag from '../components/Tag';
-import PostDates from '../components/PostDates';
+import Header from '../components/Header/Header';
+import Footer from '../components/Footer/Footer';
+import Tag from '../components/Tag/Tag';
+import PostDates from '../components/PostDates/PostDates';
 
 export interface Props {
   content: {
@@ -39,7 +39,19 @@ const {
     <BaseHead title={title} description={description} />
   </head>
   <body class="dark:bg-slate-900">
-    <Header />
+    <Header links={[
+      { href: '/', label: 'Home', isActive: true },
+      { href: '/events', label: 'Events' },
+      { href: '/catalog', label: 'Catalog' },
+      { href: '/policies', label: 'Policies' },
+      { href: '/services', label: 'Services' },
+      { href: '/links', label: 'Links' },
+      { href: '/friends', label: 'Friends' },
+    ]} 
+    socialLinks={[
+      { href: 'https://www.facebook.com/StrongMaine/', brand: 'facebook'}
+    ]}
+    />
     <main>
       <article>
         {

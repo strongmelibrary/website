@@ -1,9 +1,27 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../components/Header/Header';
+import Footer from '../components/Footer/Footer';
 
 import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
+import { HeroIndex, Post } from '../components/HeroIndex/HeroIndex';
+import TodaysHours from '../components/TodaysHours/TodaysHours';
+
+const posts: Post[] = (await Astro.glob('./blog/**/*.{md,mdx}')).sort(
+  (a, b) =>
+    new Date(b.frontmatter.publishedAt).valueOf() - new Date(a.frontmatter.publishedAt).valueOf(),
+).slice(0, 3).map((post) => ({
+  title: post.frontmatter.title,
+  url: post.url,
+  date: new Date(post.frontmatter.publishedAt).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }),
+  category: post.frontmatter.category,
+  description: post.frontmatter.description,
+}));
+
 ---
 
 <!DOCTYPE html>
@@ -12,7 +30,24 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body class="dark:bg-slate-900">
-    <Header title={SITE_TITLE} />
+    <Header links={[
+      { href: '/', label: 'Home', isActive: true },
+      { href: '/events', label: 'Events' },
+      { href: '/catalog', label: 'Catalog' },
+      { href: '/policies', label: 'Policies' },
+      { href: '/services', label: 'Services' },
+      { href: '/links', label: 'Links' },
+      { href: '/friends', label: 'Friends' },
+    ]} 
+    socialLinks={[
+      { href: 'https://www.facebook.com/StrongMaine/', brand: 'facebook'}
+    ]}
+    />
+
+    <HeroIndex
+      posts={posts}>
+      <TodaysHours client:only />
+    </HeroIndex>
     <main
       class="mt-12 prose dark:prose-invert prose-neutral sm:prose-sm lg:prose-lg xl:prose-xl 2xl:prose-2xl mx-auto"
     >
