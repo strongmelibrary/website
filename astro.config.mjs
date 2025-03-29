@@ -18,7 +18,7 @@ console.log(
 // https://astro.build/config
 export default defineConfig({
   base: isLocal ? undefined : '/website',
-  site: isLocal ? 'http://localhost:3000' : "https://strongmelibrary.github.io",
+  site: isLocal ? 'http://localhost:3000' : "https://strongmelibrary.github.io/website",
   markdown: {
     syntaxHighlight: false,
     remarkPlugins: [
