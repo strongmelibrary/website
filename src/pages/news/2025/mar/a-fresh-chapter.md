@@ -5,7 +5,7 @@ description: "Discover the new look and renewed spirit of our library’s online
 publishedAt: "Mar 30 2025"
 updatedAt: "Mar 19 2025"
 initialDraftAt: "Mar 19 2025"
-heroImage: "/placeholder-hero.jpg"
+heroImage: "placeholder-hero.jpg"
 tags: ["branding", "website", "logo", "history"]
 ---
 

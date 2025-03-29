@@ -4,6 +4,7 @@ import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 import Tag from '../components/Tag/Tag';
 import PostDates from '../components/PostDates/PostDates';
+import { BASE_URL } from '../config';
 
 export interface Props {
   content: {
@@ -40,13 +41,13 @@ const {
   </head>
   <body class="dark:bg-slate-900">
     <Header links={[
-      { href: '/', label: 'Home', isActive: true },
-      { href: '/events', label: 'Events' },
-      { href: '/catalog', label: 'Catalog' },
-      { href: '/policies', label: 'Policies' },
-      { href: '/services', label: 'Services' },
-      { href: '/links', label: 'Links' },
-      { href: '/friends', label: 'Friends' },
+      { href: BASE_URL, label: 'Home', isActive: true },
+      { href: BASE_URL+'events', label: 'Events' },
+      { href: BASE_URL+'catalog', label: 'Catalog' },
+      { href: BASE_URL+'policies', label: 'Policies' },
+      { href: BASE_URL+'services', label: 'Services' },
+      { href: BASE_URL+'links', label: 'Links' },
+      { href: BASE_URL+'friends', label: 'Friends' },
     ]} 
     socialLinks={[
       { href: 'https://www.facebook.com/StrongMaine/', brand: 'facebook'}
@@ -58,7 +59,7 @@ const {
           heroImage && (
             <div
               class="w-full h-screen/2 bg-no-repeat bg-center bg-cover"
-              style={{ backgroundImage: `url("${heroImage}")` }}
+              style={{ backgroundImage: `url("${BASE_URL+heroImage}")` }}
             />
           )
         }

@@ -3,7 +3,7 @@ layout: "../../layouts/BlogPost.astro"
 title: "Study Spaces"
 description: "Deposit data, papers, and other resources for long-term access."
 publishedAt: "Jul 22 2022"
-heroImage: "/placeholder-hero.jpg"
+heroImage: "placeholder-hero.jpg"
 tags: ["markdown", "blog", "latin"]
 ---
 

@@ -3,7 +3,7 @@ layout: "../../layouts/BlogPost.astro"
 title: "Library Guide"
 description: "Find books, media, databases, e-journals and digital resources."
 publishedAt: "Jul 15 2022"
-# heroImage: "/placeholder-hero.jpg"
+heroImage: "placeholder-hero.jpg"
 tags: ["markdown", "blog", "latin"]
 ---
 
