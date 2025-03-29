@@ -9,6 +9,12 @@ import { remarkReadingTime } from "./remark-reading-time.mjs";
 
 const isLocal = import.meta.env.DEV;
 
+console.log(
+  `Building for ${isLocal ? "local development" : "production"}${
+    isLocal ? "" : ` at ${new Date().toISOString()}`
+  }`
+);
+
 // https://astro.build/config
 export default defineConfig({
   base: isLocal ? undefined : '/website',
