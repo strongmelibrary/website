@@ -3,18 +3,8 @@ import React from "react";
 import { BASE_URL, SITE_TITLE } from "../../config";
 import { HeaderLogo } from "../HeaderLogo/HeaderLogo";
 import clsx from "clsx";
-import { Brands, SocialButton } from "../SocialButton/SocialButton";
-
-export interface Link {
-  href: string;
-  label: string;
-  isActive?: boolean;
-}
-
-export interface SocialLink {
-  href: string;
-  brand: Brands;
-}
+import { SocialButton } from "../SocialButton/SocialButton";
+import { Link, SocialLink } from '../types';
 
 export interface HeaderProps {
   title?: string;

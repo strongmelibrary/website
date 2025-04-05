@@ -173,6 +173,17 @@ const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
       </div>
 
     </main>
-    <Footer />
+    <Footer
+    links={[
+      { href: BASE_URL+'events', label: 'Events' },
+      { href: BASE_URL+'catalog', label: 'Catalog' },
+      { href: BASE_URL+'policies', label: 'Policies' },
+      { href: BASE_URL+'services', label: 'Services' },
+      { href: BASE_URL+'links', label: 'Links' },
+      { href: BASE_URL+'friends', label: 'Friends' },
+    ]} 
+    socialLinks={[
+      { href: 'https://www.facebook.com/StrongMaine/', brand: 'facebook'}
+    ]} />
   </body>
 </html>

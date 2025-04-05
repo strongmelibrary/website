@@ -21,6 +21,12 @@ export const LIBRARY_HOURS = stringToJSON()
   .describe("JSON config containing API Keys for external calls to comms-bot")
   .parse(import.meta.env.PUBLIC_LIBRARY_HOURS)
 
+export const PUBLIC_ACTUAL_ADDRESS = import.meta.env.PUBLIC_ACTUAL_ADDRESS
+export const PUBLIC_ADDRESS_GOOGLE_MAPS = import.meta.env.PUBLIC_ADDRESS_GOOGLE_MAPS
+export const PUBLIC_MAILING_ADDRESS = import.meta.env.PUBLIC_MAILING_ADDRESS
+export const PUBLIC_PHONE_NUMBER = import.meta.env.PUBLIC_PHONE_NUMBER
+export const PUBLIC_EMAIL = import.meta.env.PUBLIC_EMAIL
+
 console.log({
   BASE_URL,
   SITE_TITLE,

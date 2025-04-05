@@ -3,14 +3,10 @@ import * as tb from "react-icons/tb";
 import { PiImageBroken } from "react-icons/pi";
 import {
   capitalizeFirstLetter,
-  OnlyWithPrefix,
-  RemovePrefixAndLowercase,
 } from "../../utils/capitalize";
 import { Button } from "@headlessui/react";
 import clsx from "clsx";
-
-type BrandIcons = OnlyWithPrefix<keyof typeof tb, "TbBrand">;
-export type Brands = RemovePrefixAndLowercase<BrandIcons, "TbBrand">;
+import { BrandIcons, Brands } from '../types';
 
 export type SocialButtonProps = {
   brand: Brands;
@@ -38,7 +34,9 @@ export const SocialButton = ({
         "justify-center",
         "rounded-full",
         "p-2",
-        "border-2",
+        "w-[40px]",
+        "h-[40px]",
+        "border-1",
         "border-gray-300",
         "bg-neutral-0",
         "hover:bg-accent",
@@ -46,6 +44,8 @@ export const SocialButton = ({
         "transition-colors",
         "duration-200",
         "cursor-pointer",
+        "grow-0",
+        "group",
         className,
       )}
       onClick={() => window.open(link, "_blank")}
@@ -54,10 +54,13 @@ export const SocialButton = ({
     >
       <Icon
         className={clsx(
-          "w-6",
-          "h-6",
-          "text-gray-700",
-          "dark:text-gray-200",
+          "w-[24px]",
+          "h-[24px]",
+          "text-info",
+          "dark:text-info-light",
+          "group-hover:text-neutral-0", // Change color on hover
+          "transition-colors",
+          "duration-200",
           iconClassName,
         )}
       />
