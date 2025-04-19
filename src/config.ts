@@ -14,6 +14,10 @@ export const MAINTENANCE_NOTICE = import.meta.env.PUBLIC_MAINTENANCE_NOTICE;
 export const LICENSE_NOTICE = import.meta.env.PUBLIC_LICENSE_NOTICE;
 export const TWITTER = import.meta.env.PUBLIC_TWITTER;
 export const GITHUB = import.meta.env.PUBLIC_GITHUB;
+export const BOOKWORM_API_URL = import.meta.env.PUBLIC_BOOKWORM_API_URL || 'https://bookworm.aster.hn';
+export const SEARCH_DOWN_CTA_URL = import.meta.env.PUBLIC_SEARCH_DOWN_CTA_URL || 'https://communityreads.org';
+export const BOOKWORM_USERNAME = import.meta.env.PUBLIC_BOOKWORM_USERNAME || 'placeholder_user';
+export const BOOKWORM_PASSWORD = import.meta.env.PUBLIC_BOOKWORM_PASSWORD || ''; // Corrected: PUBLIC_ prefix is required for client-side access
 
 export const LIBRARY_HOURS = stringToJSON()
   .pipe(z.array(HoursScheduleSchema))
@@ -37,5 +41,9 @@ console.log({
   LICENSE_NOTICE,
   TWITTER,
   GITHUB,
+  BOOKWORM_API_URL,
+  SEARCH_DOWN_CTA_URL,
+  BOOKWORM_USERNAME,
+  // BOOKWORM_PASSWORD, // Avoid logging sensitive data
   LIBRARY_HOURS,
 })

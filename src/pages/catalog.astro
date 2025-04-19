@@ -1,0 +1,56 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header/Header';
+import Footer from '../components/Footer/Footer';
+import SearchWidget from '../components/SearchWidget/SearchWidget';
+import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL } from '../config'; // Import necessary config
+
+const pageTitle = "Search Catalog"; // Title remains appropriate
+const fullTitle = `${pageTitle} | ${SITE_TITLE}`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={fullTitle} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="dark:bg-slate-900 flex flex-col min-h-screen">
+    <Header links={[
+      // TODO: Determine active state based on current page?
+      // Mark 'Catalog' as active on this page
+      { href: BASE_URL, label: 'Home' },
+      { href: BASE_URL+'events', label: 'Events' },
+      { href: BASE_URL+'catalog', label: 'Catalog', isActive: true },
+      { href: BASE_URL+'policies', label: 'Policies' },
+      { href: BASE_URL+'services', label: 'Services' },
+      { href: BASE_URL+'links', label: 'Links' },
+      { href: BASE_URL+'friends', label: 'Friends' },
+    ]}
+    socialLinks={[
+      { href: 'https://www.facebook.com/StrongMaine/', brand: 'facebook'}
+    ]}
+    />
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+      <h1 class="text-3xl font-bold mb-6">{pageTitle}</h1>
+      <p class="mb-4">Use the form below to search the library catalog.</p>
+
+      {/* Render the SearchWidget client-side, showing results inline */}
+      {/* We need client:load for React component hydration */}
+      <SearchWidget client:load showResultsInline={true} />
+
+    </main>
+
+    <Footer links={[
+      { href: BASE_URL+'events', label: 'Events' },
+      { href: BASE_URL+'catalog', label: 'Catalog' },
+      { href: BASE_URL+'policies', label: 'Policies' },
+      { href: BASE_URL+'services', label: 'Services' },
+      { href: BASE_URL+'links', label: 'Links' },
+      { href: BASE_URL+'friends', label: 'Friends' },
+    ]}
+    socialLinks={[
+      { href: 'https://www.facebook.com/StrongMaine/', brand: 'facebook'}
+    ]} />
+  </body>
+</html>

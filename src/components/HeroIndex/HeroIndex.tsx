@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import clsx from "clsx";
 import { ReadMoreBlock } from "../ReadMoreBlock/ReadMoreBlock";
 import { Button, Input } from '@headlessui/react';
@@ -28,6 +28,13 @@ export const HeroIndex = ({
   heroTagline,
   children,
 }: HeroIndexProps) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  
+  const handleSearch = useCallback(() => {
+    if (searchTerm.trim()) {
+      window.location.href = `/catalog?q=${encodeURIComponent(searchTerm.trim())}&page=1`;
+    }
+  }, [searchTerm]);
   return (
     <div
       className={clsx(
@@ -118,7 +125,7 @@ export const HeroIndex = ({
           className={clsx(
             "flex",
             "flex-row",
-            "items-start",
+            "items-center",
             "justify-start",
             "gap-2",
             "lg:col-span-2",
@@ -129,36 +136,41 @@ export const HeroIndex = ({
             "bg-info-dark"
           )}
         >
-          <Input
-            type="text"
-            placeholder="Search..."
-            className={clsx(
-              "h-full",
-              "p-2",
-              "border-b",
-              "flex-grow",
-              "text-neutral-0",
-              "border-neutral-0",
-              "focus:outline-none",
-              "focus:ring-2",
-              "focus:ring-offset-2",
-            )}
-          />
-          <Button
-            className={clsx(
-              "px-4",
-              "py-2",
-              "bg-transparent",
-              "text-white",
-              "rounded-lg",
-              "hover:bg-neutral-80",
-              "transition-colors",
-              "duration-200",
-              "cursor-pointer",
-            )}
-          >
-            <PiMagnifyingGlassBold />
-          </Button>
+          {/* Client-side search form with JavaScript redirect */}
+          <div className="flex flex-row items-center justify-start gap-2 w-full">
+            <Input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search the catalog..."
+              className={clsx(
+                "p-2",
+                "border-b",
+                "flex-grow",
+                "text-neutral-0",
+                "border-neutral-0",
+                "focus:outline-none",
+                "focus:ring-2",
+                "focus:ring-offset-2",
+              )}
+            />
+            <Button
+              onClick={handleSearch}
+              className={clsx(
+                "px-4",
+                "py-2",
+                "bg-transparent",
+                "text-white",
+                "rounded-lg",
+                "hover:bg-neutral-80",
+                "transition-colors",
+                "duration-200",
+                "cursor-pointer",
+              )}
+            >
+              <PiMagnifyingGlassBold />
+            </Button>
+          </div>
         </div>
         <div
           className={clsx(
