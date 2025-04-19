@@ -91,6 +91,11 @@ const SearchWidget: React.FC<SearchWidgetProps> = ({ showResultsInline = false }
     setCurrentPage(page); // Store the active page
     setError(null);
     setSearchResults(null);
+    
+    // When starting a search, show loading state
+    if (showResultsInline) {
+      setIsServiceHealthy(null); // Set to loading state
+    }
 
     // Use credentials from config
     const username = BOOKWORM_USERNAME;
@@ -109,13 +114,19 @@ const SearchWidget: React.FC<SearchWidgetProps> = ({ showResultsInline = false }
         const response = await fetch(`${searchUrl}?${queryParams.toString()}`);
         if (!response.ok) {
             const errorData = await response.json();
+            // If search fails, treat it as a service health failure
+            setIsServiceHealthy(false);
             throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
         }
         const data: SearchResults = await response.json();
         setSearchResults(data);
+        // Search succeeded, service is healthy
+        setIsServiceHealthy(true);
     } catch (err: any) {
         console.error('Search failed:', err);
         setError(err.message || 'Failed to fetch search results.');
+        // Any error during search means service is unhealthy
+        setIsServiceHealthy(false);
     } finally {
         setIsLoading(false);
     }
@@ -165,13 +176,8 @@ const SearchWidget: React.FC<SearchWidgetProps> = ({ showResultsInline = false }
     }
   };
 
-  // Render loading state for health check
-  if (isServiceHealthy === null) {
-    return <div>Loading search...</div>;
-  }
-
   // Render CTA if service is unhealthy
-  if (!isServiceHealthy) {
+  if (isServiceHealthy === false) {
     return (
       <div className="p-4 border border-red-300 bg-red-50 rounded">
         <p className="text-red-700 mb-3">The library search service is currently unavailable.</p>
@@ -205,11 +211,18 @@ const SearchWidget: React.FC<SearchWidgetProps> = ({ showResultsInline = false }
           disabled={isLoading}
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out disabled:opacity-50"
         >
-          {isLoading ? 'Searching...' : 'Search'}
+          {(isLoading || isServiceHealthy === null) ? 'Searching...' : 'Search'}
         </button>
       </form>
 
       {error && <p className="text-red-600 mt-2">Error: {error}</p>}
+
+      {(isLoading || isServiceHealthy === null) && (
+        <div className="flex justify-center items-center p-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <span className="ml-3 text-lg">Loading...</span>
+        </div>
+      )}
 
       {/* Display results only if showResultsInline is true */}
       {showResultsInline && searchResults && (
