@@ -52,7 +52,7 @@ const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
 <html lang="en">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-    <script is:inline>
+    <script define:vars={{ baseUrl: BASE_URL }}>
       // This script will run after the page loads
       document.addEventListener('DOMContentLoaded', function() {
         // Find the search input and button in the HeroIndex component
@@ -64,7 +64,7 @@ const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
           searchButton.addEventListener('click', function() {
             var searchTerm = searchInput.value.trim();
             if (searchTerm) {
-              window.location.href = BASE_URL+'/catalog?q=' + encodeURIComponent(searchTerm) + '&page=1';
+              window.location.href = baseUrl + 'catalog?q=' + encodeURIComponent(searchTerm) + '&page=1';
             }
           });
           
@@ -74,7 +74,7 @@ const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
               e.preventDefault(); // Prevent form submission
               var searchTerm = searchInput.value.trim();
               if (searchTerm) {
-                window.location.href = BASE_URL+'/catalog?q=' + encodeURIComponent(searchTerm) + '&page=1';
+                window.location.href = baseUrl + 'catalog?q=' + encodeURIComponent(searchTerm) + '&page=1';
               }
             }
           });
