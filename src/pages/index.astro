@@ -64,7 +64,7 @@ const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
           searchButton.addEventListener('click', function() {
             var searchTerm = searchInput.value.trim();
             if (searchTerm) {
-              window.location.href = '/catalog?q=' + encodeURIComponent(searchTerm) + '&page=1';
+              window.location.href = BASE_URL+'/catalog?q=' + encodeURIComponent(searchTerm) + '&page=1';
             }
           });
           
@@ -74,7 +74,7 @@ const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
               e.preventDefault(); // Prevent form submission
               var searchTerm = searchInput.value.trim();
               if (searchTerm) {
-                window.location.href = '/catalog?q=' + encodeURIComponent(searchTerm) + '&page=1';
+                window.location.href = BASE_URL+'/catalog?q=' + encodeURIComponent(searchTerm) + '&page=1';
               }
             }
           });
