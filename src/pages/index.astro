@@ -100,10 +100,6 @@ const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
     <HeroIndex
       posts={services}>
       <TodaysHours client:only />
-      {/* Add SearchWidget here, results will not be shown inline */}
-      <div class="mt-4 px-4 md:px-0"> {/* Add some margin and padding */}
-        <SearchWidget client:load />
-      </div>
     </HeroIndex>
     <main
       class={clsx(

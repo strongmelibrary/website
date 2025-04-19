@@ -4,7 +4,9 @@ import {
   SEARCH_DOWN_CTA_URL,
   BOOKWORM_USERNAME,
   BOOKWORM_PASSWORD,
+  SEARCH_DOWN_CTA_TEXT,
 } from '../../config';
+import { PiMagnifyingGlassBold } from 'react-icons/pi';
 
 interface SearchWidgetProps {
   showResultsInline?: boolean; // If true, show results directly; otherwise, navigate to search page
@@ -179,15 +181,15 @@ const SearchWidget: React.FC<SearchWidgetProps> = ({ showResultsInline = false }
   // Render CTA if service is unhealthy
   if (isServiceHealthy === false) {
     return (
-      <div className="p-4 border border-red-300 bg-red-50 rounded">
-        <p className="text-red-700 mb-3">The library search service is currently unavailable.</p>
+      <div className="p-4 border border-accent bg-accent/20 rounded">
+        <p className="text-accent-dark mb-3">The on-site search service is currently unavailable.</p>
         <a
           href={ctaUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out"
+          className="inline-block bg-accent/80 hover:bg-accent text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out"
         >
-          Visit Community Reads
+          {SEARCH_DOWN_CTA_TEXT}
         </a>
       </div>
     );
@@ -196,26 +198,29 @@ const SearchWidget: React.FC<SearchWidgetProps> = ({ showResultsInline = false }
   // Render search form if service is healthy
   return (
     <div className="search-widget my-4">
-      <form onSubmit={handleFormSubmit} className="flex gap-2">
+      <form onSubmit={handleFormSubmit} className="flex gap-0">
         <input
           type="search"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search the library catalog..."
           aria-label="Search library catalog"
-          className="flex-grow p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-grow p-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
         <button
           type="submit"
           disabled={isLoading}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out disabled:opacity-50"
+          className="bg-accent/80 hover:bg-accent text-white font-bold py-2 px-4 transition duration-150 ease-in-out disabled:opacity-50 flex flex-row items-center gap-2"
         >
-          {(isLoading || isServiceHealthy === null) ? 'Searching...' : 'Search'}
+          {(isLoading || isServiceHealthy === null) ? 'Searching...' : (<>
+            <PiMagnifyingGlassBold className="relative top-[1px]"/>
+            Search
+          </>)}
         </button>
       </form>
 
-      {error && <p className="text-red-600 mt-2">Error: {error}</p>}
+      {error && <p className="text-error mt-2">Error: {error}</p>}
 
       {(isLoading || isServiceHealthy === null) && (
         <div className="flex justify-center items-center p-8">

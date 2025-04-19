@@ -16,6 +16,7 @@ export const TWITTER = import.meta.env.PUBLIC_TWITTER;
 export const GITHUB = import.meta.env.PUBLIC_GITHUB;
 export const BOOKWORM_API_URL = import.meta.env.PUBLIC_BOOKWORM_API_URL || 'https://bookworm.aster.hn';
 export const SEARCH_DOWN_CTA_URL = import.meta.env.PUBLIC_SEARCH_DOWN_CTA_URL || 'https://communityreads.org';
+export const SEARCH_DOWN_CTA_TEXT = import.meta.env.PUBLIC_SEARCH_DOWN_CTA_TEXT || '';
 export const BOOKWORM_USERNAME = import.meta.env.PUBLIC_BOOKWORM_USERNAME || 'placeholder_user';
 export const BOOKWORM_PASSWORD = import.meta.env.PUBLIC_BOOKWORM_PASSWORD || ''; // Corrected: PUBLIC_ prefix is required for client-side access
 
