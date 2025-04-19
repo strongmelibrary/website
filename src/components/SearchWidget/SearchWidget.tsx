@@ -7,6 +7,7 @@ import {
   SEARCH_DOWN_CTA_TEXT,
 } from '../../config';
 import { PiMagnifyingGlassBold } from 'react-icons/pi';
+import { Button } from '@headlessui/react';
 
 interface SearchWidgetProps {
   showResultsInline?: boolean; // If true, show results directly; otherwise, navigate to search page
@@ -293,8 +294,19 @@ const SearchWidget: React.FC<SearchWidgetProps> = ({ showResultsInline = false }
                 </li>
               ))}
             </ul>
-          ) : (
-            <p>No results found for "{currentQuery}".</p> // Use currentQuery here
+          ) : (<>
+              <p>No results found for "{currentQuery}".</p>
+              {/* add a Request this book button here */}
+              <Button
+                className="bg-accent/80 hover:bg-accent text-white font-bold py-2 px-4 transition duration-150 ease-in-out"
+                onClick={() => {
+                  console.log('Request this book clicked for:', currentQuery);
+                  // Implement request book logic here
+                }}
+              >
+                Request this book
+              </Button>
+            </>
           )}
 
           {/* Pagination Controls */}

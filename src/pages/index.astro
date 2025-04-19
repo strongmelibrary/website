@@ -31,20 +31,40 @@ const news: Post[] = (await Astro.glob('./news/**/*.{md,mdx}')).sort(
   category: post.frontmatter.category,
   description: post.frontmatter.description,
 }));
-const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
-  (a, b) =>
-    new Date(a.frontmatter.publishedAt).valueOf() - new Date(b.frontmatter.publishedAt).valueOf(),
-).slice(0, 3).map((post) => ({
-  title: post.frontmatter.title,
-  url: post.url,
-  date: new Date(post.frontmatter.publishedAt).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }),
-  category: post.frontmatter.category,
-  description: post.frontmatter.description,
-}));
+const services: Post[] = [
+  {
+    title: 'Digital Catalog',
+    url: BASE_URL+'catalog',
+    date: new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }),
+    // category: 'Explore',
+    description: 'Search the library catalog for books, movies, and more.',
+  },
+  {
+    title: 'On-site Services',
+    url: BASE_URL+'services',
+    date: new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }),
+    // category: 'On Site',
+    description: 'Learn about what our library can do for you.',
+  },
+  {
+    title: 'Upcoming Events',
+    url: BASE_URL+'events',
+    date: new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }),
+    // category: 'Policies',
+    description: 'Come see what\'s happening this month at the library.',
+  }];
 
 ---
 
@@ -124,61 +144,6 @@ const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
         "relative",
         "h-auto",
       )}>
-        <h1>🧑‍🚀 Hello, Astronaut!</h1>
-        <p>
-          Welcome to the <s>official</s>
-          <a href="https://astro.build/">Astro</a>
-          <ins>typescript+react+tailwind</ins> blog starter template. This template serves as a<ins
-            >n</ins
-          >
-          <del>lightweight, minimally-styled</del><ins>opinionated</ins> starting point for anyone looking
-          to build a personal website, blog, or portfolio <ins>fast</ins> with Astro.
-        </p>
-        <p>
-          This template comes with a few integrations already configured in your
-          <code>astro.config.mjs</code> file. You can customize your setup with
-          <a href="https://astro.build/integrations">Astro Integrations</a> to add tools like <del
-            >Tailwind, React, or</del
-          > Vue to your project.
-        </p>
-        <p>Here are a few ideas on how to get started with the template:</p>
-        <ul>
-          <li>Edit this page in <code>src/pages/index.astro</code></li>
-          <li>
-            Edit the site header items in <code
-              >src/components/Header.<del>astro</del><ins>tsx</ins>
-            </code>
-          </li>
-          <li>
-            Add your name to the footer in <code
-              >src/components/Footer.<del>astro</del><ins>tsx</ins>
-            </code>
-          </li>
-          <li>Check out the included blog posts in <code>src/pages/blog/</code></li>
-          <li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-        </ul>
-        <p>
-          Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-            >read the docs
-          </a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-        </p>
-        <p>
-          Looking for a blog template with a bit more personality? Check out <a
-            href="https://github.com/Charca/astro-blog-template"
-            >astro-blog-template
-          </a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-        </p>
-      </div>
-      <div
-      class={clsx(
-        "col-span-1",
-        "flex",
-        "flex-col",
-        "items-start",
-        "justify-start",
-        "gap-2"
-      )}
-    >
         <div class={clsx(
           "w-full",
           "md:order-first",
@@ -202,6 +167,18 @@ const services: Post[] = (await Astro.glob('./services/**/*.{md,mdx}')).sort(
             <p>No news available.</p>
           )}
         </div>
+      </div>
+      <div
+      class={clsx(
+        "col-span-1",
+        "flex",
+        "flex-col",
+        "items-start",
+        "justify-start",
+        "gap-2"
+      )}
+    >
+        
 
         <LibraryHoursBlock />
       </div>
