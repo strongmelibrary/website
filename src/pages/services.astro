@@ -1,0 +1,40 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header, { ConfiguredHeader } from '../components/Header/Header';
+import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
+import PostsList from '../components/PostsList/PostsList';
+
+import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
+
+const posts = (await Astro.glob('./news/**/*.{md,mdx}')).sort(
+  (a, b) =>
+    new Date(b.frontmatter.publishedAt).valueOf() - new Date(a.frontmatter.publishedAt).valueOf(),
+);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="dark:bg-slate-900">
+    <ConfiguredHeader />
+
+    <main
+      class="mt-12 prose prose-sm sm:prose-base md:prose-lg lg:prose-xl xl:prose-2xl dark:prose-invert prose-slate mx-auto p-4"
+    >
+      <div class="p-4">
+        <h1 class="type-heading-md!">Services</h1>
+        <p class="type-body-sm!">
+          The Strong Town Public Library offers a variety of programs and resources designed to enrich and support the community. Our annual <b>Summer Reading Program</b> invites patrons of all ages—<b>children</b>, <b>teens</b>, and <b>adults</b>—to participate and discover the joy of reading throughout the summer months.
+          </p><p class="type-body-sm!">
+          Beyond our programs, the library provides a wide selection of materials including <b>fiction books</b> across all genres, with an extensive collection of <b>paperback westerns and mass market titles</b>. We also offer <b>audiobooks</b>, <b>large print books</b>, and an extensive range of <b>reference books for all ages</b>, featuring notable collections focused on cooking, handiwork, and crafts.
+         </p><p class="type-body-sm!"> 
+          Patrons can access digital content through our <b>Download Library</b> and borrow <b>movies</b> from our multimedia collection. For technology needs, we provide <b>five public computers</b> with free <b>WIFI</b> access. Additional services include affordable <b>photocopying</b> and convenient <b>interlibrary loan</b> options, connecting our patrons to libraries across the region.
+          </p>
+      </div>
+    </main>
+    <ConfiguredFooter />
+
+  </body>
+</html>

@@ -7,7 +7,7 @@ function Tile({ post }: { post: Record<string, any> }) {
     <div className="flex flex-col">
       <div>
         <small>
-          <TodaysHours date={post.frontmatter.publishedAt} />
+          Published {post.frontmatter.publishedAt}
         </small>
       </div>
       <div>

@@ -1,6 +1,9 @@
 import TodaysHours from "../TodaysHours/TodaysHours";
 
 import React from "react";
+
+
+
 const PostDates = ({
   initialDraftAt,
   publishedAt,
@@ -11,20 +14,15 @@ const PostDates = ({
   updatedAt?: string;
 }) => {
   return (
-    <div className="flex flex-row space-x-4">
-      {initialDraftAt && (
-        <div title="Initial draft at">
-          ✨ <TodaysHours date={initialDraftAt} />
-        </div>
-      )}
+    <div className="flex flex-row space-x-6">
       {publishedAt && (
         <div title="Published at">
-          📅 <TodaysHours date={publishedAt} />
+          📅 Published {publishedAt}
         </div>
       )}
       {updatedAt && (
         <div title="Last updated at">
-          🔃 <TodaysHours date={updatedAt} />
+          🔃 Updated {updatedAt}
         </div>
       )}
     </div>

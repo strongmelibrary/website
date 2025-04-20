@@ -12,6 +12,9 @@ export interface Link {
   href: string;
   label: string;
   isActive?: boolean;
+  isExternal?: boolean;
+  topic?: string;
+  isHidden?: boolean;
 }
 
 export interface SocialLink {

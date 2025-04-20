@@ -1,7 +1,7 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header/Header';
-import Footer from '../components/Footer/Footer';
+import Header, { ConfiguredHeader } from '../components/Header/Header';
+import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
 import Tag from '../components/Tag/Tag';
 import PostDates from '../components/PostDates/PostDates';
 import { BASE_URL } from '../config';
@@ -18,6 +18,8 @@ export interface Props {
     readingTime: {
       text: string;
     };
+    heroAttribution?: string;
+    heroAttributionLink?: string;
   };
 }
 
@@ -29,6 +31,8 @@ const {
     publishedAt,
     updatedAt,
     heroImage,
+    heroAttribution,
+    heroAttributionLink,
     tags,
     readingTime: { text: minutesRead },
   },
@@ -40,27 +44,29 @@ const {
     <BaseHead title={title} description={description} />
   </head>
   <body class="dark:bg-slate-900">
-    <Header links={[
-      { href: BASE_URL, label: 'Home', isActive: true },
-      { href: BASE_URL+'events', label: 'Events' },
-      { href: BASE_URL+'catalog', label: 'Catalog' },
-      { href: BASE_URL+'policies', label: 'Policies' },
-      { href: BASE_URL+'services', label: 'Services' },
-      { href: BASE_URL+'links', label: 'Links' },
-      { href: BASE_URL+'friends', label: 'Friends' },
-    ]} 
-    socialLinks={[
-      { href: 'https://www.facebook.com/StrongMaine/', brand: 'facebook'}
-    ]}
-    />
+    <ConfiguredHeader />
+
     <main>
       <article>
         {
           heroImage && (
             <div
-              class="w-full h-screen/2 bg-no-repeat bg-center bg-cover"
+              class="w-full h-screen/2 bg-no-repeat bg-center bg-cover relative"
               style={{ backgroundImage: `url("${BASE_URL+heroImage}")` }}
-            />
+            >
+              {heroAttribution && (
+                <div class="flex flex-row items-center absolute bottom-0 right-0 p-[6px] h-[24px] bg-black/50 hover:bg-black text-white group rounded-tl-md">
+                  <a
+                    href={heroAttributionLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-xs group-hover:underline"
+                  >
+                    {heroAttribution}
+                  </a>
+                </div>
+              )}
+            </div>
           )
         }
         <div
@@ -91,6 +97,7 @@ const {
         </div>
       </article>
     </main>
-    <Footer />
+    <ConfiguredFooter />
+
   </body>
 </html>

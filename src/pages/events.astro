@@ -1,7 +1,7 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header/Header';
-import Footer from '../components/Footer/Footer';
+import Header, { ConfiguredHeader } from '../components/Header/Header';
+import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
 import {Calendar} from '../components/Calendar/Calendar';
 import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL } from '../config'; // Import necessary config
 
@@ -15,36 +15,13 @@ const fullTitle = `${pageTitle} | ${SITE_TITLE}`;
     <BaseHead title={fullTitle} description={SITE_DESCRIPTION} />
   </head>
   <body class="dark:bg-slate-900 flex flex-col min-h-screen">
-    <Header links={[
-      // TODO: Determine active state based on current page?
-      // For now, mark none as active on search page
-      { href: BASE_URL, label: 'Home' },
-      { href: BASE_URL+'events', label: 'Events' },
-      { href: BASE_URL+'catalog', label: 'Catalog' }, // Maybe mark this active?
-      { href: BASE_URL+'policies', label: 'Policies' },
-      { href: BASE_URL+'services', label: 'Services' },
-      { href: BASE_URL+'links', label: 'Links' },
-      { href: BASE_URL+'friends', label: 'Friends' },
-    ]}
-    socialLinks={[
-      { href: 'https://www.facebook.com/StrongMaine/', brand: 'facebook'}
-    ]}
-    />
+    <ConfiguredHeader />
 
     <main class="flex-grow w-[100vw]">
       <Calendar client:load />
     </main>
 
-    <Footer links={[
-      { href: BASE_URL+'events', label: 'Events' },
-      { href: BASE_URL+'catalog', label: 'Catalog' },
-      { href: BASE_URL+'policies', label: 'Policies' },
-      { href: BASE_URL+'services', label: 'Services' },
-      { href: BASE_URL+'links', label: 'Links' },
-      { href: BASE_URL+'friends', label: 'Friends' },
-    ]}
-    socialLinks={[
-      { href: 'https://www.facebook.com/StrongMaine/', brand: 'facebook'}
-    ]} />
+    <ConfiguredFooter />
+
   </body>
 </html>

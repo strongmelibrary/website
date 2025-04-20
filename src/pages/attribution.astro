@@ -1,0 +1,29 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header, { ConfiguredHeader } from '../components/Header/Header';
+import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
+import PostsList from '../components/PostsList/PostsList';
+
+import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="dark:bg-slate-900">
+    <ConfiguredHeader />
+
+    <main
+      class="mt-12 prose prose-sm sm:prose-base md:prose-lg lg:prose-xl xl:prose-2xl dark:prose-invert prose-slate mx-auto p-4"
+    >
+      <div class="p-4">
+        <h1>Attribution</h1>
+      </div>
+    </main>
+    <ConfiguredFooter />
+
+  </body>
+</html>

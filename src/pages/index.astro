@@ -4,8 +4,8 @@ const searchParam = Astro.url.searchParams.get('search');
 const redirectUrl = searchParam ? `/catalog?q=${encodeURIComponent(searchParam)}&page=1` : null;
 
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header/Header';
-import Footer from '../components/Footer/Footer';
+import {ConfiguredHeader} from '../components/Header/Header';
+import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
 
 import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL } from '../config';
 import { HeroIndex, Post } from '../components/HeroIndex/HeroIndex';
@@ -16,6 +16,7 @@ import clsx from 'clsx';
 import { LibraryHoursBlock } from '../components/LibraryHoursBlock/LibraryHoursBlock';
 import { ReadMoreBlock } from '../components/ReadMoreBlock/ReadMoreBlock';
 import dayjs from 'dayjs';
+import { GLOBAL_LINKS, SOCIAL_LINKS } from '../constants';
 
 const news: Post[] = (await Astro.glob('./news/**/*.{md,mdx}')).sort(
   (a, b) =>
@@ -103,20 +104,8 @@ const services: Post[] = [
     </script>
   </head>
   <body class="dark:bg-slate-900">
-    <Header links={[
-      { href: BASE_URL, label: 'Home', isActive: true },
-      { href: BASE_URL+'events', label: 'Events' },
-      { href: BASE_URL+'catalog', label: 'Catalog' },
-      { href: BASE_URL+'policies', label: 'Policies' },
-      { href: BASE_URL+'services', label: 'Services' },
-      { href: BASE_URL+'links', label: 'Links' },
-      { href: BASE_URL+'friends', label: 'Friends' },
-    ]} 
-    socialLinks={[
-      { href: 'https://www.facebook.com/StrongMaine/', brand: 'facebook'}
-    ]}
-    />
-
+    
+    <ConfiguredHeader />
     <HeroIndex
       posts={services}>
       <TodaysHours client:only />
@@ -184,17 +173,6 @@ const services: Post[] = [
       </div>
 
     </main>
-    <Footer
-    links={[
-      { href: BASE_URL+'events', label: 'Events' },
-      { href: BASE_URL+'catalog', label: 'Catalog' },
-      { href: BASE_URL+'policies', label: 'Policies' },
-      { href: BASE_URL+'services', label: 'Services' },
-      { href: BASE_URL+'links', label: 'Links' },
-      { href: BASE_URL+'friends', label: 'Friends' },
-    ]} 
-    socialLinks={[
-      { href: 'https://www.facebook.com/StrongMaine/', brand: 'facebook'}
-    ]} />
+    <ConfiguredFooter />
   </body>
 </html>

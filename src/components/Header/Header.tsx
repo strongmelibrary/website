@@ -5,6 +5,7 @@ import { HeaderLogo } from "../HeaderLogo/HeaderLogo";
 import clsx from "clsx";
 import { SocialButton } from "../SocialButton/SocialButton";
 import { Link, SocialLink } from '../types';
+import { GLOBAL_LINKS, SOCIAL_LINKS } from '../../constants';
 
 export interface HeaderProps {
   title?: string;
@@ -122,3 +123,9 @@ export const Header = ({
 };
 
 export default Header;
+
+export const ConfiguredHeader = () => (
+  <Header links={GLOBAL_LINKS} 
+  socialLinks={SOCIAL_LINKS}
+  />
+);

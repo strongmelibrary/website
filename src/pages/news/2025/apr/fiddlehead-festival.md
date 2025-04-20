@@ -5,7 +5,9 @@ description: "We're excited to announce our return to the Fiddlehead Festival 20
 publishedAt: "April 19 2025"
 updatedAt: "April 19 2025"
 initialDraftAt: "April 19 2025"
-heroImage: "placeholder-hero.jpg"
+heroImage: "photos/news/fiddlehead-2024.jpg"
+heroAttribution: "Photo courtesy of Fiddlehead Festival"
+heroAttributionLink: "https://www.facebook.com/FarmingtonMaineFiddleheadFestival"
 tags: ["events", "community"]
 ---
 

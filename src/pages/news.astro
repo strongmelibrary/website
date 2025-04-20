@@ -1,12 +1,12 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header/Header';
-import Footer from '../components/Footer/Footer';
+import Header, { ConfiguredHeader } from '../components/Header/Header';
+import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
 import PostsList from '../components/PostsList/PostsList';
 
 import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
 
-const posts = (await Astro.glob('./blog/**/*.{md,mdx}')).sort(
+const posts = (await Astro.glob('./news/**/*.{md,mdx}')).sort(
   (a, b) =>
     new Date(b.frontmatter.publishedAt).valueOf() - new Date(a.frontmatter.publishedAt).valueOf(),
 );
@@ -18,16 +18,17 @@ const posts = (await Astro.glob('./blog/**/*.{md,mdx}')).sort(
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body class="dark:bg-slate-900">
-    <Header />
+    <ConfiguredHeader />
+
     <main
       class="mt-12 prose prose-sm sm:prose-base md:prose-lg lg:prose-xl xl:prose-2xl dark:prose-invert prose-slate mx-auto p-4"
     >
       <div class="p-4">
-        <h1>Index</h1>
-        or see <a href="/tags/">tags</a>
+        <h1 class="type-heading-md!">News</h1>
         <PostsList posts={posts} />
       </div>
     </main>
-    <Footer />
+    <ConfiguredFooter />
+
   </body>
 </html>
