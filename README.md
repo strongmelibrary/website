@@ -1,22 +1,10 @@
 # Astro TypeScript React Tailwind Blog
 
+[<img alt="Deployed with FTP Deploy Action" src="https://img.shields.io/badge/Deployed With-FTP DEPLOY ACTION-%3CCOLOR%3E?style=for-the-badge&color=2b9348">](https://github.com/SamKirkland/FTP-Deploy-Action)
+
 ## Credit
 
 This is just a customized version of <https://github.com/withastro/astro/tree/latest/examples/blog>.
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/umstek/astro-typescript-react-tailwind/tree/main)
-
-## Customizations
-
-- Using pnpm for dependency management
-- Using React for components
-- Using Tailwind for styles
-- Using `.env` files for configurable values
-- Add extended .gitignore file generated with gitignore.io
-- Add reading time support
-- Add tags support
-- Fits more content in small screens
-- ...
 
 ## 🧞 Commands
 
@@ -24,9 +12,9 @@ All commands are run from the root of the project, from a terminal:
 
 | Command             | Action                                           |
 | :------------------ | :----------------------------------------------- |
-| `pnpm i`            | Installs dependencies                            |
-| `pnpm dev`          | Starts local dev server at `localhost:3000`      |
-| `pnpm build`        | Build your production site to `./dist/`          |
-| `pnpm preview`      | Preview your build locally, before deploying     |
-| `pnpm astro ...`    | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro --help` | Get help using the Astro CLI                     |
+| `npm i`            | Installs dependencies                            |
+| `npm run dev`          | Starts local dev server at `localhost:3000`      |
+| `npm run build`        | Build your production site to `./dist/`          |
+| `npm run preview`      | Preview your build locally, before deploying     |
+| `npm run astro ...`    | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro --help` | Get help using the Astro CLI                     |

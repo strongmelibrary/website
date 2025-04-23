@@ -1,0 +1,63 @@
+name: Deploy to GitHub Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PUBLIC_SITE_TITLE: ${{ vars.PUBLIC_SITE_TITLE }}
+      PUBLIC_SITE_DESCRIPTION: ${{ vars.PUBLIC_SITE_DESCRIPTION }}
+      PUBLIC_OWNER: ${{ vars.PUBLIC_OWNER }}
+      PUBLIC_START_YEAR: ${{ vars.PUBLIC_START_YEAR }}
+      PUBLIC_LICENSE_NOTICE: ${{ vars.PUBLIC_LICENSE_NOTICE }}
+      PUBLIC_TWITTER: ${{ vars.PUBLIC_TWITTER }}
+      PUBLIC_GITHUB: ${{ vars.PUBLIC_GITHUB }}
+      PUBLIC_LIBRARY_HOURS: ${{ vars.PUBLIC_LIBRARY_HOURS }}
+      PUBLIC_ACTUAL_ADDRESS: ${{ vars.PUBLIC_ACTUAL_ADDRESS }}
+      PUBLIC_ADDRESS_GOOGLE_MAPS: ${{ vars.PUBLIC_ADDRESS_GOOGLE_MAPS }}
+      PUBLIC_MAILING_ADDRESS: ${{ vars.PUBLIC_MAILING_ADDRESS }}
+      PUBLIC_PHONE_NUMBER: ${{ vars.PUBLIC_PHONE_NUMBER }}
+      PUBLIC_EMAIL: ${{ vars.PUBLIC_EMAIL }}
+      PUBLIC_BOOKWORM_API_URL: ${{ vars.PUBLIC_BOOKWORM_API_URL }}
+      PUBLIC_SEARCH_DOWN_CTA_URL: ${{ vars.PUBLIC_SEARCH_DOWN_CTA_URL }}
+      PUBLIC_BOOKWORM_USERNAME: ${{ vars.PUBLIC_BOOKWORM_USERNAME }}
+      PUBLIC_BOOKWORM_PASSWORD: ${{ vars.PUBLIC_BOOKWORM_PASSWORD }}
+      PUBLIC_SEARCH_DOWN_CTA_TEXT: ${{ vars.PUBLIC_SEARCH_DOWN_CTA_TEXT }}
+    steps:
+      - name: Check Env vars
+        run: env
+      - name: Checkout your repository using git
+        uses: actions/checkout@v4
+      - name: Install, build, and upload your site
+        uses: withastro/action@v3
+        with:
+          node-version: 20
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy via FTP
+        id: deployment
+        uses: SamKirkland/FTP-Deploy-Action@v4.1.0
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          port: ${{ secrets.FTP_PORT }}
+          protocol: ftps
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist         # your Astro output folder
+          server-dir: ${{ secrets.FTP_PATH }}  # where to upload on the FTP server
+          exclude: |
+            **/*.lnk
+            **/stats*
