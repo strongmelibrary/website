@@ -41,7 +41,7 @@ jobs:
           node-version: 20   
       - name: Deploy via FTP
         id: deployment
-        uses: SamKirkland/FTP-Deploy-Action@v4.1.0
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_HOST }}
           port: ${{ secrets.FTP_PORT }}
