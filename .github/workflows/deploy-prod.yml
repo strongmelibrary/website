@@ -9,7 +9,7 @@ permissions:
   id-token: write
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     env:
       PUBLIC_SITE_TITLE: ${{ vars.PUBLIC_SITE_TITLE }}
@@ -38,12 +38,7 @@ jobs:
       - name: Install, build, and upload your site
         uses: withastro/action@v3
         with:
-          node-version: 20
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
+          node-version: 20   
       - name: Deploy via FTP
         id: deployment
         uses: SamKirkland/FTP-Deploy-Action@v4.1.0
