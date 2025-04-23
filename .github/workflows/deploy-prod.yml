@@ -53,7 +53,7 @@ jobs:
           protocol: ftps
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist         # your Astro output folder
+          local-dir: ./dist/         # your Astro output folder
           server-dir: ${{ secrets.FTP_PATH }}  # where to upload on the FTP server
           exclude: |
             **/*.lnk
