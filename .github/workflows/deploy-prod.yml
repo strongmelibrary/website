@@ -45,11 +45,12 @@ jobs:
         with:
           server: ${{ secrets.FTP_HOST }}
           port: ${{ secrets.FTP_PORT }}
-          protocol: ftps
+          protocol: ftps-legacy
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/         # your Astro output folder
           server-dir: ${{ secrets.FTP_PATH }}  # where to upload on the FTP server
+          timeout: 60000
           exclude: |
             **/*.lnk
             **/stats*
