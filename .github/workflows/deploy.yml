@@ -18,8 +18,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      BASE_URL: ${{ vars.BASE_URL_STG }}
-      SITE_URL: ${{ vars.SITE_URL_STG }}
+      PUBLIC_BASE_URL: ${{ vars.BASE_URL_STG }}
+      PUBLIC_SITE_URL: ${{ vars.SITE_URL_STG }}
       PUBLIC_SITE_TITLE: ${{ vars.PUBLIC_SITE_TITLE }}
       PUBLIC_SITE_DESCRIPTION: ${{ vars.PUBLIC_SITE_DESCRIPTION }}
       PUBLIC_OWNER: ${{ vars.PUBLIC_OWNER }}

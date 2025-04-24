@@ -9,8 +9,8 @@ import { remarkReadingTime } from "./remark-reading-time.mjs";
 import { loadEnvFile } from 'node:process';
 
 const isLocal = import.meta.env.DEV;
-const base = import.meta.env.BASE_URL;
-const site = import.meta.env.SITE_URL;
+const base = import.meta.env.PUBLIC_BASE_URL;
+const site = import.meta.env.PUBLIC_SITE_URL;
 
 
 console.log(
