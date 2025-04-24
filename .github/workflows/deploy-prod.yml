@@ -41,16 +41,13 @@ jobs:
           node-version: 20   
       - name: Deploy via FTP
         id: deployment
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        uses: Dylan700/sftp-upload-action@latest
         with:
           server: ${{ secrets.FTP_HOST }}
           port: ${{ secrets.FTP_PORT }}
           protocol: ftps
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/         # your Astro output folder
-          server-dir: ${{ secrets.FTP_PATH }}  # where to upload on the FTP server
+          uploads: |
+            ./dist/ => ${{ secrets.FTP_PATH }}
           timeout: 120000
-          exclude: |
-            **/*.lnk
-            **/stats*
