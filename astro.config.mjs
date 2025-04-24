@@ -8,9 +8,9 @@ import tailwindcss from "@tailwindcss/vite";
 import { remarkReadingTime } from "./remark-reading-time.mjs";
 import { loadEnvFile } from 'node:process';
 
-const isLocal = import.meta.env.DEV;
-const base = import.meta.env.PUBLIC_BASE_URL;
-const site = import.meta.env.PUBLIC_SITE_URL;
+const isLocal = process.env.DEV;
+const base = process.env.PUBLIC_BASE_URL;
+const site = process.env.PUBLIC_SITE_URL;
 
 
 console.log(
