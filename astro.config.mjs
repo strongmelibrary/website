@@ -20,7 +20,8 @@ console.log(
 );
 
 // https://astro.build/config
-export default defineConfig({
+
+const config = {
   base: isLocal ? undefined : (base || '/website'),
   site: isLocal ? 'http://localhost:3000' : (site || "https://strongmelibrary.github.io/website"),
   markdown: {
@@ -41,4 +42,6 @@ export default defineConfig({
     plugins: [tailwindcss({ config: { applyBaseStyles: false } })],
   },
   integrations: [mdx(), react(), sitemap()],
-});
+}
+console.log('build config', config);
+export default defineConfig(config);
