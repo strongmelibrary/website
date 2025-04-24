@@ -6,8 +6,12 @@ import shikiTwoslash from "remark-shiki-twoslash";
 import tailwindcss from "@tailwindcss/vite";
 
 import { remarkReadingTime } from "./remark-reading-time.mjs";
+import { loadEnvFile } from 'node:process';
 
 const isLocal = import.meta.env.DEV;
+const base = import.meta.env.BASE_URL;
+const site = import.meta.env.SITE_URL;
+
 
 console.log(
   `Building for ${isLocal ? "local development" : "production"}${
@@ -17,8 +21,8 @@ console.log(
 
 // https://astro.build/config
 export default defineConfig({
-  base: isLocal ? undefined : '/website',
-  site: isLocal ? 'http://localhost:3000' : "https://strongmelibrary.github.io/website",
+  base: isLocal ? undefined : (base || '/website'),
+  site: isLocal ? 'http://localhost:3000' : (site || "https://strongmelibrary.github.io/website"),
   markdown: {
     syntaxHighlight: false,
     remarkPlugins: [
