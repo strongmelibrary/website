@@ -9,7 +9,7 @@ import { remarkReadingTime } from "./remark-reading-time.mjs";
 import { loadEnvFile } from 'node:process';
 
 const isLocal = process.env.DEV;
-const base = process.env.PUBLIC_BASE_URL;
+const base = process.env.PUBLIC_BASE_URL? process.env.PUBLIC_BASE_URL : '/';
 const site = process.env.PUBLIC_SITE_URL;
 
 
