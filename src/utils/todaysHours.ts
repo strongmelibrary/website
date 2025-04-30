@@ -14,18 +14,15 @@ type TodayHoursInfo = {
 };
 
 /**
- * Helper function that takes a difference in milliseconds and returns either:
+ * Helper function that takes a difference in milliseconds and returns:
  *
- *  - A human-readable duration (e.g., "1 hour and 15 minutes"), if the candidate open time
- *    is on the same day as the current time.
- *  - A day phrase ("tomorrow at {time}", "day after tomorrow at {time}", or "next {day} at {time}")
- *    if the candidate open time falls on a later day.
+ *  - A human-readable duration (e.g., "in 1 hour and 15 minutes") if on the same day.
+ *  - A day phrase ("tomorrow at 3:30pm", "next Wednesday at 9:00am") if it's a future day.
  *
- * @param diffMs - The difference in milliseconds.
- * @param simple - If true, returns a simplified version when applicable.
- * @param now - Optional current dayjs instance.
- * @param candidate - Optional candidate dayjs instance for the next open time.
- * @returns A formatted string.
+ * The `simple` flag, if true, will collapse to a single most‐significant unit:
+ *  - >1 day ⇒ "in X days"
+ *  - >0 hours ⇒ "in X hours"
+ *  - else ⇒ "in Y minutes"
  */
 const formatDuration = (
   diffMs: number,
@@ -33,7 +30,7 @@ const formatDuration = (
   now?: dayjs.Dayjs,
   candidate?: dayjs.Dayjs
 ): string => {
-  // If candidate and now are provided and the candidate is not on the same day, return day phrasing.
+  // Future‐day phrasing
   if (candidate && now && !candidate.isSame(now, 'day')) {
     if (now.add(1, 'day').isSame(candidate, 'day')) {
       return `tomorrow at ${candidate.format('h:mma')}`;
@@ -42,17 +39,29 @@ const formatDuration = (
     }
   }
 
-  // Otherwise, compute duration in minutes/hours/days.
   const totalMinutes = Math.floor(diffMs / 60000);
   const totalHours = Math.floor(totalMinutes / 60);
   const diffDays = Math.floor(totalHours / 24);
   const hoursPart = totalHours % 24;
   const minutesPart = totalMinutes % 60;
 
+  if (simple) {
+    if (diffDays > 0) {
+      return `in ${diffDays} day${diffDays > 1 ? 's' : ''}`;
+    }
+    if (hoursPart > 0) {
+      return `in ${hoursPart} hour${hoursPart > 1 ? 's' : ''}`;
+    }
+    if (minutesPart > 0) {
+      return `in ${minutesPart} minute${minutesPart !== 1 ? 's' : ''}`;
+    }
+    return "now";
+  }
+
+  // Full breakdown
   const parts: string[] = [];
   if (diffDays > 0) {
     parts.push(`${diffDays} day${diffDays > 1 ? 's' : ''}`);
-    if (simple) return `in ${parts.join(', ')}`;
   }
   if (hoursPart > 0) {
     parts.push(`${hoursPart} hour${hoursPart > 1 ? 's' : ''}`);
@@ -60,29 +69,24 @@ const formatDuration = (
   if (minutesPart > 0) {
     parts.push(`${minutesPart} minute${minutesPart !== 1 ? 's' : ''}`);
   }
-  
+
   if (parts.length === 0) {
     return "now";
   }
   if (parts.length === 1) {
     return `in ${parts[0]}`;
   }
-  const lastPart = parts.pop();
-  if (simple) {
-    parts.shift();
-  }
+  const lastPart = parts.pop()!;
   return `in ${parts.join(', ')} and ${lastPart}`;
 };
 
-// Helper function to calculate the next occurrence of a schedule's open time.
+// Helper to calculate the next weekly occurrence of a schedule's open time
 const getNextOccurrence = (s: HoursSchedule, now: dayjs.Dayjs): dayjs.Dayjs => {
-  // Get the candidate date for the schedule's day in the current week.
   let candidate = now.day(DAY_MAP[s.day as keyof typeof DAY_MAP]);
-  
-  // Build the candidate open time using the candidate date and the schedule's open time.
-  candidate = dayjs(`${candidate.format('YYYY-MM-DD')} ${s.hourOpen}`, 'YYYY-MM-DD hh:mma');
-  
-  // If the candidate open time is before the current time, add 7 days to get the next week's occurrence.
+  candidate = dayjs(
+    `${candidate.format('YYYY-MM-DD')} ${s.hourOpen}`,
+    'YYYY-MM-DD hh:mma'
+  );
   if (candidate.isBefore(now)) {
     candidate = candidate.add(7, 'day');
   }
@@ -91,18 +95,16 @@ const getNextOccurrence = (s: HoursSchedule, now: dayjs.Dayjs): dayjs.Dayjs => {
 
 /**
  * Computes today's hours info given an array of hours schedules.
- *
- * @param hours - An array of validated HoursSchedule objects.
- * @param nowOverride - Optional dayjs object to override the current time for testing.
- * @returns An object containing today's hours, whether the business is currently open,
- *          whether it will open later today, the remaining open time, and the next open time if applicable.
  */
-export const getTodayHoursInfo = (hours: HoursSchedule[], nowOverride?: dayjs.Dayjs): TodayHoursInfo => {
+export const getTodayHoursInfo = (
+  hours: HoursSchedule[],
+  nowOverride?: dayjs.Dayjs
+): TodayHoursInfo => {
   const now = nowOverride ?? dayjs();
-  const TODAY = now.format('dddd'); // e.g., "Monday", "Tuesday", etc.
+  const TODAY = now.format('dddd');
   const schedule = hours.find((s) => s.day === TODAY);
-  
-  // When there's no schedule for today, compute the next open occurrence.
+
+  // No schedule for today ⇒ find the absolute next opening
   if (!schedule) {
     let nextCandidate: dayjs.Dayjs | null = null;
     for (const s of hours) {
@@ -117,25 +119,34 @@ export const getTodayHoursInfo = (hours: HoursSchedule[], nowOverride?: dayjs.Da
       willBeOpenLater: false,
       remainingTime: "0",
       nextOpenFromNow: nextCandidate
-        ? formatDuration(nextCandidate.diff(now), true, now, nextCandidate)
+        ? formatDuration(
+          nextCandidate.diff(now),
+            /* simple= */ false,
+          now,
+          nextCandidate
+        )
         : undefined,
     };
   }
 
-  // Combine today's date with the open/close times.
+  // Build today's open/close times
   const todayDateStr = now.format('YYYY-MM-DD');
-  const openTime = dayjs(`${todayDateStr} ${schedule.hourOpen}`, 'YYYY-MM-DD hh:mma');
-  const closeTime = dayjs(`${todayDateStr} ${schedule.hourClose}`, 'YYYY-MM-DD hh:mma');
-  
-  // Business is open if current time is between openTime and closeTime.
+  const openTime = dayjs(
+    `${todayDateStr} ${schedule.hourOpen}`,
+    'YYYY-MM-DD hh:mma'
+  );
+  const closeTime = dayjs(
+    `${todayDateStr} ${schedule.hourClose}`,
+    'YYYY-MM-DD hh:mma'
+  );
+
   const isOpen = now.isAfter(openTime) && now.isBefore(closeTime);
-  // Business will be open later if current time is before today's open time.
   const willBeOpenLater = now.isBefore(openTime);
-  const remainingTime = isOpen ? formatDuration(closeTime.diff(now)) : "0";
+  const remainingTime = isOpen
+    ? formatDuration(closeTime.diff(now))
+    : "0";
 
   let nextOpenFromNow: string | undefined;
-  
-  // If the business is not open now, compute the next open time across all schedule items.
   if (!isOpen) {
     let nextCandidate: dayjs.Dayjs | null = null;
     for (const s of hours) {
@@ -145,7 +156,12 @@ export const getTodayHoursInfo = (hours: HoursSchedule[], nowOverride?: dayjs.Da
       }
     }
     if (nextCandidate) {
-      nextOpenFromNow = formatDuration(nextCandidate.diff(now), true, now, nextCandidate);
+      nextOpenFromNow = formatDuration(
+        nextCandidate.diff(now),
+        /* simple= */ false,
+        now,
+        nextCandidate
+      );
     }
   }
 
@@ -158,25 +174,29 @@ export const getTodayHoursInfo = (hours: HoursSchedule[], nowOverride?: dayjs.Da
   };
 };
 
-export const getDateForDayTime = (dayName: string, timeStr: string) => {
+/**
+ * Given a weekday name ("Tuesday") and a time string ("3:45pm"),
+ * returns the next Date matching that combination.
+ */
+export const getDateForDayTime = (dayName: string, timeStr: string): dayjs.Dayjs => {
   const targetDay = DAY_MAP[dayName as keyof typeof DAY_MAP];
   if (targetDay === undefined) {
     throw new Error(`Invalid day name: ${dayName}`);
   }
-  
-  // Start with today's date and set to the target weekday.
+
+  // Start with today's date, shift to target weekday
   let candidate = dayjs().day(targetDay);
-  
-  // If candidate is before the current moment, add 7 days to ensure it's in the future.
+
+  // If that's in the past, roll forward a week
   if (candidate.isBefore(dayjs())) {
     candidate = candidate.add(7, 'day');
   }
-  
-  // Parse the provided time using dayjs.
+
+  // Parse and apply the time
   const parsedTime = dayjs(timeStr, 'hh:mma');
-  
-  // Set the candidate's time to the parsed hours and minutes.
-  candidate = candidate.hour(parsedTime.hour()).minute(parsedTime.minute()).second(0).millisecond(0);
-  
-  return candidate;
+  return candidate
+    .hour(parsedTime.hour())
+    .minute(parsedTime.minute())
+    .second(0)
+    .millisecond(0);
 };
