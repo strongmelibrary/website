@@ -19,14 +19,6 @@ Our refreshed website is more than just a visual update. It’s a thoughtful rei
 - **Mobile-Responsive Design:** Whether you’re at home or on the go, our site automatically adjusts to your device, making it simple to access library resources from your phone or tablet.
 - **User-Friendly Experience:** With a clean, modern look, finding information is now as comfortable as flipping through the pages of a favorite book.
 
-## Embracing Our Legacy Through Innovation
-
-While our digital makeover marks a step forward, it’s deeply rooted in the storied past of our community. The **Strong Maine Public Library** has long been a guardian of local heritage, preserving tales that span generations. Our town’s history is interwoven with the legacy of the library:
-
-- **Historic Beginnings:** Our region’s roots date back to the late 18th century, when early settlers like William Read arrived in the area. The town eventually adopted the name “Strong” in honor of Caleb Strong, reflecting the resilient spirit that continues to define our community.
-- **The Sandy River Connection:** Just as the Sandy River has powered early mills and brought life to our local industries, it now flows through our new logo. This design element is a tribute to the river that nurtured our town’s growth and continues to inspire the library’s mission of sustaining knowledge and community bonds.
-- **A Tapestry of Memories:** Many of our patrons have fond recollections of days spent at the library – from flipping through local history books to attending community events that brought neighbors together. Our archives are filled with stories of a time when the library was the heart of our small town, a place where news, literature, and local legends were shared over cups of coffee and lively conversation.
-
 ## The New Logo: A Symbol of Continuity and Community
 
 Our updated logo features a flowing representation of the **Sandy River** – a constant reminder of the heritage that runs deep in Strong. For generations, the river has not only provided water and power but also served as a meeting point for families and friends. Today, the river in our logo symbolizes the connection between the past and the present, uniting the memories of yesteryear with today’s modern advancements.
