@@ -34,7 +34,7 @@ const news: Post[] = (await Astro.glob('./news/**/*.{md,mdx}')).sort(
 }));
 const services: Post[] = [
   {
-    title: 'Digital Catalog',
+    title: 'Library Catalog',
     url: BASE_URL+'catalog',
     date: new Date().toLocaleDateString('en-US', {
       year: 'numeric',
