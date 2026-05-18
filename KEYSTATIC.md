@@ -1,11 +1,11 @@
 # Keystatic CMS Setup
 
-This project uses [Keystatic](https://keystatic.com/) as a headless CMS for managing content. The CMS is designed for a **dual-deploy** pattern: the public website remains fully static (deployed via FTP), while a separate CMS admin panel is deployed to a platform like Netlify.
+This project uses [Keystatic](https://keystatic.com/) as a headless CMS for managing content. The CMS is designed for a **dual-deploy** pattern: the public website remains fully static (deployed via FTP), while a separate CMS admin panel is deployed to a platform like Vercel.
 
 ## Architecture
 
 ```
-Librarian → cms.example.com/keystatic (Netlify/Vercel)
+Librarian → cms.example.com/keystatic (Vercel)
          → Logs in with GitHub
          → Edits content (news, services, library hours, etc.)
          → Keystatic commits to main branch on GitHub
@@ -62,13 +62,14 @@ Each collection entry is a directory containing an `index.mdoc` (Markdoc) file w
 
 ## Deploying the CMS Admin Panel
 
-### Netlify (Recommended)
+### Vercel (Recommended)
 
-1. Create a new site in Netlify pointing at the `strongmelibrary/website` repo
+1. Create a new project in Vercel pointing at the `strongmelibrary/website` repo
 2. Configure build settings:
+   - **Framework Preset**: Astro
    - **Build command**: `npm run build:cms`
-   - **Publish directory**: `dist/`
-3. Set environment variables:
+   - **Output directory**: `dist/`
+3. Set environment variables in the Vercel dashboard:
    - `KEYSTATIC_CMS=true`
    - `PUBLIC_KEYSTATIC_STORAGE=github` — enables GitHub storage in the client-side admin UI
    - `KEYSTATIC_GITHUB_CLIENT_ID` — from GitHub OAuth App
@@ -81,7 +82,8 @@ Each collection entry is a directory containing an `index.mdoc` (Markdoc) file w
 1. Run `npm run dev:cms` locally
 2. Visit `http://localhost:4321/keystatic`
 3. Follow the prompts to create a GitHub OAuth App
-4. Copy the Client ID and Secret into your deployment environment variables
+   - Set the **Authorization callback URL** to: `https://your-site.vercel.app/api/keystatic/github/oauth/callback`
+4. Copy the Client ID and Secret into your Vercel environment variables
 5. Generate a random `KEYSTATIC_SECRET` (e.g., `openssl rand -hex 32`)
 
 ## What the Librarian Needs
