@@ -1,7 +1,8 @@
 import clsx from "clsx";
 import React from "react";
-import brandMark from "../../../public/brand/variant_mark.svg";
-import brandTitle from "../../../public/brand/title.svg";
+// Use ?url to get the public URL as a string (not processed as asset)
+import brandMark from "/brand/variant_mark.svg?url";
+import brandTitle from "/brand/title.svg?url";
 
 import { SITE_TITLE } from "../../config";
 

@@ -1,14 +1,16 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
-import Header, { ConfiguredHeader } from '../components/Header/Header';
-import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
-import PostsList from '../components/PostsList/PostsList';
+import { ConfiguredHeader } from '../components/Header/Header';
+import { ConfiguredFooter } from '../components/Footer/Footer';
+import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL } from '../config';
+import { ReadMoreBlock } from '../components/ReadMoreBlock/ReadMoreBlock';
+import dayjs from 'dayjs';
 
-import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
-
-const posts = (await Astro.glob('./news/**/*.{md,mdx}')).sort(
+const newsEntries = await getCollection('news');
+const posts = newsEntries.sort(
   (a, b) =>
-    new Date(b.frontmatter.publishedAt).valueOf() - new Date(a.frontmatter.publishedAt).valueOf(),
+    new Date(b.data.publishedAt || '').valueOf() - new Date(a.data.publishedAt || '').valueOf(),
 );
 ---
 
@@ -25,10 +27,25 @@ const posts = (await Astro.glob('./news/**/*.{md,mdx}')).sort(
     >
       <div class="p-4">
         <h1 class="type-heading-md!">News</h1>
-        <PostsList posts={posts} />
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <ReadMoreBlock
+              title={post.data.title}
+              titleSize="xs"
+              subtitle={post.data.description}
+              url={`${BASE_URL}news/${post.id.replace(/\/index$/, '')}`}
+              linkText={
+                post.data.publishedAt
+                  ? `Posted on: ${dayjs(post.data.publishedAt).format('MMMM D, YYYY')}`
+                  : ''
+              }
+            />
+          ))
+        ) : (
+          <p>No news available.</p>
+        )}
       </div>
     </main>
     <ConfiguredFooter />
-
   </body>
 </html>

@@ -1,16 +1,16 @@
 ---
-// Check for search parameter and prepare redirect if it exists
+import { getCollection } from 'astro:content';
+
 const searchParam = Astro.url.searchParams.get('search');
 const redirectUrl = searchParam ? `/catalog?q=${encodeURIComponent(searchParam)}&page=1` : null;
 
 import BaseHead from '../components/BaseHead.astro';
-import {ConfiguredHeader} from '../components/Header/Header';
-import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
+import { ConfiguredHeader } from '../components/Header/Header';
+import { ConfiguredFooter } from '../components/Footer/Footer';
 
 import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL } from '../config';
 import { HeroIndex, Post } from '../components/HeroIndex/HeroIndex';
 import TodaysHours from '../components/TodaysHours/TodaysHours';
-import SearchWidget from '../components/SearchWidget/SearchWidget'; // Import the new component
 
 import clsx from 'clsx';
 import { LibraryHoursBlock } from '../components/LibraryHoursBlock/LibraryHoursBlock';
@@ -18,20 +18,24 @@ import { ReadMoreBlock } from '../components/ReadMoreBlock/ReadMoreBlock';
 import dayjs from 'dayjs';
 import { GLOBAL_LINKS, SOCIAL_LINKS } from '../constants';
 
-const news: Post[] = (await Astro.glob('./news/**/*.{md,mdx}')).sort(
+const newsEntries = await getCollection('news');
+const news = newsEntries.sort(
   (a, b) =>
-    new Date(b.frontmatter.publishedAt).valueOf() - new Date(a.frontmatter.publishedAt).valueOf(),
-).slice(0, 3).map((post) => ({
-  title: post.frontmatter.title,
-  url: post.url,
-  date: new Date(post.frontmatter.publishedAt).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }),
-  category: post.frontmatter.category,
-  description: post.frontmatter.description,
+    new Date(b.data.publishedAt || '').valueOf() - new Date(a.data.publishedAt || '').valueOf(),
+).slice(0, 3).map((entry) => ({
+  title: entry.data.title,
+  url: `${BASE_URL}news/${entry.id.replace(/\/index$/, '')}`,
+  date: entry.data.publishedAt
+    ? new Date(entry.data.publishedAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    : '',
+  category: entry.data.tags?.[0],
+  description: entry.data.description || '',
 }));
+
 const services: Post[] = [
   {
     title: 'Library Catalog',
@@ -41,7 +45,6 @@ const services: Post[] = [
       month: 'long',
       day: 'numeric',
     }),
-    // category: 'Explore',
     description: 'Search the library catalog for books, movies, and more.',
   },
   {
@@ -52,7 +55,6 @@ const services: Post[] = [
       month: 'long',
       day: 'numeric',
     }),
-    // category: 'On Site',
     description: 'Learn about what our library can do for you.',
   },
   {
@@ -63,10 +65,8 @@ const services: Post[] = [
       month: 'long',
       day: 'numeric',
     }),
-    // category: 'Policies',
     description: 'Come see what\'s happening this month at the library.',
   }];
-
 ---
 
 <!DOCTYPE html>
@@ -74,14 +74,11 @@ const services: Post[] = [
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
     <script define:vars={{ baseUrl: BASE_URL }}>
-      // This script will run after the page loads
       document.addEventListener('DOMContentLoaded', function() {
-        // Find the search input and button in the HeroIndex component
         var searchInput = document.querySelector('.bg-info-dark input');
         var searchButton = document.querySelector('.bg-info-dark button');
         
         if (searchInput && searchButton) {
-          // Add click event listener to the search button
           searchButton.addEventListener('click', function() {
             var searchTerm = searchInput.value.trim();
             if (searchTerm) {
@@ -89,10 +86,9 @@ const services: Post[] = [
             }
           });
           
-          // Add keypress event listener to the search input (for Enter key)
           searchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-              e.preventDefault(); // Prevent form submission
+              e.preventDefault();
               var searchTerm = searchInput.value.trim();
               if (searchTerm) {
                 window.location.href = baseUrl + 'catalog?q=' + encodeURIComponent(searchTerm) + '&page=1';
@@ -167,11 +163,8 @@ const services: Post[] = [
         "gap-2"
       )}
     >
-        
-
         <LibraryHoursBlock />
       </div>
-
     </main>
     <ConfiguredFooter />
   </body>

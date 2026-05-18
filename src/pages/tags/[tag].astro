@@ -1,52 +1,70 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
-import PostsList from '../../components/PostsList/PostsList';
-
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../config';
+import { ConfiguredHeader } from '../../components/Header/Header';
+import { ConfiguredFooter } from '../../components/Footer/Footer';
+import { ReadMoreBlock } from '../../components/ReadMoreBlock/ReadMoreBlock';
+import Tag from '../../components/Tag/Tag';
+import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL } from '../../config';
+import dayjs from 'dayjs';
 
 export async function getStaticPaths() {
-  const posts = await Astro.glob('../blog/**/*.{md,mdx}');
+  const newsEntries = await getCollection('news');
+  const serviceEntries = await getCollection('services');
+  const allEntries = [...newsEntries, ...serviceEntries];
 
-  const groupedPosts: { [tag: string]: Record<string, any>[] } = posts
-    .flatMap((post) => (post.frontmatter.tags || []).map((tag: string) => [tag, post]))
-    .reduce((groups, [tag, post]) => ({ ...groups, [tag]: [...(groups[tag] || []), post] }), {});
+  const allTags = [...new Set(allEntries.flatMap((entry) => entry.data.tags || []))];
 
-  return Object.entries(groupedPosts).map(([tag, posts]) => ({
-    params: { tag },
-    props: {
-      posts: posts.sort(
-        (a, b) =>
-          new Date(b.frontmatter.publishedAt).valueOf() -
-          new Date(a.frontmatter.publishedAt).valueOf(),
-      ),
-    },
-  }));
+  return allTags.map((tag) => {
+    const taggedEntries = allEntries.filter((entry) =>
+      entry.data.tags?.includes(tag)
+    );
+    return {
+      params: { tag },
+      props: { entries: taggedEntries, tag },
+    };
+  });
 }
 
-const {
-  params: { tag },
-  props: { posts },
-} = Astro;
+const { entries, tag } = Astro.props;
+const sortedEntries = entries.sort(
+  (a, b) =>
+    new Date(b.data.publishedAt || '').valueOf() - new Date(a.data.publishedAt || '').valueOf(),
+);
 ---
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <BaseHead title={`Tag: ${tag} | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
   </head>
   <body class="dark:bg-slate-900">
-    <Header />
+    <ConfiguredHeader />
+
     <main
       class="mt-12 prose prose-sm sm:prose-base md:prose-lg lg:prose-xl xl:prose-2xl dark:prose-invert prose-slate mx-auto p-4"
     >
       <div class="p-4">
-        <h1>🏷️ {tag}</h1>
-        go back to <a href="/tags/">tags</a>
-        <PostsList posts={posts} />
+        <h1 class="type-heading-md!">Tag: {tag}</h1>
+        {sortedEntries.map((entry) => {
+          const collectionType = entry.collection;
+          const url = `${BASE_URL}${collectionType === 'news' ? 'news' : 'services'}/${entry.id.replace(/\/index$/, '')}`;
+          return (
+            <ReadMoreBlock
+              title={entry.data.title}
+              titleSize="xs"
+              subtitle={entry.data.description}
+              url={url}
+              linkText={
+                entry.data.publishedAt
+                  ? `Posted on: ${dayjs(entry.data.publishedAt).format('MMMM D, YYYY')}`
+                  : ''
+              }
+            />
+          );
+        })}
       </div>
     </main>
-    <Footer />
+    <ConfiguredFooter />
   </body>
 </html>

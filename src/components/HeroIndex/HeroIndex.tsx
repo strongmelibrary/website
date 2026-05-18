@@ -4,8 +4,8 @@ import { ReadMoreBlock } from "../ReadMoreBlock/ReadMoreBlock";
 import { Button, Input } from '@headlessui/react';
 import { PiMagnifyingGlassBold } from 'react-icons/pi';
 
-import heroImage from "../../../public/photos/unsplash/annie-spratt-unsplash.jpg"; 
-import flyingBooks from "../../../public/illustrations/flying_books.svg"; 
+import heroImage from "/photos/unsplash/annie-spratt-unsplash.jpg?url";
+import flyingBooks from "/illustrations/flying_books.svg?url";
 
 export interface Post {
   title: string;

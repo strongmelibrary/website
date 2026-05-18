@@ -3,8 +3,9 @@ import clsx from 'clsx';
 
 import { LIBRARY_HOURS } from '../../config';
 import { DAY_MAP } from '../../constants';
+import clock from "/illustrations/clock.svg?url";
+
 import { getDateForDayTime } from '../../utils/todaysHours';
-import clock from "../../../public/illustrations/clock.svg"; 
 
 const DayAndHours = ({ day, hourOpen, hourClose }: {
   day: string;

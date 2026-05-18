@@ -1,0 +1,81 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import { ConfiguredHeader } from '../../components/Header/Header';
+import { ConfiguredFooter } from '../../components/Footer/Footer';
+import Tag from '../../components/Tag/Tag';
+import PostDates from '../../components/PostDates/PostDates';
+import { BASE_URL } from '../../config';
+
+export async function getStaticPaths() {
+  const newsEntries = await getCollection('news');
+  return newsEntries.map((entry) => ({
+    params: { slug: entry.id.replace(/\/index$/, '') },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, description, publishedAt, updatedAt, heroImage, heroAttribution, heroAttributionLink, tags } = entry.data;
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body class="dark:bg-slate-900">
+    <ConfiguredHeader />
+
+    <main>
+      <article>
+        {
+          heroImage && (
+            <div
+              class="w-full h-screen/2 bg-no-repeat bg-center bg-cover relative"
+              style={{ backgroundImage: `url("${BASE_URL + heroImage}")` }}
+            >
+              {heroAttribution && (
+                <div class="flex flex-row items-center absolute bottom-0 right-0 p-[6px] h-[24px] bg-black/50 hover:bg-black text-white group rounded-tl-md">
+                  <a
+                    href={heroAttributionLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-xs group-hover:underline"
+                  >
+                    {heroAttribution}
+                  </a>
+                </div>
+              )}
+            </div>
+          )
+        }
+        <div
+          class="mt-12 prose prose-sm sm:prose-base md:prose-lg lg:prose-xl xl:prose-2xl dark:prose-invert prose-slate mx-auto p-4"
+        >
+          <h1>{title}</h1>
+          <div class="flex flex-col space-y-4 text-sm sm:text-base md:text-md lg:text-lg">
+            <div class="flex flex-row space-x-2">
+              {
+                tags?.map((tag) => (
+                  <Tag key={tag} href={`${BASE_URL}tags/${tag}`}>
+                    {tag}
+                  </Tag>
+                ))
+              }
+            </div>
+            <div class="flex flex-row space-x-4">
+              <PostDates
+                publishedAt={publishedAt}
+                updatedAt={updatedAt}
+              />
+            </div>
+          </div>
+          <div class="h-16"></div>
+          <Content />
+        </div>
+      </article>
+    </main>
+    <ConfiguredFooter />
+  </body>
+</html>

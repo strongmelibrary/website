@@ -1,26 +1,26 @@
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
+import markdoc from '@astrojs/markdoc';
 import sitemap from "@astrojs/sitemap";
 import react from "@astrojs/react";
 import shikiTwoslash from "remark-shiki-twoslash";
 import tailwindcss from "@tailwindcss/vite";
+import keystatic from '@keystatic/astro';
 
 import { remarkReadingTime } from "./remark-reading-time.mjs";
-import { loadEnvFile } from 'node:process';
 
 const isLocal = process.env.DEV;
-const base = process.env.PUBLIC_BASE_URL? process.env.PUBLIC_BASE_URL : '/';
+const isCmsMode = process.env.KEYSTATIC_CMS === 'true';
+const base = process.env.PUBLIC_BASE_URL ? process.env.PUBLIC_BASE_URL : '/';
 const site = process.env.PUBLIC_SITE_URL;
-
 
 console.log(
   `Building for ${isLocal ? "local development" : "production"}${
     isLocal ? "" : ` at ${new Date().toISOString()}`
-  }`
+  }${isCmsMode ? " [CMS MODE]" : ""}`
 );
 
 // https://astro.build/config
-
 const config = {
   base: isLocal ? undefined : (base || '/website'),
   site: isLocal ? 'http://localhost:3000' : (site || "https://strongmelibrary.github.io/website"),
@@ -33,7 +33,6 @@ const config = {
         { themes: ["github-dark", "github-light"] },
       ],
     ],
-    extendDefaultPlugins: true,
   },
   vite: {
     optimizeDeps: {
@@ -41,7 +40,14 @@ const config = {
     },
     plugins: [tailwindcss({ config: { applyBaseStyles: false } })],
   },
-  integrations: [mdx(), react(), sitemap()],
-}
+  integrations: [
+    markdoc(),
+    mdx(),
+    react(),
+    sitemap(),
+    ...(isCmsMode ? [keystatic()] : []),
+  ],
+};
+
 console.log('build config', config);
 export default defineConfig(config);
