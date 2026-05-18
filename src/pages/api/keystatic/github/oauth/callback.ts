@@ -1,65 +1,68 @@
+// src/pages/api/keystatic/github/oauth/callback.ts
 import type { APIRoute } from 'astro';
 
-/**
- * TEMPORARY DEBUG INTERCEPT — remove after diagnosing OAuth 401
- *
- * This file intercepts requests to /api/keystatic/github/oauth/callback
- * BEFORE Keystatic's built-in handler and dumps the full request context
- * as JSON so we can inspect whether `state` is present and cookies are set.
- *
- * To restore normal Keystatic OAuth, delete this file.
- */
-export const GET: APIRoute = ({ request, url }) => {
-  const allCookies: Record<string, string> = {};
-  const cookieHeader = request.headers.get('cookie');
-  if (cookieHeader) {
-    cookieHeader.split(';').forEach(c => {
+export const prerender = false;
+
+export const GET: APIRoute = async ({ request, url }) => {
+  const code = url.searchParams.get('code');
+  const state = url.searchParams.get('state');
+
+  // Parse cookies from request
+  const cookieHeader = request.headers.get('cookie') ?? '';
+  const cookies = Object.fromEntries(
+    cookieHeader.split(';').map(c => {
       const [k, ...v] = c.trim().split('=');
-      if (k) allCookies[k.trim()] = v.join('=');
-    });
+      return [k.trim(), v.join('=')];
+    })
+  );
+  const storedState = cookies['ks-state'];
+
+  // Validate state
+  if (!code || !state || !storedState || state !== storedState) {
+    return new Response(
+      `OAuth state validation failed. state=${state}, storedState=${storedState ? '[present]' : '[missing]'}`,
+      { status: 401 }
+    );
   }
 
-  const params: Record<string, string> = {};
-  url.searchParams.forEach((v, k) => { params[k] = v; });
+  // Exchange code for access token
+  const clientId = import.meta.env.KEYSTATIC_GITHUB_CLIENT_ID;
+  const clientSecret = import.meta.env.KEYSTATIC_GITHUB_CLIENT_SECRET;
 
-  const headers: Record<string, string> = {};
-  request.headers.forEach((v, k) => { headers[k] = v; });
+  if (!clientId || !clientSecret) {
+    return new Response('Missing GitHub OAuth credentials', { status: 500 });
+  }
 
-  // Highlight the OAuth-critical fields
-  const oauthDiagnosis = {
-    hasCode: params['code'] !== undefined,
-    codeLength: params['code']?.length ?? 0,
-    hasState: params['state'] !== undefined,
-    stateValue: params['state'] ?? null,
-    keystatiCookies: Object.fromEntries(
-      Object.entries(allCookies).filter(([k]) =>
-        k.toLowerCase().includes('keystatic') ||
-        k.toLowerCase() === 'state' ||
-        k.toLowerCase().includes('oauth') ||
-        k.toLowerCase().includes('gh_')
-      )
-    ),
-    allCookieKeys: Object.keys(allCookies),
-  };
+  const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({ client_id: clientId, client_secret: clientSecret, code }),
+  });
 
-  return new Response(
-    JSON.stringify(
-      {
-        _note: 'TEMPORARY DEBUG INTERCEPT — delete src/pages/api/keystatic/github/oauth/callback.ts to restore Keystatic OAuth',
-        url: url.toString(),
-        oauthDiagnosis,
-        queryParams: params,
-        cookies: allCookies,
-        headers,
-      },
-      null,
-      2
-    ),
-    {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    }
+  const tokenData = await tokenResponse.json() as Record<string, string>;
+
+  if (!tokenData.access_token) {
+    return new Response(
+      `GitHub token exchange failed: ${tokenData.error ?? 'unknown error'} — ${tokenData.error_description ?? ''}`,
+      { status: 401 }
+    );
+  }
+
+  // Clear the ks-state cookie and set the access token cookie
+  // NOTE: keystatic-gh-access-token must NOT be HttpOnly — Keystatic's frontend JS reads it
+  const headers = new Headers();
+  headers.append(
+    'Set-Cookie',
+    `ks-state=; HttpOnly; Secure; SameSite=Lax; Max-Age=0; Path=/`
   );
-};
+  headers.append(
+    'Set-Cookie',
+    `keystatic-gh-access-token=${tokenData.access_token}; Secure; SameSite=Lax; Path=/`
+  );
+  headers.set('Location', `${url.origin}/keystatic`);
 
-export const prerender = false;
+  return new Response(null, { status: 302, headers });
+};
