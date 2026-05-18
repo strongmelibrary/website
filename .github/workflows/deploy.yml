@@ -45,6 +45,9 @@ jobs:
         run: env
       - name: Checkout your repository using git
         uses: actions/checkout@v4
+      - name: Remove CMS-only API routes (SSR, not compatible with static build)
+        run: |
+          rm -rf src/pages/api/keystatic
       - name: Install, build, and upload your site
         uses: withastro/action@v3
         with:
