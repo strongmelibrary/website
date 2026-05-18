@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build:cms"
+  command = "echo KEYSTATIC_GITHUB_CLIENT_ID=$KEYSTATIC_GITHUB_CLIENT_ID && npm run build:cms"
   publish = "dist"
 
 [build.environment]
