@@ -112,9 +112,11 @@ This happens for one of two reasons:
 
 Vercel env vars are scoped per environment: **Production**, **Preview**, **Development**. If `KEYSTATIC_SECRET`, `KEYSTATIC_GITHUB_CLIENT_ID`, and `KEYSTATIC_GITHUB_CLIENT_SECRET` were set in the dashboard for **Production** but you're accessing a **Preview** deployment (or vice versa), the serverless function sees `undefined`.
 
+> **How to tell**: Preview deployment URLs look like `your-project-abc123-xyz.vercel.app` or `your-project-word-word-37.vercel.app` (random words/numbers appended). Your custom domain or `your-project.vercel.app` (no suffix) is Production. If you're unsure, open the Vercel dashboard → **Deployments** and check which environment the URL belongs to.
+
 **Fix**: In the Vercel dashboard → **Settings → Environment Variables**, confirm all three secrets are enabled for the correct environment(s):
 - ☑ Production
-- ☑ Preview (if you test via Preview URLs)
+- ☑ Preview (if you test via Preview URLs — each var has a separate checkbox)
 
 #### Reason B — Stale deployment (env vars added after last deploy)
 
@@ -130,15 +132,27 @@ Vite replaces `import.meta.env.*` references **at build time**. If any part of t
 
 > **Note**: Never put secret values (`KEYSTATIC_SECRET`, `KEYSTATIC_GITHUB_CLIENT_SECRET`) in [`vercel.json`](vercel.json) — that file is committed to the repository. Secrets belong in the Vercel dashboard only.
 
+#### Reason D — Node.js 24 runtime incompatibility
+
+Vercel recently introduced `nodejs24.x` as a runtime option. `@keystatic/core` signs and verifies the OAuth state cookie using HMAC-SHA256 via Node's built-in `crypto` module. Node.js 24 (released May 2025) is new enough that it may expose subtle changes in crypto API behavior or buffer handling that cause the HMAC verification to silently fail — which Keystatic surfaces as a 401.
+
+**How to diagnose**: Check the Vercel function runtime in the deployment logs. If it shows `nodejs24.x` and all env vars are confirmed correct with a fresh redeploy, try switching to `nodejs22.x`.
+
+**Fix**:
+1. In the Vercel dashboard → **Settings → Functions**, change **Node.js Version** from `24.x` to `22.x`
+2. Trigger a fresh **Redeploy**
+3. Alternatively, add `"functions": { "api/**": { "runtime": "nodejs22.x" } }` to [`vercel.json`](vercel.json) to pin the runtime in code
+
 #### Checklist for 401 debugging
 
 1. [ ] Open Vercel dashboard → **Settings → Environment Variables**
 2. [ ] Confirm `KEYSTATIC_SECRET` is present with a non-empty value (not just whitespace)
 3. [ ] Confirm `KEYSTATIC_GITHUB_CLIENT_ID` matches the GitHub OAuth App exactly
 4. [ ] Confirm `KEYSTATIC_GITHUB_CLIENT_SECRET` matches the GitHub OAuth App exactly
-5. [ ] Confirm all three are enabled for the environment matching your deployment URL (Production/Preview)
+5. [ ] Confirm all three are enabled for the **correct environment** — check whether your URL is a **Preview** deployment (random-suffix URL) or **Production** (custom domain / bare `project.vercel.app`)
 6. [ ] Trigger a fresh **Redeploy** in the Vercel dashboard after confirming the above
 7. [ ] Confirm the GitHub OAuth App **Authorization callback URL** exactly matches `https://your-vercel-domain/api/keystatic/github/oauth/callback`
+8. [ ] If all of the above pass, check the Vercel function runtime — if it shows `nodejs24.x`, switch to `22.x` in **Settings → Functions** and redeploy (see Reason D above)
 
 ---
 
