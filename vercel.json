@@ -1,0 +1,5 @@
+{
+  "env": {
+    "PUBLIC_KEYSTATIC_STORAGE": "github"
+  }
+}

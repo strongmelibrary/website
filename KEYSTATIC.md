@@ -71,11 +71,17 @@ Each collection entry is a directory containing an `index.mdoc` (Markdoc) file w
    - **Output directory**: `dist/`
 3. Set environment variables in the Vercel dashboard:
    - `KEYSTATIC_CMS=true`
-   - `PUBLIC_KEYSTATIC_STORAGE=github` — enables GitHub storage in the client-side admin UI
    - `KEYSTATIC_GITHUB_CLIENT_ID` — from GitHub OAuth App
    - `KEYSTATIC_GITHUB_CLIENT_SECRET` — from GitHub OAuth App
    - `KEYSTATIC_SECRET` — a random secret string
    - Plus all `PUBLIC_*` variables from the production config
+
+> **⚠️ `PUBLIC_KEYSTATIC_STORAGE=github` — no manual Vercel setup needed**
+> This variable is codified in [`vercel.json`](vercel.json) and is automatically injected at build time.
+> Do **not** set it to `local` (or omit it) or Keystatic will silently fall back to local file storage,
+> even when all GitHub OAuth credentials are present. Because [`keystatic.config.ts`](keystatic.config.ts)
+> uses `import.meta.env` (resolved at **build time** by Vite/Astro), this variable **must** be present
+> during the Vercel build — not just at runtime.
 
 ### Setting up GitHub Authentication
 
