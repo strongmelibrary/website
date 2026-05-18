@@ -1,4 +1,4 @@
-import { defineConfig } from "astro/config";
+import { defineConfig, envField } from "astro/config";
 import mdx from "@astrojs/mdx";
 import markdoc from '@astrojs/markdoc';
 import sitemap from "@astrojs/sitemap";
@@ -49,6 +49,15 @@ const config = {
     sitemap(),
     ...(isCmsMode ? [keystatic()] : []),
   ],
+  ...(isCmsMode ? {
+    env: {
+      schema: {
+        KEYSTATIC_GITHUB_CLIENT_ID: envField.string({ context: "server", access: "secret" }),
+        KEYSTATIC_GITHUB_CLIENT_SECRET: envField.string({ context: "server", access: "secret" }),
+        KEYSTATIC_SECRET: envField.string({ context: "server", access: "secret" }),
+      }
+    }
+  } : {}),
 };
 
 console.log('build config', config);

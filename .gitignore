@@ -273,3 +273,5 @@ sketch
 
 # Local Netlify folder
 .netlify
+
+.astro/
