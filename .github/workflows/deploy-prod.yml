@@ -42,7 +42,7 @@ jobs:
       - name: Install, build, and upload your site
         uses: withastro/action@v3
         with:
-          node-version: 20   
+          node-version: 22
       - name: Deploy via FTP
         id: deployment
         uses: Dylan700/sftp-upload-action@latest
