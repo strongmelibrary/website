@@ -6,6 +6,7 @@ import react from "@astrojs/react";
 import shikiTwoslash from "remark-shiki-twoslash";
 import tailwindcss from "@tailwindcss/vite";
 import keystatic from '@keystatic/astro';
+import netlify from '@astrojs/netlify';
 
 import { remarkReadingTime } from "./remark-reading-time.mjs";
 
@@ -22,6 +23,7 @@ console.log(
 
 // https://astro.build/config
 const config = {
+  adapter: isCmsMode ? netlify() : undefined,
   base: isLocal ? undefined : (base || '/website'),
   site: isLocal ? 'http://localhost:3000' : (site || "https://strongmelibrary.github.io/website"),
   markdown: {
