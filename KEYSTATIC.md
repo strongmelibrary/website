@@ -98,6 +98,50 @@ Each collection entry is a directory containing an `index.mdoc` (Markdoc) file w
 - The **URL** to the deployed CMS admin panel
 - That's it — no terminal, git, or code knowledge required
 
+## Troubleshooting
+
+### OAuth Callback Returns 401 (GitHub returns 200)
+
+**Symptom**: GitHub successfully exchanges the OAuth code for an access token (`POST github.com/login/oauth/access_token → 200`), but Keystatic's own callback handler returns 401 (`GET /api/keystatic/github/oauth/callback → 401`).
+
+**Root Cause**: `KEYSTATIC_SECRET` is `undefined` inside the Vercel serverless function that handles the callback. Keystatic uses this secret to verify the signed OAuth state cookie it set when the login flow began. If the secret is absent, the HMAC signature check fails and Keystatic returns 401 as a security measure.
+
+This happens for one of two reasons:
+
+#### Reason A — Environment scope mismatch (most common)
+
+Vercel env vars are scoped per environment: **Production**, **Preview**, **Development**. If `KEYSTATIC_SECRET`, `KEYSTATIC_GITHUB_CLIENT_ID`, and `KEYSTATIC_GITHUB_CLIENT_SECRET` were set in the dashboard for **Production** but you're accessing a **Preview** deployment (or vice versa), the serverless function sees `undefined`.
+
+**Fix**: In the Vercel dashboard → **Settings → Environment Variables**, confirm all three secrets are enabled for the correct environment(s):
+- ☑ Production
+- ☑ Preview (if you test via Preview URLs)
+
+#### Reason B — Stale deployment (env vars added after last deploy)
+
+Vercel env vars only take effect on the **next deployment** triggered after they are saved. If the secrets were added to the dashboard after the last deploy, the running serverless functions still don't have them.
+
+**Fix**: Trigger a fresh Vercel re-deploy (e.g., push a trivial commit or use **Deployments → Redeploy** in the dashboard).
+
+#### Reason C — `import.meta.env` bake-time issue
+
+Vite replaces `import.meta.env.*` references **at build time**. If any part of the Keystatic integration reads secrets via `import.meta.env.KEYSTATIC_SECRET` (rather than `process.env`), the variable must be present during the Vercel **Build Step**, not just at runtime.
+
+**Fix**: In the Vercel dashboard for each of the three secrets, check **"Also expose to Build Step"** (or "Available during build"). Then re-deploy.
+
+> **Note**: Never put secret values (`KEYSTATIC_SECRET`, `KEYSTATIC_GITHUB_CLIENT_SECRET`) in [`vercel.json`](vercel.json) — that file is committed to the repository. Secrets belong in the Vercel dashboard only.
+
+#### Checklist for 401 debugging
+
+1. [ ] Open Vercel dashboard → **Settings → Environment Variables**
+2. [ ] Confirm `KEYSTATIC_SECRET` is present with a non-empty value (not just whitespace)
+3. [ ] Confirm `KEYSTATIC_GITHUB_CLIENT_ID` matches the GitHub OAuth App exactly
+4. [ ] Confirm `KEYSTATIC_GITHUB_CLIENT_SECRET` matches the GitHub OAuth App exactly
+5. [ ] Confirm all three are enabled for the environment matching your deployment URL (Production/Preview)
+6. [ ] Trigger a fresh **Redeploy** in the Vercel dashboard after confirming the above
+7. [ ] Confirm the GitHub OAuth App **Authorization callback URL** exactly matches `https://your-vercel-domain/api/keystatic/github/oauth/callback`
+
+---
+
 ## Configuration
 
 The Keystatic content schema is defined in [`keystatic.config.ts`](keystatic.config.ts). The Astro content collection schemas are defined in [`src/content/config.ts`](src/content/config.ts). These two files must be kept in sync when adding new content types.
