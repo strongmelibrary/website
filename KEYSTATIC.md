@@ -70,6 +70,7 @@ Each collection entry is a directory containing an `index.mdoc` (Markdoc) file w
    - **Publish directory**: `dist/`
 3. Set environment variables:
    - `KEYSTATIC_CMS=true`
+   - `PUBLIC_KEYSTATIC_STORAGE=github` — enables GitHub storage in the client-side admin UI
    - `KEYSTATIC_GITHUB_CLIENT_ID` — from GitHub OAuth App
    - `KEYSTATIC_GITHUB_CLIENT_SECRET` — from GitHub OAuth App
    - `KEYSTATIC_SECRET` — a random secret string
@@ -97,7 +98,8 @@ The Keystatic content schema is defined in [`keystatic.config.ts`](keystatic.con
 
 | Variable | Required For | Description |
 |----------|-------------|-------------|
-| `KEYSTATIC_CMS` | CMS deploy | Set to `true` to enable CMS mode |
+| `KEYSTATIC_CMS` | CMS deploy | Set to `true` to enable CMS mode (server-side: adapter & integrations) |
+| `PUBLIC_KEYSTATIC_STORAGE` | CMS deploy | Set to `github` to enable GitHub storage (client-side: admin UI). Defaults to `local` |
 | `KEYSTATIC_GITHUB_CLIENT_ID` | CMS deploy | GitHub OAuth App Client ID |
 | `KEYSTATIC_GITHUB_CLIENT_SECRET` | CMS deploy | GitHub OAuth App Client Secret |
 | `KEYSTATIC_SECRET` | CMS deploy | Random secret for session signing |

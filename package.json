@@ -14,7 +14,7 @@
     "build-storybook": "storybook build",
     "kill:dev:astro": "pkill -f \"astro dev\" 2>/dev/null; sleep 1; echo \"done\"",
     "dev:cms": "KEYSTATIC_CMS=true USE_LOCAL=true astro dev --host --open",
-    "dev:cms:github": "KEYSTATIC_CMS=true astro dev --host --open",
+    "dev:cms:github": "KEYSTATIC_CMS=true PUBLIC_KEYSTATIC_STORAGE=github astro dev --host --open",
     "build:cms": "KEYSTATIC_CMS=true astro build"
   },
   "dependencies": {

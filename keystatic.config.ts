@@ -1,7 +1,7 @@
 import { config, collection, singleton, fields } from '@keystatic/core';
 
 export default config({
-  storage: (import.meta.env.KEYSTATIC_CMS === 'true' && import.meta.env.USE_LOCAL !== 'true')
+  storage: import.meta.env.PUBLIC_KEYSTATIC_STORAGE === 'github'
     ? {
       kind: 'github',
       repo: 'strongmelibrary/website',
