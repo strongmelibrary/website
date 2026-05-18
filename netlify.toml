@@ -1,5 +1,5 @@
 [build]
-  command = "echo KEYSTATIC_GITHUB_CLIENT_ID=$KEYSTATIC_GITHUB_CLIENT_ID && npm run build:cms"
+  command = "npm run build:cms"
   publish = "dist"
 
 [build.environment]
@@ -9,3 +9,6 @@
 [functions]
   node_bundler = "esbuild"
   included_files = []
+
+[[plugins]]
+  package = "netlify-plugin-inline-functions-env"
