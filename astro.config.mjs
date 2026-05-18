@@ -37,6 +37,11 @@ const config = {
     ],
   },
   vite: {
+    define: {
+      'process.env.KEYSTATIC_GITHUB_CLIENT_ID': 'process.env.KEYSTATIC_GITHUB_CLIENT_ID',
+      'process.env.KEYSTATIC_GITHUB_CLIENT_SECRET': 'process.env.KEYSTATIC_GITHUB_CLIENT_SECRET',
+      'process.env.KEYSTATIC_SECRET': 'process.env.KEYSTATIC_SECRET',
+    },
     optimizeDeps: {
       include: ["@mdx-js/react"],
     },
