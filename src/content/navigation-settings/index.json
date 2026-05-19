@@ -1,0 +1,34 @@
+{
+  "navLinks": [
+    {
+      "label": "Home",
+      "href": "/",
+      "isHidden": false,
+      "openInNewTab": false
+    },
+    {
+      "label": "Catalog",
+      "href": "/catalog",
+      "isHidden": false,
+      "openInNewTab": false
+    },
+    {
+      "label": "News",
+      "href": "/news",
+      "isHidden": false,
+      "openInNewTab": false
+    },
+    {
+      "label": "Events",
+      "href": "/events",
+      "isHidden": true,
+      "openInNewTab": false
+    },
+    {
+      "label": "Services",
+      "href": "/services",
+      "isHidden": false,
+      "openInNewTab": false
+    }
+  ]
+}

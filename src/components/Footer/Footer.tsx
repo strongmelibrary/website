@@ -11,22 +11,17 @@ import React from "react";
 import clsx from "clsx";
 import { HeaderLogo } from '../HeaderLogo/HeaderLogo';
 
-import {
-  PUBLIC_ACTUAL_ADDRESS,
-  PUBLIC_ADDRESS_GOOGLE_MAPS,
-  PUBLIC_MAILING_ADDRESS,
-  PUBLIC_PHONE_NUMBER,
-  PUBLIC_EMAIL
-} from "../../config";
 import { TbExternalLink } from 'react-icons/tb';
-import { Link, SocialLink } from '../types';
+import type { Link, SocialLink } from '../types';
 import { SocialButton } from '../SocialButton/SocialButton';
 import { FRIENDS_LINKS, GLOBAL_LINKS, SOCIAL_LINKS } from '../../constants';
+import type { ContactInfo } from '../../config';
 
 export interface FooterProps {
   links?: Link[];
   friendsLinks?: Link[];
   socialLinks?: SocialLink[];
+  contactInfo?: ContactInfo;
 }
 
 export const DEFAULT_LINKS: Link[] = [
@@ -109,7 +104,16 @@ const Footer = ({
   links = DEFAULT_LINKS,
   friendsLinks = DEFAULT_FRIENDS_LINKS,
   socialLinks = DEFAULT_SOCIAL_LINKS,
+  contactInfo,
 }: FooterProps) => {
+  // Default contact info if not provided
+  const contact = contactInfo ?? {
+    physicalAddress: '',
+    googleMapsUrl: '',
+    mailingAddress: '',
+    phoneNumber: '',
+    email: '',
+  };
   // get friend link topics
   const friendLinkTopics = friendsLinks.reduce((acc, link) => {
     if (link.topic && !acc.includes(link.topic)) {
@@ -187,10 +191,10 @@ const Footer = ({
             "items-start",
             "text-left"
           )}
-          href={PUBLIC_ADDRESS_GOOGLE_MAPS}
+          href={contact.googleMapsUrl}
           target="_blank"
         >
-          {PUBLIC_ACTUAL_ADDRESS || 'Address not available'}
+          {contact.physicalAddress || 'Address not available'}
           <TbExternalLink className="inline-block" />
         </a>
         <div className={clsx(
@@ -204,7 +208,7 @@ const Footer = ({
           "items-start",
           "text-left"
         )}>
-          Mailing: {PUBLIC_MAILING_ADDRESS || 'Address not available'}
+          Mailing: {contact.mailingAddress || 'Address not available'}
         </div>
         <div className={clsx(
           "text-slate-600",
@@ -218,8 +222,8 @@ const Footer = ({
           "text-left"
         )}>
           Phone: <a
-            href={`tel:${PUBLIC_PHONE_NUMBER}`}
-          >{PUBLIC_PHONE_NUMBER || '555-555-5555'}</a>
+            href={`tel:${contact.phoneNumber}`}
+          >{contact.phoneNumber || '555-555-5555'}</a>
         </div>
         <div className={clsx(
           "text-slate-600",
@@ -233,8 +237,8 @@ const Footer = ({
           "text-left"
         )}>
           Email: <a
-            href={`mailto:${PUBLIC_EMAIL}`}
-          >{PUBLIC_EMAIL || 'example@example.com'}</a>
+            href={`mailto:${contact.email}`}
+          >{contact.email || 'example@example.com'}</a>
         </div>
       </div>
       <div
@@ -397,10 +401,11 @@ const Footer = ({
 export default Footer;
 
 
-export const ConfiguredFooter = () => (
+export const ConfiguredFooter = ({ contactInfo }: { contactInfo?: ContactInfo }) => (
   <Footer
-    links={GLOBAL_LINKS} 
-    socialLinks={SOCIAL_LINKS} 
+    links={GLOBAL_LINKS}
+    socialLinks={SOCIAL_LINKS}
     friendsLinks={FRIENDS_LINKS}
+    contactInfo={contactInfo}
     />
 )

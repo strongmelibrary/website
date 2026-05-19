@@ -2,11 +2,80 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header, { ConfiguredHeader } from '../components/Header/Header';
 import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
-import {Calendar} from '../components/Calendar/Calendar';
-import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL } from '../config'; // Import necessary config
+import {Calendar, ConfiguredCalendar} from '../components/Calendar/Calendar';
+import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL, EVENTS_SETTINGS } from '../config';
+import { getCollection, getEntry } from 'astro:content';
 
 const pageTitle = "Library Events";
 const fullTitle = `${pageTitle} | ${SITE_TITLE}`;
+
+// Fetch events settings
+const eventsSettingsEntry = await getEntry('eventsSettings', 'index');
+const settings = eventsSettingsEntry?.data ?? EVENTS_SETTINGS;
+
+// Fetch all events from the events collection
+const allEvents = await getCollection('events');
+
+// Get today's date at midnight for comparison
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+// Filter and sort events: only future/current events (where startDate >= today or endDate >= today)
+const upcomingEvents = allEvents
+  .filter(event => {
+    const startDate = event.data.startDate ? new Date(event.data.startDate) : null;
+    const endDate = event.data.endDate ? new Date(event.data.endDate) : startDate;
+    
+    if (!startDate) return false;
+    
+    // If endDate exists and is in the future, include the event
+    if (endDate && endDate >= today) return true;
+    
+    // Otherwise check if startDate is today or in the future
+    return startDate >= today;
+  })
+  .sort((a, b) => {
+    const dateA = a.data.startDate ? new Date(a.data.startDate).getTime() : 0;
+    const dateB = b.data.startDate ? new Date(b.data.startDate).getTime() : 0;
+    return dateA - dateB;
+  });
+
+// Determine if we should show the CMS events section
+const showCmsEvents = settings.showCmsEvents !== false && upcomingEvents.length > 0;
+const cmsEventsTitle = settings.cmsEventsTitle || 'Upcoming Events';
+
+// Format date for display
+const formatEventDate = (startDate: string, endDate?: string): string => {
+  const start = new Date(startDate);
+  const startMonth = start.toLocaleString('default', { month: 'long' });
+  const startDay = start.getDate();
+  const startYear = start.getFullYear();
+  
+  if (endDate && endDate !== startDate) {
+    const end = new Date(endDate);
+    const endMonth = end.toLocaleString('default', { month: 'long' });
+    const endDay = end.getDate();
+    const endYear = end.getFullYear();
+    
+    if (startMonth === endMonth && startYear === endYear) {
+      return `${startMonth} ${startDay}–${endDay}, ${startYear}`;
+    }
+    return `${startMonth} ${startDay}, ${startYear} – ${endMonth} ${endDay}, ${endYear}`;
+  }
+  
+  return `${startMonth} ${startDay}, ${startYear}`;
+};
+
+// Format date for heading (e.g., "Saturday, June 14, 2025")
+const formatDateFull = (dateStr: string): string => {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', { 
+    weekday: 'long', 
+    month: 'long', 
+    day: 'numeric', 
+    year: 'numeric' 
+  });
+};
 ---
 
 <!DOCTYPE html>
@@ -18,7 +87,79 @@ const fullTitle = `${pageTitle} | ${SITE_TITLE}`;
     <ConfiguredHeader />
 
     <main class="flex-grow w-[100vw]">
-      <Calendar client:load />
+      {/* CMS Events Section - only show if enabled and there are events */}
+      {showCmsEvents && (
+        <section class="bg-stone-50 py-16">
+          <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-semibold text-gray-900 mb-8">{cmsEventsTitle}</h2>
+            <div class="space-y-6">
+              {upcomingEvents.map((event) => (
+                <article class="bg-white rounded-xl shadow-md p-6 border border-stone-200">
+                  <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                    <div class="flex-1">
+                      {/* Date display */}
+                      <div class="mb-3">
+                        <time class="text-lg font-medium text-indigo-700">
+                          {formatDateFull(event.data.startDate!)}
+                        </time>
+                        {event.data.startTime && !event.data.isAllDay && (
+                          <span class="ml-2 text-gray-600">
+                            at {event.data.startTime}
+                            {event.data.endTime && ` – ${event.data.endTime}`}
+                          </span>
+                        )}
+                        {event.data.isAllDay && (
+                          <span class="ml-2 text-gray-500 italic">All Day</span>
+                        )}
+                      </div>
+                      
+                      {/* Title with cancelled badge */}
+                      <div class="flex items-center gap-3 mb-2">
+                        <h3 class="text-2xl font-semibold text-gray-900">
+                          {event.data.title}
+                        </h3>
+                        {event.data.isCancelled && (
+                          <span class="px-3 py-1 bg-red-100 text-red-700 text-sm font-medium rounded-full">
+                            Cancelled
+                          </span>
+                        )}
+                      </div>
+                      
+                      {/* Location */}
+                      {event.data.location && (
+                        <p class="text-gray-600 mb-3">
+                          📍 {event.data.location}
+                        </p>
+                      )}
+                      
+                      {/* Short description */}
+                      {event.data.description && (
+                        <p class="text-gray-700 mb-4">{event.data.description}</p>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Tags */}
+                  {event.data.tags && event.data.tags.length > 0 && (
+                    <div class="flex flex-wrap gap-2 mt-4 pt-4 border-t border-stone-100">
+                      {event.data.tags.map((tag) => (
+                        <span class="px-3 py-1 bg-stone-100 text-stone-700 text-sm rounded-full">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* External Calendar Widget - only show if enabled */}
+      {settings.externalCalendarEnabled !== false && (
+        <ConfiguredCalendar client:load />
+      )}
     </main>
 
     <ConfiguredFooter />

@@ -17,6 +17,95 @@ export default config({
         siteTitle: fields.text({ label: 'Site Title' }),
         siteDescription: fields.text({ label: 'Site Description', multiline: true }),
         owner: fields.text({ label: 'Owner Name' }),
+        startYear: fields.number({ label: 'Start Year', description: 'Year to show in copyright notice' }),
+        maintenanceNotice: fields.text({ label: 'Maintenance Notice', multiline: true }),
+        licenseNotice: fields.text({ label: 'License Notice', multiline: true }),
+        socialLinks: fields.array(
+          fields.object({
+            brand: fields.select({
+              label: 'Brand',
+              options: [
+                { label: 'Facebook', value: 'facebook' },
+                { label: 'Twitter', value: 'twitter' },
+                { label: 'Instagram', value: 'instagram' },
+                { label: 'TikTok', value: 'tiktok' },
+                { label: 'YouTube', value: 'youtube' },
+                { label: 'LinkedIn', value: 'linkedin' },
+              ],
+              defaultValue: 'facebook',
+            }),
+            href: fields.url({ label: 'URL' }),
+          }),
+          {
+            label: 'Social Links',
+          }
+        ),
+      },
+    }),
+    homepageSettings: singleton({
+      label: 'Homepage Settings',
+      path: 'src/content/homepage-settings/',
+      format: { data: 'json' },
+      schema: {
+        heroTagline: fields.text({ label: 'Hero Tagline', multiline: true }),
+        heroImagePath: fields.text({ label: 'Hero Image Path', description: 'Path relative to public/ (e.g. photos/unsplash/annie-spratt-unsplash.jpg)' }),
+        heroQuickLinks: fields.array(
+          fields.object({
+            title: fields.text({ label: 'Title' }),
+            url: fields.text({ label: 'URL' }),
+            description: fields.text({ label: 'Description', multiline: true }),
+          }),
+          {
+            label: 'Hero Quick Links',
+          }
+        ),
+      },
+    }),
+    catalogSettings: singleton({
+      label: 'Catalog Settings',
+      path: 'src/content/catalog-settings/',
+      format: { data: 'json' },
+      schema: {
+        electronicCatalogUrl: fields.url({ label: 'Electronic Catalog URL' }),
+        electronicCatalogLinkText: fields.text({ label: 'Catalog Link Text' }),
+        searchDownCtaUrl: fields.text({ label: 'Search Down CTA URL' }),
+        searchDownCtaText: fields.text({ label: 'Search Down CTA Text' }),
+      },
+    }),
+    navigationSettings: singleton({
+      label: 'Navigation Settings',
+      path: 'src/content/navigation-settings/',
+      format: { data: 'json' },
+      schema: {
+        navLinks: fields.array(
+          fields.object({
+            label: fields.text({ label: 'Label' }),
+            href: fields.text({ label: 'URL Path' }),
+            isHidden: fields.checkbox({ label: 'Hidden', defaultValue: false }),
+            openInNewTab: fields.checkbox({ label: 'Open in New Tab', defaultValue: false }),
+          }),
+          {
+            label: 'Navigation Links',
+          }
+        ),
+      },
+    }),
+    partnerLinks: singleton({
+      label: 'Partner Links',
+      path: 'src/content/partner-links/',
+      format: { data: 'json' },
+      schema: {
+        links: fields.array(
+          fields.object({
+            label: fields.text({ label: 'Label' }),
+            href: fields.url({ label: 'URL' }),
+            topic: fields.text({ label: 'Topic/Group' }),
+            isExternal: fields.checkbox({ label: 'External Link', defaultValue: true }),
+          }),
+          {
+            label: 'Partner Links',
+          }
+        ),
       },
     }),
     contactInfo: singleton({
@@ -71,6 +160,29 @@ export default config({
           openTime: fields.text({ label: 'Opening Time' }),
           closeTime: fields.text({ label: 'Closing Time' }),
         }, { label: 'Saturday' }),
+      },
+    }),
+    eventsSettings: singleton({
+      label: 'Events Settings',
+      path: 'src/content/events-settings/',
+      format: { data: 'json' },
+      schema: {
+        externalCalendarUrl: fields.text({
+          label: 'External Calendar URL',
+          description: 'The URL/embed source for the external calendar widget'
+        }),
+        externalCalendarEnabled: fields.checkbox({
+          label: 'Show External Calendar',
+          defaultValue: true
+        }),
+        showCmsEvents: fields.checkbox({
+          label: 'Show CMS Events',
+          defaultValue: true
+        }),
+        cmsEventsTitle: fields.text({
+          label: 'CMS Events Section Title',
+          defaultValue: 'Upcoming Events'
+        }),
       },
     }),
   },
@@ -141,6 +253,46 @@ export default config({
         content: fields.markdoc({
           label: 'Content',
         }),
+      },
+    }),
+
+    events: collection({
+      label: 'Events',
+      slugField: 'title',
+      path: 'src/content/events/*/',
+      format: { contentField: 'content' },
+      entryLayout: 'content',
+      schema: {
+        title: fields.text({ label: 'Title' }),
+        startDate: fields.date({ label: 'Start Date' }),
+        endDate: fields.date({ label: 'End Date' }),
+        startTime: fields.text({ label: 'Start Time (e.g. 10:00 AM)' }),
+        endTime: fields.text({ label: 'End Time' }),
+        isAllDay: fields.checkbox({ label: 'All Day Event', defaultValue: false }),
+        location: fields.text({ label: 'Location' }),
+        description: fields.text({ label: 'Short Description', multiline: true }),
+        tags: fields.array(
+          fields.text({ label: 'Tag' }),
+          {
+            label: 'Tags',
+          }
+        ),
+        isCancelled: fields.checkbox({ label: 'Cancelled', defaultValue: false }),
+        content: fields.markdoc({
+          label: 'Content',
+        }),
+      },
+    }),
+
+    tags: collection({
+      label: 'Tags',
+      slugField: 'slug',
+      path: 'src/content/tags/*/',
+      format: { data: 'json' },
+      schema: {
+        label: fields.text({ label: 'Label', description: 'Display name for the tag (e.g. "Summer Reading")' }),
+        slug: fields.slug({ name: { label: 'Slug', description: 'URL-safe identifier (e.g. "summer-reading")' } }),
+        description: fields.text({ label: 'Description', multiline: true }),
       },
     }),
   },

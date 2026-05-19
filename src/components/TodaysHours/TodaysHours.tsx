@@ -1,21 +1,22 @@
 import clsx from "clsx";
 import React, { useEffect } from "react";
 
-import { LIBRARY_HOURS } from '../../config';
 import { getTodayHoursInfo } from '../../utils/todaysHours';
 import dayjs from 'dayjs';
+import type { HoursSchedule } from '../../schemas/HoursSchedule';
 
-const TodaysHours = ({nowOverride}: {
+const TodaysHours = ({libraryHours, nowOverride}: {
+  libraryHours: HoursSchedule[];
   nowOverride?: dayjs.Dayjs;
 }) => {
-  const [todaysHours, setTodaysHours] = React.useState(getTodayHoursInfo(LIBRARY_HOURS, nowOverride));
+  const [todaysHours, setTodaysHours] = React.useState(getTodayHoursInfo(libraryHours, nowOverride));
   
   useEffect(() => {
     const interval = setInterval(() => {
-      setTodaysHours(getTodayHoursInfo(LIBRARY_HOURS, nowOverride));
+      setTodaysHours(getTodayHoursInfo(libraryHours, nowOverride));
     }, 1000 * 60);
     return () => clearInterval(interval);
-  }, [nowOverride]);
+  }, [libraryHours, nowOverride]);
 
   return (
     <div className={clsx("flex", "flex-col", "items-center", "gap-[4px]")}>

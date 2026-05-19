@@ -19,6 +19,7 @@ export interface HeroIndexProps {
   className?: string;
   posts?: Post[];
   heroTagline?: string;
+  heroImagePath?: string;
   children?: React.ReactNode;
 }
 
@@ -26,9 +27,13 @@ export const HeroIndex = ({
   className = "",
   posts,
   heroTagline,
+  heroImagePath,
   children,
 }: HeroIndexProps) => {
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // Use provided heroImagePath or fall back to static import
+  const displayImage = heroImagePath ? `/${heroImagePath}` : heroImage;
   
   const handleSearch = useCallback(() => {
     if (searchTerm.trim()) {
@@ -64,7 +69,7 @@ export const HeroIndex = ({
           )}
         >
           <img
-            src={heroImage}
+            src={displayImage}
             alt="Hero Image"
             className={clsx(
               "w-full",

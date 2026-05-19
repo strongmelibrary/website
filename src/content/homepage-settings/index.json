@@ -1,0 +1,21 @@
+{
+  "heroTagline": "",
+  "heroImagePath": "photos/unsplash/annie-spratt-unsplash.jpg",
+  "heroQuickLinks": [
+    {
+      "title": "Library Catalog",
+      "url": "/catalog",
+      "description": "Search the library catalog for books, movies, and more."
+    },
+    {
+      "title": "On-site Services",
+      "url": "/services",
+      "description": "Learn about what our library can do for you."
+    },
+    {
+      "title": "Upcoming Events",
+      "url": "/events",
+      "description": "Come see what's happening this month at the library."
+    }
+  ]
+}

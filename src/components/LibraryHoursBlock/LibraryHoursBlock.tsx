@@ -1,11 +1,11 @@
 import React from 'react';
 import clsx from 'clsx';
 
-import { LIBRARY_HOURS } from '../../config';
 import { DAY_MAP } from '../../constants';
 import clock from "/illustrations/clock.svg?url";
 
 import { getDateForDayTime } from '../../utils/todaysHours';
+import type { HoursSchedule } from '../../schemas/HoursSchedule';
 
 const DayAndHours = ({ day, hourOpen, hourClose }: {
   day: string;
@@ -42,9 +42,9 @@ const DayAndHours = ({ day, hourOpen, hourClose }: {
 }
 
 export const LibraryHoursBlock = ({
-  overrideLibraryHours,
+  libraryHours,
 }: {
-  overrideLibraryHours?: typeof LIBRARY_HOURS;
+  libraryHours: HoursSchedule[];
 }) => {
   return <div
     className={clsx(
@@ -111,7 +111,7 @@ export const LibraryHoursBlock = ({
       "w-full",
     )}>
       {Object.entries(DAY_MAP).map(([dayName, dayNumber]) => {
-        const thisDaysSchedule = (overrideLibraryHours || LIBRARY_HOURS).find(schedule => schedule.day === dayName) || { day: dayName, hourOpen: 'Closed', hourClose: 'Closed' };
+        const thisDaysSchedule = libraryHours.find(schedule => schedule.day === dayName) || { day: dayName, hourOpen: 'Closed', hourClose: 'Closed' };
         return (<DayAndHours
           key={`${thisDaysSchedule.day}-${thisDaysSchedule.hourOpen}-${thisDaysSchedule.hourClose}`}
           day={thisDaysSchedule.day}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { EVENTS_SETTINGS } from '../../config'
 
 export interface CalendarEvent {
   id: string
@@ -244,4 +245,9 @@ export const Calendar: React.FC<CalendarProps> = ({
       )}
     </section>
   )
+}
+
+// Pre-configured Calendar that reads settings from CMS
+export const ConfiguredCalendar: React.FC<Omit<CalendarProps, 'googleCalendarUrl'>> = (props) => {
+  return <Calendar {...props} googleCalendarUrl={EVENTS_SETTINGS.externalCalendarUrl} />
 }

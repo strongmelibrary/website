@@ -8,8 +8,9 @@ import BaseHead from '../components/BaseHead.astro';
 import { ConfiguredHeader } from '../components/Header/Header';
 import { ConfiguredFooter } from '../components/Footer/Footer';
 
-import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL } from '../config';
-import { HeroIndex, Post } from '../components/HeroIndex/HeroIndex';
+import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL, LIBRARY_HOURS, CONTACT_INFO, HOMEPAGE_SETTINGS } from '../config';
+import { HeroIndex } from '../components/HeroIndex/HeroIndex';
+import type { Post } from '../components/HeroIndex/HeroIndex';
 import TodaysHours from '../components/TodaysHours/TodaysHours';
 
 import clsx from 'clsx';
@@ -36,37 +37,18 @@ const news = newsEntries.sort(
   description: entry.data.description || '',
 }));
 
-const services: Post[] = [
-  {
-    title: 'Library Catalog',
-    url: BASE_URL+'catalog',
-    date: new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }),
-    description: 'Search the library catalog for books, movies, and more.',
-  },
-  {
-    title: 'On-site Services',
-    url: BASE_URL+'services',
-    date: new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }),
-    description: 'Learn about what our library can do for you.',
-  },
-  {
-    title: 'Upcoming Events',
-    url: BASE_URL+'events',
-    date: new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }),
-    description: 'Come see what\'s happening this month at the library.',
-  }];
+// Quick links from CMS homepage settings, mapped to Post type
+const today = new Date().toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+const quickLinks: Post[] = (HOMEPAGE_SETTINGS.heroQuickLinks || []).map(link => ({
+  title: link.title,
+  url: link.url.startsWith('/') ? BASE_URL + link.url.replace(/^\//, '') : link.url,
+  date: today,
+  description: link.description || '',
+}));
 ---
 
 <!DOCTYPE html>
@@ -103,8 +85,10 @@ const services: Post[] = [
     
     <ConfiguredHeader />
     <HeroIndex
-      posts={services}>
-      <TodaysHours client:only />
+      posts={quickLinks}
+      heroTagline={HOMEPAGE_SETTINGS.heroTagline}
+      heroImagePath={HOMEPAGE_SETTINGS.heroImagePath}>
+      <TodaysHours client:only libraryHours={LIBRARY_HOURS} />
     </HeroIndex>
     <main
       class={clsx(
@@ -163,9 +147,9 @@ const services: Post[] = [
         "gap-2"
       )}
     >
-        <LibraryHoursBlock />
+        <LibraryHoursBlock libraryHours={LIBRARY_HOURS} />
       </div>
     </main>
-    <ConfiguredFooter />
+    <ConfiguredFooter contactInfo={CONTACT_INFO} />
   </body>
 </html>
