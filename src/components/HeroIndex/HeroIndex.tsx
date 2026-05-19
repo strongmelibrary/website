@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from "react";
 import clsx from "clsx";
 import { ReadMoreBlock } from "../ReadMoreBlock/ReadMoreBlock";
-import { Button, Input } from '@headlessui/react';
 import { PiMagnifyingGlassBold } from 'react-icons/pi';
 
 import heroImage from "/photos/unsplash/annie-spratt-unsplash.jpg?url";
@@ -20,6 +19,7 @@ export interface HeroIndexProps {
   posts?: Post[];
   heroTagline?: string;
   heroImagePath?: string;
+  heroImageAlt?: string;
   children?: React.ReactNode;
 }
 
@@ -28,6 +28,7 @@ export const HeroIndex = ({
   posts,
   heroTagline,
   heroImagePath,
+  heroImageAlt = "The Strong, Me Public Library",
   children,
 }: HeroIndexProps) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -40,6 +41,13 @@ export const HeroIndex = ({
       window.location.href = `/catalog?q=${encodeURIComponent(searchTerm.trim())}&page=1`;
     }
   }, [searchTerm]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <div
       className={clsx(
@@ -47,7 +55,7 @@ export const HeroIndex = ({
         "flex-col",
         "items-center",
         "justify-center",
-        "bg-gray-100",
+        "bg-[var(--color-paper)]",
         "rounded-lg",
         "shadow-md",
         "w-full",
@@ -70,7 +78,7 @@ export const HeroIndex = ({
         >
           <img
             src={displayImage}
-            alt="Hero Image"
+            alt={heroImageAlt}
             className={clsx(
               "w-full",
               "h-full",
@@ -78,16 +86,21 @@ export const HeroIndex = ({
               "absolute",
               "top-0",
               "left-0",
-              "z-1"
+              "z-10"
             )}
           />
-          <span className={clsx(
-            "type-heading-sm",
-            "text-neutral-0",
-            "p-5",
-            "z-2")}>
-            {heroTagline}
-          </span>
+          {heroTagline && (
+            <span className={clsx(
+              "type-heading-sm",
+              "text-white",
+              "drop-shadow-lg",
+              "p-5",
+              "z-20",
+              "relative",
+            )}>
+              {heroTagline}
+            </span>
+          )}
         </div>
         <div
           className={clsx(
@@ -138,43 +151,54 @@ export const HeroIndex = ({
             "h-full",
             "py-10",
             "px-4",
-            "bg-info-dark"
+            "bg-[var(--color-forest)]",
           )}
         >
-          {/* Client-side search form with JavaScript redirect */}
+          {/* Client-side search form */}
           <div className="flex flex-row items-center justify-start gap-2 w-full">
-            <Input
+            <label htmlFor="hero-search" className="sr-only">Search the catalog</label>
+            <input
+              id="hero-search"
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="Search the catalog..."
               className={clsx(
                 "p-2",
                 "border-b",
                 "flex-grow",
-                "text-neutral-0",
-                "border-neutral-0",
+                "min-h-[44px]",
+                "text-white",
+                "bg-transparent",
+                "border-white/60",
+                "placeholder:text-white/60",
                 "focus:outline-none",
-                "focus:ring-2",
-                "focus:ring-offset-2",
+                "focus-visible:border-white",
+                "focus-visible:ring-0",
               )}
             />
-            <Button
+            <button
               onClick={handleSearch}
+              aria-label="Search catalog"
               className={clsx(
                 "px-4",
                 "py-2",
+                "min-h-[44px]",
                 "bg-transparent",
                 "text-white",
                 "rounded-lg",
-                "hover:bg-neutral-80",
+                "hover:bg-white/20",
                 "transition-colors",
                 "duration-200",
                 "cursor-pointer",
+                "focus-visible:outline-2",
+                "focus-visible:outline-offset-2",
+                "focus-visible:outline-white",
               )}
             >
-              <PiMagnifyingGlassBold />
-            </Button>
+              <PiMagnifyingGlassBold aria-hidden="true" />
+            </button>
           </div>
         </div>
         <div
@@ -190,26 +214,27 @@ export const HeroIndex = ({
             "h-auto",
             "w-full",
             "py-10",
-            // bg gradient accent -> accent-light
             "bg-gradient-to-r",
             "from-accent",
             "to-accent-light",
-            "text-neutral-0",
+            "text-white",
           )}
         >
-          <img src={flyingBooks} alt="Flying Books" className={clsx(
-            "w-full", 
-            "h-full", 
-            "object-contain",
-            "absolute",
-            "top-0",
-            "left-0",
-            "z-0",
-            )} />
-          <div className={clsx(
-            "relative",
-            "z-10",
-          )}>
+          <img
+            src={flyingBooks}
+            alt=""
+            aria-hidden="true"
+            className={clsx(
+              "w-full", 
+              "h-full", 
+              "object-contain",
+              "absolute",
+              "top-0",
+              "left-0",
+              "z-0",
+            )}
+          />
+          <div className={clsx("relative", "z-10")}>
             {children}
           </div>
         </div>

@@ -5,6 +5,7 @@ import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
 import {Calendar, ConfiguredCalendar} from '../components/Calendar/Calendar';
 import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL, EVENTS_SETTINGS, CONTACT_INFO } from '../config';
 import { getCollection, getEntry } from 'astro:content';
+import { HiMapPin } from 'react-icons/hi2';
 
 const pageTitle = "Library Events";
 const fullTitle = `${pageTitle} | ${SITE_TITLE}`;
@@ -83,43 +84,53 @@ const formatDateFull = (dateStr: string): string => {
   <head>
     <BaseHead title={fullTitle} description={SITE_DESCRIPTION} />
   </head>
-  <body class="dark:bg-slate-900 flex flex-col min-h-screen">
-    <ConfiguredHeader />
+  <body class="bg-[var(--color-paper)] text-[var(--color-charcoal)] flex flex-col min-h-screen">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[var(--color-forest)] focus:text-white focus:rounded focus:outline-none"
+    >
+      Skip to main content
+    </a>
+    <ConfiguredHeader client:load />
 
-    <main class="flex-grow w-[100vw]">
+    <main id="main-content" class="flex-grow w-full">
+      <div class="max-w-4xl mx-auto px-4 py-12">
+        <h1 class="type-heading-lg text-[var(--color-charcoal)] mb-8">Events</h1>
+      </div>
+
       {/* CMS Events Section - only show if enabled and there are events */}
       {showCmsEvents && (
-        <section class="bg-stone-50 py-16">
+        <section aria-label={cmsEventsTitle} class="bg-[var(--color-parchment)] py-16">
           <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-3xl font-semibold text-gray-900 mb-8">{cmsEventsTitle}</h2>
+            <h2 class="type-heading-md text-[var(--color-charcoal)] mb-8">{cmsEventsTitle}</h2>
             <div class="space-y-6">
               {upcomingEvents.map((event) => (
-                <article class="bg-white rounded-xl shadow-md p-6 border border-stone-200">
+                <article class="bg-[var(--color-paper)] rounded-xl shadow-md p-6 border border-[var(--color-stone)]/30">
                   <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                     <div class="flex-1">
                       {/* Date display */}
                       <div class="mb-3">
-                        <time class="text-lg font-medium text-indigo-700">
+                        <time class="type-body-lg font-medium text-[var(--color-terracotta)]">
                           {formatDateFull(event.data.startDate!)}
                         </time>
                         {event.data.startTime && !event.data.isAllDay && (
-                          <span class="ml-2 text-gray-600">
+                          <span class="ml-2 type-body text-[var(--color-charcoal)]/70">
                             at {event.data.startTime}
                             {event.data.endTime && ` – ${event.data.endTime}`}
                           </span>
                         )}
                         {event.data.isAllDay && (
-                          <span class="ml-2 text-gray-500 italic">All Day</span>
+                          <span class="ml-2 type-body-sm text-[var(--color-charcoal)]/50 italic">All Day</span>
                         )}
                       </div>
                       
                       {/* Title with cancelled badge */}
                       <div class="flex items-center gap-3 mb-2">
-                        <h3 class="text-2xl font-semibold text-gray-900">
+                        <h3 class="type-heading-sm text-[var(--color-charcoal)]">
                           {event.data.title}
                         </h3>
                         {event.data.isCancelled && (
-                          <span class="px-3 py-1 bg-red-100 text-red-700 text-sm font-medium rounded-full">
+                          <span class="px-3 py-1 bg-[var(--color-error-light)] text-[var(--color-error-dark)] type-body-sm font-medium rounded-full">
                             Cancelled
                           </span>
                         )}
@@ -127,23 +138,24 @@ const formatDateFull = (dateStr: string): string => {
                       
                       {/* Location */}
                       {event.data.location && (
-                        <p class="text-gray-600 mb-3">
-                          📍 {event.data.location}
+                        <p class="flex items-center gap-1 type-body text-[var(--color-charcoal)]/70 mb-3">
+                          <HiMapPin aria-hidden="true" className="w-4 h-4 flex-shrink-0 text-[var(--color-terracotta)]" />
+                          {event.data.location}
                         </p>
                       )}
                       
                       {/* Short description */}
                       {event.data.description && (
-                        <p class="text-gray-700 mb-4">{event.data.description}</p>
+                        <p class="type-body text-[var(--color-charcoal)]/80 mb-4">{event.data.description}</p>
                       )}
                     </div>
                   </div>
                   
                   {/* Tags */}
                   {event.data.tags && event.data.tags.length > 0 && (
-                    <div class="flex flex-wrap gap-2 mt-4 pt-4 border-t border-stone-100">
+                    <div class="flex flex-wrap gap-2 mt-4 pt-4 border-t border-[var(--color-stone)]/20">
                       {event.data.tags.map((tag) => (
-                        <span class="px-3 py-1 bg-stone-100 text-stone-700 text-sm rounded-full">
+                        <span class="px-3 py-1 bg-[var(--color-paper)] border border-[var(--color-stone)]/40 text-[var(--color-charcoal)]/70 type-body-sm rounded-full">
                           {tag}
                         </span>
                       ))}
@@ -163,6 +175,5 @@ const formatDateFull = (dateStr: string): string => {
     </main>
 
     <ConfiguredFooter contactInfo={CONTACT_INFO} />
-
   </body>
 </html>

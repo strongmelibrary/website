@@ -3,8 +3,8 @@ import React from "react";
 
 function PostsList({ posts }: { posts: Record<string, any>[] }) {
   return (
-    <section>
-      <ul className="space-y-8 mt-12">
+    <section aria-label="Posts">
+      <ul className="space-y-6 mt-8">
         {posts.map((post) => (
           <li key={post.url}>
             <Tile post={post} />

@@ -15,7 +15,7 @@ export const HeaderLink = ({ className, ...rest }: HeaderProps) => {
       className={clsx(
         "type-heading",
         "font-bold",
-        "text-gray-700",
+        "text-[var(--color-charcoal)]",
         "transition-all",
         "duration-200",
         "ease-in-out",
@@ -23,8 +23,12 @@ export const HeaderLink = ({ className, ...rest }: HeaderProps) => {
         "py-2",
         "border-b-[2px]",
         "tracking-[0.05em]",
+        "focus-visible:outline-2",
+        "focus-visible:outline-offset-2",
+        "focus-visible:outline-[var(--color-forest)]",
+        "rounded-sm",
         {
-          "border-gray-700 opacity-100": rest.isActive,
+          "border-[var(--color-terracotta)] opacity-100": rest.isActive,
           "border-transparent opacity-70": !rest.isActive,
         },
         className,

@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import dayjs from 'dayjs';
+import { HiArrowRight } from "react-icons/hi2";
 
 export interface ReadMoreBlockBase {
   title: string;
@@ -86,23 +86,32 @@ export const ReadMoreBlock = ({
         })}
       >
         {category && (
-          <span className="text-sm text-gray-500 type-caps">{category}</span>
+          <span className="type-caps text-[var(--color-terracotta)] mb-1">{category}</span>
         )}
         <a
-          className={clsx({
-            "type-heading-xs": titleSize === "xs",
-            "type-heading-sm": titleSize === "sm",
-            "type-heading-md": titleSize === "md",
-            "type-heading-lg": titleSize === "lg",
-            "pointer-events-none": separator
-          })}
+          className={clsx(
+            "text-[var(--color-charcoal)]",
+            "hover:text-[var(--color-terracotta)]",
+            "transition-colors",
+            "focus-visible:outline-2",
+            "focus-visible:outline-offset-2",
+            "focus-visible:outline-[var(--color-forest)]",
+            "rounded-sm",
+            {
+              "type-heading-xs": titleSize === "xs",
+              "type-heading-sm": titleSize === "sm",
+              "type-heading-md": titleSize === "md",
+              "type-heading-lg": titleSize === "lg",
+              "pointer-events-none": separator,
+            }
+          )}
           href={url}
         >
           {title}
         </a>
         {separator && (
           <div className={clsx("w-full", "relative")}>
-            <hr className={clsx("pb-[16px]", "mt-[16px]")} />
+            <hr className={clsx("pb-[16px]", "mt-[16px]", "border-[var(--color-stone)]/30")} />
             <div
               className={clsx(
                 "absolute",
@@ -111,26 +120,39 @@ export const ReadMoreBlock = ({
                 "left-0",
                 "w-[40px]",
                 "h-[4px]",
-                "bg-accent",
+                "bg-[var(--color-terracotta)]",
               )}
             />
           </div>
         )}
-        {subtitle && <p className="text-gray-700">{subtitle}</p>}
+        {subtitle && (
+          <p className="type-body-sm text-[var(--color-charcoal)]/70 mt-1">{subtitle}</p>
+        )}
         {children && <div className="mt-2">{children}</div>}
-        {/* Link to the full post */}
 
-        <a href={url} className={clsx(
-          "mt-4",
-          "inline-block",
-          "text-accent",
-          "hover:underline",
-          {
-            "type-body-xs": titleSize === "xs",
-            "type-body-md": titleSize !== "xs",
-          }
-          )}>
+        <a
+          href={url}
+          className={clsx(
+            "mt-4",
+            "inline-flex",
+            "items-center",
+            "gap-1",
+            "text-[var(--color-terracotta)]",
+            "hover:text-[var(--color-terracotta-dark)]",
+            "hover:underline",
+            "transition-colors",
+            "focus-visible:outline-2",
+            "focus-visible:outline-offset-2",
+            "focus-visible:outline-[var(--color-forest)]",
+            "rounded-sm",
+            {
+              "type-body-xs": titleSize === "xs",
+              "type-body-md": titleSize !== "xs",
+            }
+          )}
+        >
           {linkText}
+          <HiArrowRight aria-hidden="true" className="w-4 h-4" />
         </a>
       </div>
     </div>

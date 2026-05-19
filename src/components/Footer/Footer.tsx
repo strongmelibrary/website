@@ -1,11 +1,9 @@
 import {
   BASE_URL,
-  GITHUB,
   LICENSE_NOTICE,
   MAINTENANCE_NOTICE,
   OWNER,
   START_YEAR,
-  TWITTER,
 } from "../../config";
 import React from "react";
 import clsx from "clsx";
@@ -25,80 +23,16 @@ export interface FooterProps {
 }
 
 export const DEFAULT_LINKS: Link[] = [
-  { href: "/blog", label: "Blog" },
-  { href: "/projects", label: "Projects" },
+  { href: "/news", label: "News" },
+  { href: "/events", label: "Events" },
+  { href: "/services", label: "Services" },
+  { href: "/catalog", label: "Catalog" },
   { href: "/about", label: "About" },
 ];
 
-export const DEFAULT_FRIENDS_LINKS: Link[] = [
-  {
-    href: 'https://example.com',
-    label: 'Friend 1',
-    isExternal: true,
-    topic: 'Informational',
-  },
-  {
-    href: 'https://example.com',
-    label: 'Friend 2',
-    isExternal: true,
-    topic: 'Informational',
-  },
-  {
-    href: 'https://example.com',
-    label: 'Friend 3',
-    isExternal: true,
-    topic: 'Informational',
-  },
-  {
-    href: 'https://example.com',
-    label: 'Friend 4',
-    isExternal: true,
-    topic: 'Informational',
-  },
-  {
-    href: 'https://example.com',
-    label: 'Friend 5',
-    isExternal: true,
-    topic: 'Libraries',
-  },
-  {
-    href: 'https://example.com',
-    label: 'Friend 6',
-    isExternal: true,
-    topic: 'Libraries',
-  },
-  {
-    href: 'https://example.com',
-    label: 'Friend 7',
-    isExternal: true,
-    topic: 'Libraries',
-  },
-  {
-    href: 'https://example.com',
-    label: 'Friend 8',
-    isExternal: true,
-    topic: 'Newspaper',
-  },
-  {
-    href: 'https://example.com',
-    label: 'Friend 9',
-    isExternal: true,
-    topic: 'Newspaper',
-  },
-  {
-    href: 'https://example.com',
-    label: 'Friend 10',
-    isExternal: true,
-    topic: 'Newspaper',
-  },
-];
+export const DEFAULT_FRIENDS_LINKS: Link[] = [];
 
-export const DEFAULT_SOCIAL_LINKS: SocialLink[] = [
-  { href: "#", brand: "facebook" },
-  { href: "#", brand: "twitter" },
-  { href: "#", brand: "tiktok" },
-  { href: "#", brand: "instagram" },
-];
+export const DEFAULT_SOCIAL_LINKS: SocialLink[] = [];
 
 const Footer = ({
   links = DEFAULT_LINKS,
@@ -133,13 +67,10 @@ const Footer = ({
       "grid-cols-1",
       "gap-y-[16px]",
       "mx-auto",
-      "pb-32"
+      "pb-16",
     )}>
 
-      <div className={clsx(
-        "col-span-0",
-        "md:col-span-1",
-      )}/>
+      <div className={clsx("col-span-0", "md:col-span-1")} />
       <div className={clsx(
         "col-span-1",
         "md:col-span-3",
@@ -150,15 +81,12 @@ const Footer = ({
       )}>
         <HeaderLogo />
       </div>
-      <div className={clsx(
-        "col-span-0",
-        "md:col-span-4",
-      )}/>
-      <div className={clsx(
-        "col-span-0",
-        "md:col-span-1",
-      )}/>
-      <div className={clsx(
+      <div className={clsx("col-span-0", "md:col-span-4")} />
+      <div className={clsx("col-span-0", "md:col-span-1")} />
+
+      {/* Contact column */}
+      <address className={clsx(
+        "not-italic",
         "flex",
         "flex-col",
         "md:col-span-2",
@@ -168,80 +96,102 @@ const Footer = ({
         "text-center",
         "px-8",
       )}>
-        
-
-        <span className={clsx(
-          "type-heading-xxs",
-          "px-6",
-          "font-semibold",
-          "text-slate-900",
-          "dark:text-slate-100",
-        )}>
+        <span className={clsx("type-caps", "px-6", "mb-2", "text-[var(--color-charcoal)]")}>
           Contact
         </span>
-        <a
-          className={clsx(
-            "text-sm",
+        {contact.physicalAddress && (
+          <a
+            className={clsx(
+              "type-body-sm",
+              "mt-2",
+              "px-8",
+              "max-w-md",
+              "flex",
+              "flex-row",
+              "gap-2",
+              "items-start",
+              "text-left",
+              "text-[var(--color-charcoal)]",
+              "hover:text-[var(--color-terracotta)]",
+              "transition-colors",
+              "focus-visible:outline-2",
+              "focus-visible:outline-offset-2",
+              "focus-visible:outline-[var(--color-forest)]",
+              "rounded-sm",
+            )}
+            href={contact.googleMapsUrl || '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`View ${contact.physicalAddress} on Google Maps`}
+          >
+            {contact.physicalAddress}
+            <TbExternalLink aria-hidden="true" className="inline-block flex-shrink-0 mt-0.5" />
+          </a>
+        )}
+        {contact.mailingAddress && (
+          <div className={clsx(
+            "type-body-sm",
             "mt-2",
             "px-8",
             "max-w-md",
             "flex",
             "flex-row",
-            "gap-2",
             "items-start",
-            "text-left"
-          )}
-          href={contact.googleMapsUrl}
-          target="_blank"
-        >
-          {contact.physicalAddress || 'Address not available'}
-          <TbExternalLink className="inline-block" />
-        </a>
-        <div className={clsx(
-          "text-slate-600",
-          "text-sm",
-          "mt-2",
-          "px-8",
-          "max-w-md",
-          "flex",
-          "flex-row",
-          "items-start",
-          "text-left"
-        )}>
-          Mailing: {contact.mailingAddress || 'Address not available'}
-        </div>
-        <div className={clsx(
-          "text-slate-600",
-          "text-sm",
-          "mt-2",
-          "px-8",
-          "max-w-md",
-          "flex",
-          "flex-row",
-          "items-start",
-          "text-left"
-        )}>
-          Phone: <a
-            href={`tel:${contact.phoneNumber}`}
-          >{contact.phoneNumber || '555-555-5555'}</a>
-        </div>
-        <div className={clsx(
-          "text-slate-600",
-          "text-sm",
-          "mt-2",
-          "px-8",
-          "max-w-md",
-          "flex",
-          "flex-row",
-          "items-start",
-          "text-left"
-        )}>
-          Email: <a
-            href={`mailto:${contact.email}`}
-          >{contact.email || 'example@example.com'}</a>
-        </div>
-      </div>
-      <div
+            "text-left",
+            "text-[var(--color-charcoal)]",
+          )}>
+            Mailing: {contact.mailingAddress}
+          </div>
+        )}
+        {contact.phoneNumber && (
+          <div className={clsx(
+            "type-body-sm",
+            "mt-2",
+            "px-8",
+            "max-w-md",
+            "flex",
+            "flex-row",
+            "items-start",
+            "text-left",
+            "text-[var(--color-charcoal)]",
+          )}>
+            Phone:{" "}
+            <a
+              href={`tel:${contact.phoneNumber}`}
+              aria-label={`Call ${contact.phoneNumber}`}
+              className="ml-1 hover:text-[var(--color-terracotta)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-forest)] rounded-sm"
+            >
+              {contact.phoneNumber}
+            </a>
+          </div>
+        )}
+        {contact.email && (
+          <div className={clsx(
+            "type-body-sm",
+            "mt-2",
+            "px-8",
+            "max-w-md",
+            "flex",
+            "flex-row",
+            "items-start",
+            "text-left",
+            "text-[var(--color-charcoal)]",
+          )}>
+            Email:{" "}
+            <a
+              href={`mailto:${contact.email}`}
+              aria-label={`Email ${contact.email}`}
+              className="ml-1 hover:text-[var(--color-terracotta)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-forest)] rounded-sm"
+            >
+              {contact.email}
+            </a>
+          </div>
+        )}
+      </address>
+
+      {/* Navigation column */}
+      <nav
+        aria-label="Footer navigation"
         className={clsx(
           "flex",
           "flex-col",
@@ -252,148 +202,155 @@ const Footer = ({
           "px-8",
         )}
       >
-        <span className={clsx(
-          "type-heading-xxs",
-          "px-6",
-          "font-semibold",
-          "text-slate-900",
-          "dark:text-slate-100",
-        )}>
+        <span className={clsx("type-caps", "px-6", "mb-2", "text-[var(--color-charcoal)]")}>
           Navigation
         </span>
         {links.map((link) => (
           <a
+            key={link.href}
             className={clsx(
-              "text-sm",
+              "type-body-sm",
               "px-8",
               "max-w-md",
-              "items-center",
+              "text-[var(--color-charcoal)]",
+              "hover:text-[var(--color-terracotta)]",
+              "transition-colors",
+              "focus-visible:outline-2",
+              "focus-visible:outline-offset-2",
+              "focus-visible:outline-[var(--color-forest)]",
+              "rounded-sm",
             )}
             href={link.href}
           >
             {link.label}
           </a>
         ))}
+      </nav>
 
-      </div>
-      <div
-        className={clsx(
-          "flex",
-          "flex-col",
-          "md:col-span-2",
-          "md:items-start",
-          "items-center",
-          "md:text-left",
-          "text-center",
-          "justify-end",
-          "gap-2",
-          "px-8",
-        )}
-      >
-        <span className={clsx(
-          "type-heading-xxs",
-          "px-6",
-          "font-semibold",
-          "text-slate-900",
-          "dark:text-slate-100",
-        )}>
-          Friends & Other Links
-        </span>
-        {friendLinkTopics.map((topic) => (
-          <div key={topic} className="flex flex-col">
-            <span className={clsx(
-              "text-sm",
-              "px-8",
-              "max-w-md",
-              "items-center",
-              "font-semibold",
-            )}>
-              {topic}
-            </span>
-            {friendsLinks
-              .filter((link) => link.topic === topic)
-              .map((link) => (
-                <a
-                  key={link.href}
-                  className={clsx(
-                    "text-sm",
-                    "px-8",
-                    "max-w-md",
-                    "items-center",
-                  )}
-                  href={link.href}
-                >
-                  {link.label}
-                </a>
-              ))}
-          </div>
-        ))}
+      {/* Friends & Other Links column */}
+      {friendsLinks.length > 0 && (
+        <nav
+          aria-label="Friends and partner links"
+          className={clsx(
+            "flex",
+            "flex-col",
+            "md:col-span-2",
+            "md:items-start",
+            "items-center",
+            "md:text-left",
+            "text-center",
+            "justify-end",
+            "gap-2",
+            "px-8",
+          )}
+        >
+          <span className={clsx("type-caps", "px-6", "mb-2", "text-[var(--color-charcoal)]")}>
+            Friends &amp; Other Links
+          </span>
+          {friendLinkTopics.map((topic) => (
+            <div key={topic} className="flex flex-col">
+              <span className={clsx(
+                "type-body-sm",
+                "px-8",
+                "max-w-md",
+                "font-semibold",
+                "text-[var(--color-charcoal)]",
+              )}>
+                {topic}
+              </span>
+              {friendsLinks
+                .filter((link) => link.topic === topic)
+                .map((link) => (
+                  <a
+                    key={link.href}
+                    className={clsx(
+                      "type-body-sm",
+                      "px-8",
+                      "max-w-md",
+                      "text-[var(--color-charcoal)]",
+                      "hover:text-[var(--color-terracotta)]",
+                      "transition-colors",
+                      "focus-visible:outline-2",
+                      "focus-visible:outline-offset-2",
+                      "focus-visible:outline-[var(--color-forest)]",
+                      "rounded-sm",
+                    )}
+                    href={link.href}
+                    target={link.isExternal ? "_blank" : undefined}
+                    rel={link.isExternal ? "noopener noreferrer" : undefined}
+                  >
+                    {link.label}
+                    {link.isExternal && (
+                      <TbExternalLink aria-hidden="true" className="inline-block ml-1" />
+                    )}
+                  </a>
+                ))}
+            </div>
+          ))}
+        </nav>
+      )}
 
-      </div>
+      {/* Social + copyright column */}
       <div
         className={clsx(
           "flex",
           "flex-col",
           "font-light",
-          "text-sm",
+          "type-body-sm",
           "justify-start",
           "md:items-start",
           "items-center",
           "h-full",
           "px-6",
+          "text-[var(--color-charcoal)]",
         )}
       >
+        {socialLinks.length > 0 && (
+          <>
+            <span className={clsx("type-caps", "mb-2", "text-[var(--color-charcoal)]")}>
+              Social
+            </span>
+            <nav aria-label="Social media links" className="flex space-x-1 px-2 mb-8 font-semibold text-base">
+              {socialLinks.map((link) => (
+                <SocialButton
+                  key={link.href}
+                  link={link.href}
+                  brand={link.brand}
+                />
+              ))}
+            </nav>
+          </>
+        )}
 
-        <span className={clsx(
-          "type-heading-xxs",
-          "font-semibold",
-          "text-slate-900",
-          "dark:text-slate-100",
-        )}>
-          Social
-        </span>
-        <nav className="flex space-x-1 px-2 mb-16 font-semibold text-base text-md text-slate-900 dark:text-slate-100">
-          {socialLinks.map((link) => (
-            <SocialButton
-              key={link.href}
-              link={link.href}
-              brand={link.brand}
-            />
-          ))}
-        </nav>
-
-        <p className={clsx(
-          "m-0",
-        )}>
-          <a href={BASE_URL + 'attribution'} className="underline">
+        <p className="m-0">
+          <a
+            href={BASE_URL + 'attribution'}
+            className="underline hover:text-[var(--color-terracotta)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-forest)] rounded-sm"
+          >
             Attribution Page
           </a>
         </p>
-        <p className={clsx(
-          "mt-1",
-          "m-0",
-        )}>
+        <p className="mt-1 m-0">
+          <a
+            href="https://website-omega-five-37.vercel.app/keystatic"
+            className="underline hover:text-[var(--color-terracotta)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-forest)] rounded-sm"
+          >
+            Admin Login
+          </a>
+        </p>
+        <p className="mt-1 m-0">
           Copyright © {START_YEAR} - {new Date().getFullYear()}
         </p>
-        <p className={clsx(
-          "m-0",
-        )}>
+        <p className="m-0">
           {OWNER}.
         </p>
-        {MAINTENANCE_NOTICE && <p className={clsx(
-          "mx-32",
-          "mt-2",
-          "md:mt-6",
-          "mb-8"
-        )}>
-          {MAINTENANCE_NOTICE}
-        </p>}
+        {MAINTENANCE_NOTICE && (
+          <p className="max-w-lg mx-auto mt-2 md:mt-6 mb-8">
+            {MAINTENANCE_NOTICE}
+          </p>
+        )}
       </div>
-      <div className={clsx(
-        "col-span-0",
-        "md:col-span-1",
-      )}/>
-
+      <div className={clsx("col-span-0", "md:col-span-1")} />
     </footer>
   );
 };
@@ -407,5 +364,5 @@ export const ConfiguredFooter = ({ contactInfo }: { contactInfo?: ContactInfo })
     socialLinks={SOCIAL_LINKS}
     friendsLinks={FRIENDS_LINKS}
     contactInfo={contactInfo}
-    />
+  />
 )

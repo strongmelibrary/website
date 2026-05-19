@@ -1,29 +1,44 @@
 ---
+import { getEntry, render } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
-import Header, { ConfiguredHeader } from '../components/Header/Header';
-import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
-import PostsList from '../components/PostsList/PostsList';
+import { ConfiguredHeader } from '../components/Header/Header';
+import { ConfiguredFooter } from '../components/Footer/Footer';
+import { BASE_URL, SITE_TITLE, CONTACT_INFO } from '../config';
 
-import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
+const attributionPage = await getEntry('pages', 'attribution');
+if (!attributionPage) {
+  return Astro.redirect(BASE_URL);
+}
 
+const { Content } = await render(attributionPage);
+const { title, description } = attributionPage.data;
 ---
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <BaseHead title={`${title} | ${SITE_TITLE}`} description={description || ''} />
   </head>
-  <body class="dark:bg-slate-900">
-    <ConfiguredHeader />
-
-    <main
-      class="mt-12 prose prose-sm sm:prose-base md:prose-lg lg:prose-xl xl:prose-2xl dark:prose-invert prose-slate mx-auto p-4"
+  <body class="bg-[var(--color-paper)] text-[var(--color-charcoal)]">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[var(--color-forest)] focus:text-white focus:rounded focus:outline-none"
     >
-      <div class="p-4">
-        <h1>Attribution</h1>
-      </div>
-    </main>
-    <ConfiguredFooter />
+      Skip to main content
+    </a>
+    <ConfiguredHeader client:load />
 
+    <main id="main-content">
+      <article>
+        <div
+          class="mt-12 prose prose-sm sm:prose-base md:prose-lg lg:prose-xl xl:prose-2xl mx-auto p-4 prose-headings:font-heading prose-headings:text-[var(--color-charcoal)] prose-a:text-[var(--color-terracotta)] prose-a:no-underline hover:prose-a:underline"
+        >
+          <h1 class="type-heading-lg text-[var(--color-charcoal)]">{title}</h1>
+          <div class="mt-8"></div>
+          <Content />
+        </div>
+      </article>
+    </main>
+    <ConfiguredFooter contactInfo={CONTACT_INFO} />
   </body>
 </html>

@@ -1,4 +1,6 @@
 import React from "react";
+import { HiTag } from "react-icons/hi2";
+
 const Tag = ({
   children,
   href,
@@ -11,22 +13,20 @@ const Tag = ({
   count?: number;
   anchorClassName?: string;
 } & React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
+  React.HTMLAttributes<HTMLSpanElement>,
+  HTMLSpanElement
 >) => {
   return (
-    <div {...rest}>
-      🏷️
+    <span {...rest}>
       <a
-        className={["cursor-pointer", anchorClassName]
-          .filter(Boolean)
-          .join(" ")}
+        className={["tag", anchorClassName].filter(Boolean).join(" ")}
         href={href}
       >
+        <HiTag aria-hidden="true" className="w-3 h-3" />
         <span>{children}</span>
+        {count !== undefined && <span>({count})</span>}
       </a>
-      {count && <span className="mx-1">({count})</span>}
-    </div>
+    </span>
   );
 };
 

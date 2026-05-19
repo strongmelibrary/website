@@ -17,34 +17,36 @@ const posts = newsEntries.sort(
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <BaseHead title={`Library News | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
   </head>
-  <body class="dark:bg-slate-900">
-    <ConfiguredHeader />
-
-    <main
-      class="mt-12 prose prose-sm sm:prose-base md:prose-lg lg:prose-xl xl:prose-2xl dark:prose-invert prose-slate mx-auto p-4"
+  <body class="bg-[var(--color-paper)] text-[var(--color-charcoal)]">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[var(--color-forest)] focus:text-white focus:rounded focus:outline-none"
     >
-      <div class="p-4">
-        <h1 class="type-heading-md!">News</h1>
-        {posts.length > 0 ? (
-          posts.map((post) => (
-            <ReadMoreBlock
-              title={post.data.title}
-              titleSize="xs"
-              subtitle={post.data.description}
-              url={`${BASE_URL}news/${post.id.replace(/\/index$/, '')}`}
-              linkText={
-                post.data.publishedAt
-                  ? `Posted on: ${dayjs(post.data.publishedAt).format('MMMM D, YYYY')}`
-                  : ''
-              }
-            />
-          ))
-        ) : (
-          <p>No news available.</p>
-        )}
-      </div>
+      Skip to main content
+    </a>
+    <ConfiguredHeader client:load />
+
+    <main id="main-content" class="max-w-4xl mx-auto px-4 py-12">
+      <h1 class="type-heading-lg text-[var(--color-charcoal)] mb-8">Library News</h1>
+      {posts.length > 0 ? (
+        posts.map((post) => (
+          <ReadMoreBlock
+            title={post.data.title}
+            titleSize="xs"
+            subtitle={post.data.description}
+            url={`${BASE_URL}news/${post.id.replace(/\/index$/, '')}`}
+            linkText={
+              post.data.publishedAt
+                ? `Posted on: ${dayjs(post.data.publishedAt).format('MMMM D, YYYY')}`
+                : ''
+            }
+          />
+        ))
+      ) : (
+        <p class="type-body text-[var(--color-charcoal)]/70">No news available.</p>
+      )}
     </main>
     <ConfiguredFooter contactInfo={CONTACT_INFO} />
   </body>

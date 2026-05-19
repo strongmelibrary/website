@@ -1,5 +1,4 @@
 @import "@fontsource/jetbrains-mono/variable" layer(base);
-@import "@fontsource/lexend/variable" layer(base);
 @import "./shiki.css" layer(base);
 @import "tailwindcss";
 @import "./theme.css";
@@ -9,53 +8,77 @@
 
 @config '../../tailwind.config.cjs';
 
-@custom-variant dark (&:is(.dark *));
-
 @layer base {
-  div,
-  span,
-  label,
-  input,
-  textarea,
-  select {
-    @apply type-body;
+  /* Skip navigation link (visually hidden until focused) */
+  #skip-nav {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    z-index: 100;
+    background-color: var(--color-paper);
+    color: var(--color-forest);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-btn);
+    text-decoration: none;
+    transition: top 0.1s ease;
   }
+  #skip-nav:focus {
+    top: 1rem;
+  }
+
+  /* Base body */
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-charcoal);
+    font-family: var(--font-body);
+  }
+
+  /* Headings */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    @apply type-heading;
+    font-family: var(--font-heading);
+    font-weight: 700;
   }
+
+  /* Links */
+  a {
+    color: var(--color-forest);
+    text-decoration: none;
+    transition: color 0.1s ease-in-out;
+  }
+  a:hover {
+    color: var(--color-forest-dark);
+  }
+
+  /* Global focus ring (WCAG AA) */
+  *:focus-visible {
+    outline: 2px solid var(--color-forest);
+    outline-offset: 2px;
+  }
+
+  /* Responsive images */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Box sizing */
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-400, currentColor);
-    @apply box-border;
-  }
-
-  a {
-    transition: color 0.1s ease-in-out;
-    text-decoration: none; /* Remove underline on focus */
-  }
-
-  a:hover,
-  a:focus,
-  a:focus-visible,
-  a:focus-within,
-  a:active {
-    color: var(--color-accent-light, currentColor);
+    box-sizing: border-box;
   }
 }
 
-.glass {
-  backdrop-filter: blur(1em) saturate(200%);
-  /* background-color: rgba(255, 255, 255, 0.8); */
-}
-
+/* Code syntax highlighting: hide the unused theme variant */
 @media (prefers-color-scheme: light) {
   .shiki.github-dark {
     display: none;

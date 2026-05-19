@@ -23,7 +23,7 @@ export const HeaderLogo = ({ className }: { className?: string }) => {
     >
       <img
         src={brandMark}
-        alt="Logo Mark"
+        alt="Strong, Me Public Library logo mark"
         className="w-[60px] h-full"
       />
       <img

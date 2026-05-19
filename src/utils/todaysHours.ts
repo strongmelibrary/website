@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { HoursSchedule } from '../schemas/HoursSchedule';
+import type { HoursSchedule } from '../schemas/HoursSchedule';
 import { DAY_MAP } from '../constants';
 
 dayjs.extend(customParseFormat);

@@ -13,7 +13,7 @@ const DayAndHours = ({ day, hourOpen, hourClose }: {
   hourClose: string;
 }) => {
   const isClosed = hourOpen === 'Closed' && hourClose === 'Closed';
-  const dummyOpenDate = getDateForDayTime(day, isClosed ? '12:00pm' : hourOpen); // Use a default time if closed
+  const dummyOpenDate = getDateForDayTime(day, isClosed ? '12:00pm' : hourOpen);
   const dummyCloseDate = getDateForDayTime(day, hourClose);
   const openString = dummyOpenDate.format('mm') === '00' ? dummyOpenDate.format('ha') : dummyOpenDate.format('h:mma');
   const closeString = dummyCloseDate.format('mm') === '00' ? dummyCloseDate.format('ha') : dummyCloseDate.format('h:mma');
@@ -27,7 +27,9 @@ const DayAndHours = ({ day, hourOpen, hourClose }: {
       "py-2",
       "border-b",
       "w-full",
-      isClosed ? "text-info-light/50 border-info-light/50" : "text-info-light border-info-light"
+      isClosed
+        ? "text-[var(--color-paper)]/50 border-[var(--color-paper)]/30"
+        : "text-[var(--color-paper)] border-[var(--color-paper)]/50"
     )}>
       <span className={clsx("type-heading-xxs", "p-[4px]")}>
         {dummyOpenDate.format('dddd')}
@@ -36,7 +38,9 @@ const DayAndHours = ({ day, hourOpen, hourClose }: {
         <span className={clsx("type-heading-xs", "ml-auto")}>
           {openString} - {closeString}
         </span>
-        ) : (<span className={clsx("type-heading-xxs")}>Closed</span>)}
+      ) : (
+        <span className={clsx("type-heading-xxs")}>Closed</span>
+      )}
     </div>
   );
 }
@@ -46,79 +50,81 @@ export const LibraryHoursBlock = ({
 }: {
   libraryHours: HoursSchedule[];
 }) => {
-  return <div
-    className={clsx(
-      "flex",
-      "flex-col",
-      "items-start",
-      "justify-start",
-      "gap-2",
-      "p-[20px]",
-      "pt-[40px]",
-      "bg-info-dark",
-      "border",
-      "border-neutral-300",
-      "rounded-lg",
-      "relative", // to position the pseudo-element
-      "text-info-light",
-      "w-full",
-      // "min-w-[300px]", // Ensure a minimum width
-    )}
-  >
-    <div className={clsx(
-      "w-[0px]",
-      "h-[35px]",
-      "bg-transparent",
-      "border-solid",
-      "border-[10px]",
-      "border-accent",
-      "border-bottom-[10px]",
-      "border-b-transparent",
-      "border-top-left-radius-[5px]",
-      "border-top-right-radius-[5px]",
-      "absolute",
-      "top-[-5px]",
-      "left-[20px]",
-    )} />
-    <img
-      src={clock}
-      alt="Clock Icon"
+  return (
+    <div
+      role="region"
+      aria-label="Library Hours"
       className={clsx(
-        "w-[150px]",
-        "h-[150px]",
-        "absolute",
-        "top-[40px]",
-        "right-[40px]",
-        "rotate-45",
-        "opacity-5",
-        //invert colors
-        "filter",
-        "invert",
-        "z-2", // Ensure it is behind the title
-      )}
-      />
-    <h1
-      className={clsx(
-        "type-heading-sm",
-        "mb-2",
-        "z-10"
+        "flex",
+        "flex-col",
+        "items-start",
+        "justify-start",
+        "gap-2",
+        "p-[20px]",
+        "pt-[40px]",
+        "bg-[var(--color-forest)]",
+        "border",
+        "border-[var(--color-forest)]",
+        "rounded-lg",
+        "relative",
+        "text-[var(--color-paper)]",
+        "w-full",
       )}
     >
-      Library Hours
-    </h1>
-    <div className={clsx(
-      "z-10",
-      "w-full",
-    )}>
-      {Object.entries(DAY_MAP).map(([dayName, dayNumber]) => {
-        const thisDaysSchedule = libraryHours.find(schedule => schedule.day === dayName) || { day: dayName, hourOpen: 'Closed', hourClose: 'Closed' };
-        return (<DayAndHours
-          key={`${thisDaysSchedule.day}-${thisDaysSchedule.hourOpen}-${thisDaysSchedule.hourClose}`}
-          day={thisDaysSchedule.day}
-          hourOpen={thisDaysSchedule.hourOpen}
-          hourClose={thisDaysSchedule.hourClose}
-        />
-      )})}
+      {/* Bookmark triangle accent */}
+      <div className={clsx(
+        "w-[0px]",
+        "h-[35px]",
+        "bg-transparent",
+        "border-solid",
+        "border-[10px]",
+        "border-[var(--color-terracotta)]",
+        "border-b-transparent",
+        "absolute",
+        "top-[-5px]",
+        "left-[20px]",
+      )} />
+      {/* Clock illustration watermark */}
+      <img
+        src={clock}
+        alt=""
+        aria-hidden="true"
+        className={clsx(
+          "w-[150px]",
+          "h-[150px]",
+          "absolute",
+          "top-[40px]",
+          "right-[40px]",
+          "rotate-45",
+          "opacity-5",
+          "filter",
+          "invert",
+          "z-0",
+        )}
+      />
+      <h2
+        className={clsx(
+          "type-heading-sm",
+          "mb-2",
+          "z-10",
+          "text-[var(--color-paper)]",
+        )}
+      >
+        Library Hours
+      </h2>
+      <div className={clsx("z-10", "w-full")}>
+        {Object.entries(DAY_MAP).map(([dayName, dayNumber]) => {
+          const thisDaysSchedule = libraryHours.find(schedule => schedule.day === dayName) || { day: dayName, hourOpen: 'Closed', hourClose: 'Closed' };
+          return (
+            <DayAndHours
+              key={`${thisDaysSchedule.day}-${thisDaysSchedule.hourOpen}-${thisDaysSchedule.hourClose}`}
+              day={thisDaysSchedule.day}
+              hourOpen={thisDaysSchedule.hourOpen}
+              hourClose={thisDaysSchedule.hourClose}
+            />
+          );
+        })}
+      </div>
     </div>
-  </div>;
+  );
 }

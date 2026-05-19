@@ -1,8 +1,5 @@
-import TodaysHours from "../TodaysHours/TodaysHours";
-
 import React from "react";
-
-
+import { HiCalendar, HiArrowPath } from "react-icons/hi2";
 
 const PostDates = ({
   initialDraftAt,
@@ -14,15 +11,19 @@ const PostDates = ({
   updatedAt?: string;
 }) => {
   return (
-    <div className="flex flex-row space-x-6">
+    <div className="flex flex-row flex-wrap gap-4 type-body-xs text-[var(--color-neutral-60)]">
       {publishedAt && (
-        <div title="Published at">
-          📅 Published {publishedAt}
+        <div className="flex items-center gap-1" title="Published at">
+          <HiCalendar aria-hidden="true" className="w-4 h-4 inline-block" />
+          <span>Published </span>
+          <time dateTime={publishedAt}>{publishedAt}</time>
         </div>
       )}
       {updatedAt && (
-        <div title="Last updated at">
-          🔃 Updated {updatedAt}
+        <div className="flex items-center gap-1" title="Last updated at">
+          <HiArrowPath aria-hidden="true" className="w-4 h-4 inline-block" />
+          <span>Updated </span>
+          <time dateTime={updatedAt}>{updatedAt}</time>
         </div>
       )}
     </div>

@@ -5,6 +5,7 @@ import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
 import Tag from '../components/Tag/Tag';
 import PostDates from '../components/PostDates/PostDates';
 import { BASE_URL } from '../config';
+import { HiBookOpen } from 'react-icons/hi2';
 
 export interface Props {
   content: {
@@ -39,20 +40,29 @@ const {
 } = Astro.props;
 ---
 
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} />
   </head>
-  <body class="dark:bg-slate-900">
-    <ConfiguredHeader />
+  <body class="bg-[var(--color-paper)] text-[var(--color-charcoal)]">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[var(--color-forest)] focus:text-white focus:rounded focus:outline-none"
+    >
+      Skip to main content
+    </a>
+    <ConfiguredHeader client:load />
 
-    <main>
+    <main id="main-content">
       <article>
         {
           heroImage && (
             <div
-              class="w-full h-screen/2 bg-no-repeat bg-center bg-cover relative"
-              style={{ backgroundImage: `url("${BASE_URL+heroImage}")` }}
+              class="w-full h-[50vh] bg-no-repeat bg-center bg-cover relative"
+              role="img"
+              aria-label={`Hero image for ${title}`}
+              style={{ backgroundImage: `url("${BASE_URL + heroImage}")` }}
             >
               {heroAttribution && (
                 <div class="flex flex-row items-center absolute bottom-0 right-0 p-[6px] h-[24px] bg-black/50 hover:bg-black text-white group rounded-tl-md">
@@ -60,7 +70,7 @@ const {
                     href={heroAttributionLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="text-xs group-hover:underline"
+                    class="text-xs group-hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                   >
                     {heroAttribution}
                   </a>
@@ -70,34 +80,36 @@ const {
           )
         }
         <div
-          class="mt-12 prose prose-sm sm:prose-base md:prose-lg lg:prose-xl xl:prose-2xl dark:prose-invert prose-slate mx-auto p-4"
+          class="mt-12 prose prose-sm sm:prose-base md:prose-lg lg:prose-xl xl:prose-2xl mx-auto p-4 prose-headings:font-heading prose-headings:text-[var(--color-charcoal)] prose-a:text-[var(--color-terracotta)] prose-a:no-underline hover:prose-a:underline"
         >
-          <h1>{title}</h1>
-          <div class="flex flex-col space-y-4 text-sm sm:text-base md:text-md lg:text-lg">
-            <div class="flex flex-row space-x-2">
+          <h1 class="type-heading-lg text-[var(--color-charcoal)]">{title}</h1>
+          <div class="flex flex-col space-y-4 not-prose">
+            <div class="flex flex-row flex-wrap gap-2">
               {
                 tags?.map((tag) => (
-                  <Tag key={tag} href={`/tags/${tag}`}>
+                  <Tag key={tag} href={`${BASE_URL}tags/${tag}`}>
                     {tag}
                   </Tag>
                 ))
               }
             </div>
-            <div class="flex flex-row space-x-4">
+            <div class="flex flex-row flex-wrap items-center gap-4">
               <PostDates
                 initialDraftAt={initialDraftAt}
                 publishedAt={publishedAt}
                 updatedAt={updatedAt}
               />
-              <div>☕{minutesRead}</div>
+              <div class="flex items-center gap-1 type-body-xs text-[var(--color-charcoal)]/60">
+                <HiBookOpen aria-hidden="true" className="w-4 h-4 inline-block" />
+                <span>{minutesRead}</span>
+              </div>
             </div>
           </div>
-          <div class="h-16"></div>
+          <div class="mt-8"></div>
           <slot />
         </div>
       </article>
     </main>
     <ConfiguredFooter />
-
   </body>
 </html>

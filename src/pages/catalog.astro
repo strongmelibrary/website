@@ -1,12 +1,12 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Header, { ConfiguredHeader } from '../components/Header/Header';
-import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
+import { ConfiguredHeader } from '../components/Header/Header';
+import { ConfiguredFooter } from '../components/Footer/Footer';
 import SearchWidget from '../components/SearchWidget/SearchWidget';
-import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL, ELECTRONIC_CATALOG_URL, ELECTRONIC_CATALOG_TEXT, CONTACT_INFO } from '../config'; // Import necessary config
+import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL, ELECTRONIC_CATALOG_URL, ELECTRONIC_CATALOG_TEXT, CONTACT_INFO } from '../config';
 import { TbExternalLink } from 'react-icons/tb';
 
-const pageTitle = "Search Catalog"; // Title remains appropriate
+const pageTitle = "Library Catalog";
 const fullTitle = `${pageTitle} | ${SITE_TITLE}`;
 ---
 
@@ -15,35 +15,37 @@ const fullTitle = `${pageTitle} | ${SITE_TITLE}`;
   <head>
     <BaseHead title={fullTitle} description={SITE_DESCRIPTION} />
   </head>
-  <body class="dark:bg-slate-900 flex flex-col min-h-screen">
-    <ConfiguredHeader />
+  <body class="bg-[var(--color-paper)] text-[var(--color-charcoal)] flex flex-col min-h-screen">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[var(--color-forest)] focus:text-white focus:rounded focus:outline-none"
+    >
+      Skip to main content
+    </a>
+    <ConfiguredHeader client:load />
 
+    <main id="main-content" class="flex-grow max-w-4xl mx-auto w-full px-4 py-12">
+      <h1 class="type-heading-lg text-[var(--color-charcoal)] mb-6">{pageTitle}</h1>
 
-    <main class="flex-grow container mx-auto px-4 py-8">
-      <h1 class="type-heading-md!">{pageTitle}</h1>
-
-      {/* Render the SearchWidget client-side, showing results inline */}
-      {/* We need client:load for React component hydration */}
-      <p>
-        Catalog search currently only searches physical books, to see digitally accessible
-        content, please visit 
-        <a 
-          href={ELECTRONIC_CATALOG_URL} 
-          class="text-accent hover:underline"
+      <p class="type-body text-[var(--color-charcoal)]/80 mb-2">
+        Catalog search currently only searches physical books. To see digitally accessible
+        content, please visit
+        <a
+          href={ELECTRONIC_CATALOG_URL}
+          class="text-[var(--color-terracotta)] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-forest)] inline-flex items-center gap-1"
           target="_blank"
-          >
-          <TbExternalLink className="inline-block mr-1" />
+          rel="noopener noreferrer"
+        >
+          <TbExternalLink aria-hidden="true" className="inline-block" />
           {ELECTRONIC_CATALOG_TEXT}
         </a>.
       </p>
-      <p>
+      <p class="type-body-sm text-[var(--color-charcoal)]/60 mb-6">
         <em>We're working to add digital title search to this page soon.</em>
       </p>
       <SearchWidget client:load showResultsInline={true} />
-
     </main>
 
     <ConfiguredFooter contactInfo={CONTACT_INFO} />
-
   </body>
 </html>

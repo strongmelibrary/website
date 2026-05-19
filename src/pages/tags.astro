@@ -4,7 +4,7 @@ import BaseHead from '../components/BaseHead.astro';
 import { ConfiguredHeader } from '../components/Header/Header';
 import { ConfiguredFooter } from '../components/Footer/Footer';
 import Tag from '../components/Tag/Tag';
-import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL } from '../config';
+import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL, CONTACT_INFO } from '../config';
 
 const newsEntries = await getCollection('news');
 const serviceEntries = await getCollection('services');
@@ -16,23 +16,29 @@ const allTags = [...new Set(allEntries.flatMap((entry) => entry.data.tags || [])
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <BaseHead title={`Tags | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+    <BaseHead title={`Browse by Topic | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
   </head>
-  <body class="dark:bg-slate-900">
-    <ConfiguredHeader />
-
-    <main
-      class="mt-12 prose prose-sm sm:prose-base md:prose-lg lg:prose-xl xl:prose-2xl dark:prose-invert prose-slate mx-auto p-4"
+  <body class="bg-[var(--color-paper)] text-[var(--color-charcoal)]">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[var(--color-forest)] focus:text-white focus:rounded focus:outline-none"
     >
-      <div class="p-4">
-        <h1 class="type-heading-md!">Tags</h1>
+      Skip to main content
+    </a>
+    <ConfiguredHeader client:load />
+
+    <main id="main-content" class="max-w-4xl mx-auto px-4 py-12">
+      <h1 class="type-heading-lg text-[var(--color-charcoal)] mb-8">Browse by Topic</h1>
+      {allTags.length > 0 ? (
         <div class="flex flex-row flex-wrap gap-2">
           {allTags.map((tag) => (
             <Tag href={`${BASE_URL}tags/${tag}`}>{tag}</Tag>
           ))}
         </div>
-      </div>
+      ) : (
+        <p class="type-body text-[var(--color-charcoal)]/70">No topics found.</p>
+      )}
     </main>
-    <ConfiguredFooter />
+    <ConfiguredFooter contactInfo={CONTACT_INFO} />
   </body>
 </html>

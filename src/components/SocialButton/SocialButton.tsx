@@ -1,12 +1,9 @@
 import React from "react";
 import * as tb from "react-icons/tb";
 import { PiImageBroken } from "react-icons/pi";
-import {
-  capitalizeFirstLetter,
-} from "../../utils/capitalize";
-import { Button } from "@headlessui/react";
+import { capitalizeFirstLetter } from "../../utils/capitalize";
 import clsx from "clsx";
-import { BrandIcons, Brands } from '../types';
+import type { BrandIcons, Brands } from '../types';
 
 export type SocialButtonProps = {
   brand: Brands;
@@ -24,10 +21,15 @@ export const SocialButton = ({
   let Icon = tb[`TbBrand${capitalizeFirstLetter(brand)}` as BrandIcons];
   if (!Icon) {
     console.error(`Icon not found for brand: ${brand}`);
-    Icon = PiImageBroken; // Fallback icon
+    Icon = PiImageBroken;
   }
   return (
-    <Button
+    <a
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Visit our ${brand} page`}
+      title={`Visit our ${brand} page`}
       className={clsx(
         "flex",
         "items-center",
@@ -36,34 +38,33 @@ export const SocialButton = ({
         "p-2",
         "w-[40px]",
         "h-[40px]",
-        "border-1",
-        "border-gray-300",
-        "bg-neutral-0",
-        "hover:bg-accent",
-        "hover:border-accent",
+        "border",
+        "border-[var(--color-stone)]/50",
+        "bg-[var(--color-paper)]",
+        "hover:bg-[var(--color-terracotta)]",
+        "hover:border-[var(--color-terracotta)]",
         "transition-colors",
         "duration-200",
-        "cursor-pointer",
         "grow-0",
         "group",
+        "focus-visible:outline-2",
+        "focus-visible:outline-offset-2",
+        "focus-visible:outline-[var(--color-forest)]",
         className,
       )}
-      onClick={() => window.open(link, "_blank")}
-      aria-label={`Link to ${brand}`}
-      title={`Link to ${brand}`}
     >
       <Icon
+        aria-hidden="true"
         className={clsx(
           "w-[24px]",
           "h-[24px]",
-          "text-info",
-          "dark:text-info-light",
-          "group-hover:text-neutral-0", // Change color on hover
+          "text-[var(--color-charcoal)]",
+          "group-hover:text-white",
           "transition-colors",
           "duration-200",
           iconClassName,
         )}
       />
-    </Button>
+    </a>
   );
 };
