@@ -22,12 +22,13 @@ export interface FooterProps {
   contactInfo?: ContactInfo;
 }
 
+const _base = import.meta.env.BASE_URL;
 export const DEFAULT_LINKS: Link[] = [
-  { href: "/news", label: "News" },
-  { href: "/events", label: "Events" },
-  { href: "/services", label: "Services" },
-  { href: "/catalog", label: "Catalog" },
-  { href: "/about", label: "About" },
+  { href: `${_base}news`, label: "News" },
+  { href: `${_base}events`, label: "Events" },
+  { href: `${_base}services`, label: "Services" },
+  { href: `${_base}catalog`, label: "Catalog" },
+  { href: `${_base}about`, label: "About" },
 ];
 
 export const DEFAULT_FRIENDS_LINKS: Link[] = [];

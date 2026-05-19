@@ -26,12 +26,18 @@ export type CatalogSettingsJson = typeof catalogSettingsJson;
 export type EventsSettingsJson = typeof eventsSettingsJson;
 
 // Navigation settings from CMS
+const _base = import.meta.env.BASE_URL; // e.g. '/website/' in production, '/' in dev
 export const NAV_LINKS = navigationSettingsJson.navLinks
   .filter(link => !link.isHidden)
-  .map(link => ({
-    ...link,
-    href: link.href.startsWith('/') ? link.href : `/${link.href}`,
-  }));
+  .map(link => {
+    // Normalise the raw href to a leading-slash form, then strip that slash
+    // so we can safely join with BASE_URL which already has a trailing slash.
+    const rawPath = link.href.startsWith('/') ? link.href.slice(1) : link.href;
+    return {
+      ...link,
+      href: `${_base}${rawPath}`,
+    };
+  });
 
 // Social links from CMS (via siteInfo)
 export const SOCIAL_LINKS = siteInfoJson.socialLinks ?? [];
@@ -39,9 +45,9 @@ export const SOCIAL_LINKS = siteInfoJson.socialLinks ?? [];
 // Partner/Friends links from CMS
 export const FRIENDS_LINKS = partnerLinksJson.links;
 
-export const BASE_URL = import.meta.env.PUBLIC_BASE_URL
-  ? `${import.meta.env.PUBLIC_BASE_URL.replace(/\/+$/, '')}/`
-  : '/';
+// Use Astro's built-in BASE_URL which reflects the `base` option in astro.config.mjs.
+// This is always set correctly: '/' in dev, '/website/' (or whatever base is) in production.
+export const BASE_URL = import.meta.env.BASE_URL;
 
 // Site info from CMS with env fallback
 export const SITE_TITLE = siteInfoJson.siteTitle ?? import.meta.env.PUBLIC_SITE_TITLE;
