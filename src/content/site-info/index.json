@@ -1,14 +1,17 @@
 {
   "siteTitle": "Strong Maine Public Library",
   "siteDescription": "To provide media resources and educational opportunities for the residents of the community.",
-  "owner": "Strong Maine Public Library",
-  "startYear": 2024,
-  "maintenanceNotice": "",
-  "licenseNotice": "",
+  "owner": "Strong Public Library",
+  "startYear": 1931,
+  "licenseNotice": "All rights reserved.",
   "socialLinks": [
     {
-      "href": "https://www.facebook.com/StrongMaine/",
-      "brand": "facebook"
+      "brand": "facebook",
+      "href": "https://www.facebook.com/StrongMaine/"
+    },
+    {
+      "brand": "twitter",
+      "href": "strongmelibrary"
     }
   ]
 }
