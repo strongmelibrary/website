@@ -1,6 +1,6 @@
 {
-  "electronicCatalogUrl": "https://catalog",
-  "electronicCatalogLinkText": "Catalog",
-  "searchDownCtaUrl": "",
-  "searchDownCtaText": ""
+  "electronicCatalogUrl": "https://https://ebook.yourcloudlibrary.com/library/strongpl/featured",
+  "electronicCatalogLinkText": "eCatalog on CloudLibrary",
+  "searchDownCtaUrl": "https://opac.libraryworld.com/opac",
+  "searchDownCtaText": "Search the catalog on OPAC"
 }
