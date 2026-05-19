@@ -3,7 +3,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Header, { ConfiguredHeader } from '../components/Header/Header';
 import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
 import SearchWidget from '../components/SearchWidget/SearchWidget';
-import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL, ELECTRONIC_CATALOG_URL, ELECTRONIC_CATALOG_TEXT } from '../config'; // Import necessary config
+import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL, ELECTRONIC_CATALOG_URL, ELECTRONIC_CATALOG_TEXT, CONTACT_INFO } from '../config'; // Import necessary config
 import { TbExternalLink } from 'react-icons/tb';
 
 const pageTitle = "Search Catalog"; // Title remains appropriate
@@ -43,7 +43,7 @@ const fullTitle = `${pageTitle} | ${SITE_TITLE}`;
 
     </main>
 
-    <ConfiguredFooter />
+    <ConfiguredFooter contactInfo={CONTACT_INFO} />
 
   </body>
 </html>

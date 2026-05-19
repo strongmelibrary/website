@@ -26,10 +26,12 @@ export type CatalogSettingsJson = typeof catalogSettingsJson;
 export type EventsSettingsJson = typeof eventsSettingsJson;
 
 // Navigation settings from CMS
-export const NAV_LINKS = navigationSettingsJson.navLinks.map(link => ({
-  ...link,
-  href: link.href.startsWith('/') ? link.href : `/${link.href}`,
-}));
+export const NAV_LINKS = navigationSettingsJson.navLinks
+  .filter(link => !link.isHidden)
+  .map(link => ({
+    ...link,
+    href: link.href.startsWith('/') ? link.href : `/${link.href}`,
+  }));
 
 // Social links from CMS (via siteInfo)
 export const SOCIAL_LINKS = siteInfoJson.socialLinks ?? [];

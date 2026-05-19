@@ -3,7 +3,7 @@ import { getEntry, render } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import { ConfiguredHeader } from '../components/Header/Header';
 import { ConfiguredFooter } from '../components/Footer/Footer';
-import { BASE_URL } from '../config';
+import { BASE_URL, CONTACT_INFO } from '../config';
 
 const aboutPage = await getEntry('pages', 'about');
 if (!aboutPage) {
@@ -41,6 +41,6 @@ const { title, description, updatedAt, heroImage } = aboutPage.data;
         </div>
       </article>
     </main>
-    <ConfiguredFooter />
+    <ConfiguredFooter contactInfo={CONTACT_INFO} />
   </body>
 </html>

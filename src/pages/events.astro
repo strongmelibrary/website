@@ -3,7 +3,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Header, { ConfiguredHeader } from '../components/Header/Header';
 import Footer, { ConfiguredFooter } from '../components/Footer/Footer';
 import {Calendar, ConfiguredCalendar} from '../components/Calendar/Calendar';
-import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL, EVENTS_SETTINGS } from '../config';
+import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL, EVENTS_SETTINGS, CONTACT_INFO } from '../config';
 import { getCollection, getEntry } from 'astro:content';
 
 const pageTitle = "Library Events";
@@ -162,7 +162,7 @@ const formatDateFull = (dateStr: string): string => {
       )}
     </main>
 
-    <ConfiguredFooter />
+    <ConfiguredFooter contactInfo={CONTACT_INFO} />
 
   </body>
 </html>

@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import { ConfiguredHeader } from '../components/Header/Header';
 import { ConfiguredFooter } from '../components/Footer/Footer';
-import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL } from '../config';
+import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL, CONTACT_INFO } from '../config';
 import { ReadMoreBlock } from '../components/ReadMoreBlock/ReadMoreBlock';
 import dayjs from 'dayjs';
 
@@ -46,6 +46,6 @@ const posts = newsEntries.sort(
         )}
       </div>
     </main>
-    <ConfiguredFooter />
+    <ConfiguredFooter contactInfo={CONTACT_INFO} />
   </body>
 </html>
