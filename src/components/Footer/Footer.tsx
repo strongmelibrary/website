@@ -1,5 +1,6 @@
 import {
   BASE_URL,
+  withBase,
   LICENSE_NOTICE,
   MAINTENANCE_NOTICE,
   OWNER,
@@ -22,13 +23,12 @@ export interface FooterProps {
   contactInfo?: ContactInfo;
 }
 
-const _base = import.meta.env.BASE_URL;
 export const DEFAULT_LINKS: Link[] = [
-  { href: `${_base}news`, label: "News" },
-  { href: `${_base}events`, label: "Events" },
-  { href: `${_base}services`, label: "Services" },
-  { href: `${_base}catalog`, label: "Catalog" },
-  { href: `${_base}about`, label: "About" },
+  { href: withBase('news'), label: "News" },
+  { href: withBase('events'), label: "Events" },
+  { href: withBase('services'), label: "Services" },
+  { href: withBase('catalog'), label: "Catalog" },
+  { href: withBase('about'), label: "About" },
 ];
 
 export const DEFAULT_FRIENDS_LINKS: Link[] = [];
@@ -325,7 +325,7 @@ const Footer = ({
 
         <p className="m-0">
           <a
-            href={BASE_URL + 'attribution'}
+            href={withBase('attribution')}
             className="underline hover:text-[var(--color-terracotta)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-forest)] rounded-sm"
           >
             Attribution Page

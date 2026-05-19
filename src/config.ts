@@ -25,19 +25,24 @@ export type HomepageSettingsJson = typeof homepageSettingsJson;
 export type CatalogSettingsJson = typeof catalogSettingsJson;
 export type EventsSettingsJson = typeof eventsSettingsJson;
 
+// Robust base-URL helper — always produces exactly one `/` between BASE_URL
+// and the path, regardless of whether BASE_URL has a trailing slash or not,
+// and regardless of whether `path` starts with a leading slash or not.
+const _BASE = import.meta.env.BASE_URL; // e.g. '/website/' or '/website' or '/'
+const _baseWithSlash = _BASE.endsWith('/') ? _BASE : _BASE + '/';
+
+export function withBase(path: string): string {
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  return _baseWithSlash + cleanPath;
+}
+
 // Navigation settings from CMS
-const _base = import.meta.env.BASE_URL; // e.g. '/website/' in production, '/' in dev
 export const NAV_LINKS = navigationSettingsJson.navLinks
   .filter(link => !link.isHidden)
-  .map(link => {
-    // Normalise the raw href to a leading-slash form, then strip that slash
-    // so we can safely join with BASE_URL which already has a trailing slash.
-    const rawPath = link.href.startsWith('/') ? link.href.slice(1) : link.href;
-    return {
-      ...link,
-      href: `${_base}${rawPath}`,
-    };
-  });
+  .map(link => ({
+    ...link,
+    href: withBase(link.href),
+  }));
 
 // Social links from CMS (via siteInfo)
 export const SOCIAL_LINKS = siteInfoJson.socialLinks ?? [];

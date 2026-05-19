@@ -1,6 +1,6 @@
 import HeaderLink from "../HeaderLink/HeaderLink";
 import React, { useState } from "react";
-import { BASE_URL } from "../../config";
+import { BASE_URL, withBase } from "../../config";
 import { HeaderLogo } from "../HeaderLogo/HeaderLogo";
 import clsx from "clsx";
 import { SocialButton } from "../SocialButton/SocialButton";
@@ -15,13 +15,12 @@ export interface HeaderProps {
   socialLinks?: SocialLink[];
 }
 
-const _base = import.meta.env.BASE_URL;
 export const DEFAULT_LINKS: Link[] = [
-  { href: `${_base}news`, label: "News" },
-  { href: `${_base}events`, label: "Events" },
-  { href: `${_base}services`, label: "Services" },
-  { href: `${_base}catalog`, label: "Catalog" },
-  { href: `${_base}about`, label: "About" },
+  { href: withBase('news'), label: "News" },
+  { href: withBase('events'), label: "Events" },
+  { href: withBase('services'), label: "Services" },
+  { href: withBase('catalog'), label: "Catalog" },
+  { href: withBase('about'), label: "About" },
 ];
 
 export const DEFAULT_SOCIAL_LINKS: SocialLink[] = [];
