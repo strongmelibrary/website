@@ -1,0 +1,61 @@
+name: Nightly Production Deploy
+
+on:
+  schedule:
+    # Run every night at 2:00 AM Eastern (6:00 AM UTC)
+    - cron: "0 6 * * *"
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+jobs:
+  check-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for new commits since last successful run
+        id: check_commits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Get the timestamp of the last successful run of this workflow
+          LAST_SUCCESS_DATE=$(gh run list \
+            --workflow "nightly-deploy.yml" \
+            --status success \
+            --limit 1 \
+            --json updatedAt \
+            --jq '.[0].updatedAt // empty')
+
+          if [ -z "$LAST_SUCCESS_DATE" ]; then
+            echo "No previous successful run found — treating as new commits present."
+            echo "has_new_commits=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Last successful run: $LAST_SUCCESS_DATE"
+
+            # Count commits on the default branch since that timestamp
+            COMMIT_COUNT=$(git log --oneline --since="$LAST_SUCCESS_DATE" | wc -l)
+
+            if [ "$COMMIT_COUNT" -gt 0 ]; then
+              echo "Found $COMMIT_COUNT new commit(s) since last successful run."
+              echo "has_new_commits=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "No new commits since last successful run."
+              echo "has_new_commits=false" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
+      # NOTE: The default GITHUB_TOKEN cannot trigger workflow_dispatch on
+      # other workflows (GitHub prevents recursive triggers). You must create
+      # a Personal Access Token (classic, with "repo" and "workflow" scopes)
+      # or a GitHub App token and store it as the DEPLOY_TOKEN repository secret.
+      - name: Trigger production deploy
+        if: steps.check_commits.outputs.has_new_commits == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          echo "Dispatching deploy-prod workflow…"
+          gh workflow run deploy-prod.yml --ref main
+          echo "Production deploy triggered successfully."
