@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Legacy Library Scraper API",
-    "version": "1.0.0",
-    "description": "API for scraping search results from a legacy library website."
+    "title": "Library Media Search API",
+    "version": "2.0.0",
+    "description": "Unified API for searching physical media (legacy library system) and digital media (YCL / CloudLibrary) in a single request. The legacy `/api/scrape` endpoint is retained for backward compatibility."
   },
   "servers": [
     {
@@ -15,7 +15,7 @@
     "/health": {
       "get": {
         "summary": "Health Check",
-        "description": "Returns the operational status of the server.",
+        "description": "Returns the operational status of the server and the availability of each backing service.",
         "responses": {
           "200": {
             "description": "Server is operational",
@@ -27,7 +27,145 @@
                     "status": {
                       "type": "string",
                       "example": "ok"
+                    },
+                    "services": {
+                      "type": "object",
+                      "properties": {
+                        "legacy": {
+                          "type": "boolean",
+                          "description": "Whether the legacy (print) service is configured."
+                        },
+                        "ycl": {
+                          "type": "boolean",
+                          "description": "Whether the digital (YCL / CloudLibrary) service is configured."
+                        }
+                      }
                     }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search": {
+      "get": {
+        "summary": "Combined Search",
+        "description": "Searches physical and digital media in parallel and returns a merged, paginated result set. Requires authentication credentials for the legacy system. Digital results are only included when a `librarySlug` is supplied.",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": true,
+            "description": "The search term.",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "required": true,
+            "description": "The username for logging into the legacy site.",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "required": false,
+            "description": "The password for logging into the legacy site (optional).",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "librarySlug",
+            "in": "query",
+            "required": false,
+            "description": "The digital (CloudLibrary) library identifier. If omitted, digital search is skipped.",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number for unified pagination.",
+            "schema": { "type": "integer", "default": 1, "minimum": 1 }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "description": "Number of results per page.",
+            "schema": { "type": "integer", "default": 10, "minimum": 1 }
+          },
+          {
+            "name": "mediaType",
+            "in": "query",
+            "required": false,
+            "description": "Filter results by media type.",
+            "schema": {
+              "type": "string",
+              "enum": ["physical", "digital", "combined"],
+              "default": "combined"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "description": "Sort order for the combined results.",
+            "schema": {
+              "type": "string",
+              "enum": ["relevance", "availability", "title", "author", "date"],
+              "default": "relevance"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "description": "Response format: `v2` (unified, default) or `v1` (legacy format).",
+            "schema": {
+              "type": "string",
+              "enum": ["v1", "v2"],
+              "default": "v2"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful search",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Missing or invalid query parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Search query is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - Search failed or timed out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string", "example": "Search failed" },
+                    "message": { "type": "string" }
                   }
                 }
               }
@@ -129,6 +267,94 @@
   },
   "components": {
     "schemas": {
+      "UnifiedResult": {
+        "type": "object",
+        "description": "A single search result in unified (v2) format.",
+        "properties": {
+          "id": { "type": "string", "description": "Unique result identifier." },
+          "title": { "type": "string", "description": "Title of the item." },
+          "author": { "type": "string", "description": "Author of the item." },
+          "description": { "type": "string", "description": "Description or summary." },
+          "mediaType": {
+            "type": "string",
+            "enum": ["physical", "digital"],
+            "description": "Whether the item is physical (print) or digital."
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Cover image URL. Digital covers are absolute; legacy print covers are relative to the legacy site base URL."
+          },
+          "availability": {
+            "type": "string",
+            "description": "Availability status of the item (e.g., \"Available\", \"Checked Out\")."
+          },
+          "copies": {
+            "type": "integer",
+            "description": "Number of copies available or listed."
+          },
+          "format": {
+            "type": "string",
+            "description": "Media format (e.g., \"Book\", \"eBook\", \"Audiobook\")."
+          },
+          "source": {
+            "type": "string",
+            "enum": ["legacy", "ycl"],
+            "description": "Backing service the result came from."
+          },
+          "sourceId": {
+            "type": "string",
+            "description": "Identifier of the item in the source system."
+          },
+          "additionalDetails": {
+            "type": "object",
+            "description": "Source-specific fields. Legacy items expose `googlePreviewUrl` and `extraFields`; digital items expose `isbn`, `publisher`, `publishDate`, `language`, `subjects`, `seriesTitle`, and the external `detailsUrl`.",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "author",
+          "description",
+          "mediaType",
+          "availability",
+          "copies",
+          "format",
+          "source",
+          "sourceId",
+          "additionalDetails"
+        ]
+      },
+      "CombinedPaginationMeta": {
+        "type": "object",
+        "properties": {
+          "currentPage": { "type": "integer" },
+          "pageSize": { "type": "integer" },
+          "totalResults": { "type": "integer" },
+          "totalPages": { "type": "integer" },
+          "mediaTypeCounts": {
+            "type": "object",
+            "properties": {
+              "physical": { "type": "integer" },
+              "digital": { "type": "integer" }
+            },
+            "required": ["physical", "digital"]
+          }
+        },
+        "required": ["currentPage", "pageSize", "totalResults", "totalPages", "mediaTypeCounts"]
+      },
+      "SearchResponse": {
+        "type": "object",
+        "properties": {
+          "meta": { "$ref": "#/components/schemas/CombinedPaginationMeta" },
+          "results": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/UnifiedResult" }
+          }
+        },
+        "required": ["meta", "results"]
+      },
       "BookInfo": {
         "type": "object",
         "properties": {

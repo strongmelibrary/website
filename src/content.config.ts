@@ -152,6 +152,7 @@ const catalogSettings = defineCollection({
     electronicCatalogLinkText: z.string(),
     searchDownCtaUrl: z.string(),
     searchDownCtaText: z.string(),
+    bookwormLibrarySlug: z.string().optional(),
   }),
 });
 

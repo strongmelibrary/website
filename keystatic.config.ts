@@ -70,6 +70,11 @@ export default config({
         electronicCatalogLinkText: fields.text({ label: 'Catalog Link Text' }),
         searchDownCtaUrl: fields.text({ label: 'Search Down CTA URL' }),
         searchDownCtaText: fields.text({ label: 'Search Down CTA Text' }),
+        bookwormLibrarySlug: fields.text({
+          label: 'Digital Library Slug',
+          description:
+            'CloudLibrary library identifier (e.g. "strongpl"). Enables digital/eBook results in catalog search. Leave blank to search print titles only.',
+        }),
       },
     }),
     navigationSettings: singleton({

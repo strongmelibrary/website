@@ -434,23 +434,47 @@ Tailwind's default 4px (0.25rem) base. Use the 4, 8, 12, 16, 24, 32, 48, 64px sc
 
 ### 5.16 SearchWidget (`src/components/SearchWidget/SearchWidget.tsx`)
 
-**What it does:** Catalog search form that queries the Bookworm API and displays results with availability status, pagination, and a "Request this book" CTA.
+**What it does:** Catalog search form that queries the Bookworm combined search API (`/api/search`, v2 response) and displays **both print and digital (CloudLibrary) results** in one list. Supports media-type filtering, sorting, unified pagination, a linkable URL state, and a service-unavailable fallback CTA.
+
+**Props:**
+- `showResultsInline` (default `false`) — when `true`, results render inline on the page (catalog page). When `false`, submitting the form navigates to `/catalog?q=…&page=1`.
+
+**API contract:**
+- `GET {BOOKWORM_API_URL}/health` → `{ status: "ok", services: { legacy, ycl } }`
+- `GET {BOOKWORM_API_URL}/api/search?search&username&password&librarySlug&page&pageSize&mediaType&sortBy&version=v2`
+- `mediaType` — `combined` (default) | `physical` | `digital`
+- `sortBy` — `relevance` (default) | `availability` | `title` | `author`
+- A `librarySlug` (see `BOOKWORM_LIBRARY_SLUG`, sourced from Catalog Settings → "Digital Library Slug") is required for digital results; without it the API returns print results only and the format filter is hidden.
+- Response `meta.mediaTypeCounts` reports `{ physical, digital }`; it is only accurate for the sources queried, so filtered responses are merged into the last known counts.
 
 **Design standards followed:**
-- Form: `role="search"`
+- Form: `role="search"`, visually-hidden `<label htmlFor>` bound to the input
 - Input: `border-[var(--color-stone)]/50`, `focus-visible:ring-[var(--color-forest)]`, `bg-[var(--color-paper)]`
-- Search button: `bg-[var(--color-forest)] hover:bg-[var(--color-forest-dark)]` with focus ring
-- Loading spinner: `border-[var(--color-forest)]`
-- Google Preview link: `text-[var(--color-terracotta)] hover:text-[var(--color-terracotta-dark)]`
-- Availability "Available": `bg-[var(--color-success-light)] text-[var(--color-success-dark)]`
-- Availability "not available": `bg-[var(--color-warning-light)] text-[var(--color-warning-dark)]`
-- Pagination buttons: `bg-[var(--color-paper)] border border-[var(--color-stone)]/30 hover:bg-[var(--color-stone)]/20`
-- Result cards: `bg-[var(--color-paper)] border border-[var(--color-stone)]/20 rounded-lg`
-- "Request this book" button: `aria-label` with current query
-- CTA error state: brand terracotta colors
+- Search button: `bg-[var(--color-forest)] hover:bg-[var(--color-forest-dark)]` with focus ring, label swaps to "Searching…" while loading
+- Result cards: `.card` + `border border-[var(--color-stone)]/20`; cover image fixed at `w-[72px] sm:w-[92px] md:w-[104px]` with `aspect-[2/3] object-cover`; missing covers fall back to a parchment placeholder with `HiBookOpen` (`aria-hidden`)
+- Format badge (`.type-caps` pill): print = `bg-[var(--color-parchment)] text-[var(--color-terracotta)]` with `HiBookOpen`; digital = `bg-[var(--color-forest)]/10 text-[var(--color-forest)]` with `HiDeviceTablet`
+- Availability badge (`.type-caps` pill): available = `bg-[var(--color-success-light)] text-[var(--color-success-dark)]`; not available = `bg-[var(--color-warning-light)] text-[var(--color-warning-dark)]`
+- Format filter: `role="group"` of `<button aria-pressed>` segmented controls (`All` / `Print` / `Digital`, with counts), active = `bg-[var(--color-forest)] text-white`
+- Sort: labelled `<select>` styled with brand borders
+- Detail rows: `<dl>` grid (1 column on mobile, 2 at `sm`) with `.type-body-xs`; print shows the legacy `extraFields`, digital shows publisher / published / series / ISBN / language
+- External links: terracotta text links with `TbExternalLink` (`aria-hidden`) and `target="_blank" rel="noopener noreferrer"` — "Borrow in CloudLibrary" for digital, "Google Preview" for print
+- Pagination: Previous / Next buttons plus a `nav[aria-label]` region; buttons are `min-h-[44px]`
+- Empty state: heading + hint + `.btn .btn-outline` "Request this book" CTA
+- Error state: `role="alert"` panel in `--color-error-*` tokens with a "Try again" action; network failures fall back to the service-unavailable CTA panel (`--color-terracotta`)
+- Loading state: forest spinner inside a `role="status"` region
+- Dynamic results region is announced via `aria-live`/`aria-busy` semantics on the results section
+- Responsive/defensive: the request window is trimmed client-side when the API over-returns (see Known Issues below)
 - No dark mode variants
 
-**Mobile behavior:** Full-width form. Results stack as single-column cards.
+**Known upstream issues (worked around here):**
+- The Bookworm API does not apply `offset`/`limit` to digital (YCL) results, so a filtered "Digital" page can return the entire result set. The widget trims to the requested window whenever a response contains more than `meta.pageSize` items.
+- A filtered response zeroes the count for the type it did not query; the widget preserves the previously known count instead.
+- The API launches a Cloudflare Browser Rendering session per request, so searches take ~10 s and are rate-limited (frequent rapid requests return HTTP 500 "Rate limit exceeded", surfaced via the error panel).
+
+**Mobile behavior:** Form is full-width; the format filter and sort control stack below the results heading. Result cards keep the cover beside the text (no stacking) with a single-column detail list.
+
+**Storybook:** No story yet (requires a network stub for the Bookworm API).
+
 
 ---
 
@@ -492,7 +516,10 @@ Tailwind's default 4px (0.25rem) base. Use the 4, 8, 12, 16, 24, 32, 48, 64px sc
 | Usage | Component | Icon |
 |-------|-----------|------|
 | Search button | HeroIndex, SearchWidget | `PiMagnifyingGlassBold` from `react-icons/pi` |
-| External link | Footer, catalog.astro | `TbExternalLink` from `react-icons/tb` |
+| Format badge — print | SearchWidget | `HiBookOpen` from `react-icons/hi2` |
+| Format badge — digital | SearchWidget | `HiDeviceTablet` from `react-icons/hi2` |
+| Error alert | SearchWidget | `HiExclamationCircle` from `react-icons/hi2` |
+| External link | Footer, catalog.astro, SearchWidget, SearchWidget result links | `TbExternalLink` from `react-icons/tb` |
 | Social brands | SocialButton | `TbBrand*` (dynamic) from `react-icons/tb` |
 | Broken icon fallback | SocialButton | `PiImageBroken` from `react-icons/pi` |
 | Tag marker | Tag | `HiTag` from `react-icons/hi2` |
@@ -790,13 +817,15 @@ This section documents the current design structure and standards for each page.
 
 ### 11.6 `src/pages/catalog.astro` — Catalog
 
-**Layout:** Page heading + `SearchWidget`.
+**Layout:** Page heading + intro copy + `SearchWidget` (with `showResultsInline={true}`).
 
 **Design standards:**
 - `<body>` uses `bg-paper flex flex-col min-h-screen`
-- `<main id="main-content">`
-- `<h1 class="type-heading-md">Catalog</h1>` — no CSS `!important` modifier
-- External link icon `TbExternalLink` has `aria-hidden="true"`
+- `<main id="main-content">` (`max-w-4xl`)
+- `<h1 class="type-heading-lg">Library Catalog</h1>` — no CSS `!important` modifier
+- Lead paragraph explains that search covers print **and** digital titles in one place
+- Secondary line links to the full digital collection (`eCatalog on CloudLibrary`) with the `TbExternalLink` icon marked `aria-hidden="true"`
+- Search UI is the `SearchWidget`, which renders results inline (see Section 5.16)
 
 ---
 
@@ -893,4 +922,4 @@ This section is a quick-reference checklist for anyone making changes to the cod
 
 ---
 
-*Design Bible — Strong, Me Public Library. Last updated: 2026-05-19.*
+*Design Bible — Strong, Me Public Library. Last updated: 2026-10-19.*

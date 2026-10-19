@@ -76,6 +76,7 @@ export const CATALOG_SETTINGS: CatalogSettingsJson = {
   electronicCatalogLinkText: catalogSettingsJson.electronicCatalogLinkText || import.meta.env.PUBLIC_ELECTRONIC_CATALOG_TEXT || 'Catalog',
   searchDownCtaUrl: catalogSettingsJson.searchDownCtaUrl || import.meta.env.PUBLIC_SEARCH_DOWN_CTA_URL || '',
   searchDownCtaText: catalogSettingsJson.searchDownCtaText || import.meta.env.PUBLIC_SEARCH_DOWN_CTA_TEXT || '',
+  bookwormLibrarySlug: catalogSettingsJson.bookwormLibrarySlug || import.meta.env.PUBLIC_BOOKWORM_LIBRARY_SLUG || '',
 };
 
 // Convenience exports for individual catalog settings fields
@@ -83,6 +84,8 @@ export const ELECTRONIC_CATALOG_URL = CATALOG_SETTINGS.electronicCatalogUrl;
 export const ELECTRONIC_CATALOG_TEXT = CATALOG_SETTINGS.electronicCatalogLinkText;
 export const SEARCH_DOWN_CTA_URL = CATALOG_SETTINGS.searchDownCtaUrl;
 export const SEARCH_DOWN_CTA_TEXT = CATALOG_SETTINGS.searchDownCtaText;
+// CloudLibrary slug that enables combined print + digital results from the Bookworm API.
+export const BOOKWORM_LIBRARY_SLUG = CATALOG_SETTINGS.bookwormLibrarySlug;
 
 // Events settings from CMS
 export const EVENTS_SETTINGS: EventsSettingsJson = {
@@ -147,6 +150,7 @@ console.log('Config loaded:', {
   SEARCH_DOWN_CTA_URL,
   SEARCH_DOWN_CTA_TEXT,
   BOOKWORM_USERNAME,
+  BOOKWORM_LIBRARY_SLUG,
   // BOOKWORM_PASSWORD,
   ELECTRONIC_CATALOG_URL,
   ELECTRONIC_CATALOG_TEXT,
