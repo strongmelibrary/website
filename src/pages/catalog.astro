@@ -3,11 +3,18 @@ import BaseHead from '../components/BaseHead.astro';
 import { ConfiguredHeader } from '../components/Header/Header';
 import { ConfiguredFooter } from '../components/Footer/Footer';
 import SearchWidget from '../components/SearchWidget/SearchWidget';
-import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL, ELECTRONIC_CATALOG_URL, ELECTRONIC_CATALOG_TEXT, CONTACT_INFO } from '../config';
+import { SITE_TITLE, SITE_DESCRIPTION, BASE_URL, ELECTRONIC_CATALOG_URL, ELECTRONIC_CATALOG_TEXT, SEARCH_DOWN_CTA_URL, SEARCH_DOWN_CTA_TEXT, CONTACT_INFO } from '../config';
 import { TbExternalLink } from 'react-icons/tb';
 
 const pageTitle = "Library Catalog";
 const fullTitle = `${pageTitle} | ${SITE_TITLE}`;
+
+// External "browse the full catalog" shortcuts: the physical catalogue (OPAC)
+// and the digital collection (CloudLibrary). Rendered only when configured.
+const externalCatalogs = [
+  { url: SEARCH_DOWN_CTA_URL, text: SEARCH_DOWN_CTA_TEXT },
+  { url: ELECTRONIC_CATALOG_URL, text: ELECTRONIC_CATALOG_TEXT },
+].filter((catalog) => Boolean(catalog.url) && Boolean(catalog.text));
 ---
 
 <!DOCTYPE html>
@@ -31,18 +38,29 @@ const fullTitle = `${pageTitle} | ${SITE_TITLE}`;
         Search our shelves and our digital collection in one place. Results show whether a title
         is available to borrow in print or instantly online.
       </p>
-      <p class="type-body-sm text-[var(--color-charcoal)]/60 mb-6">
-        Prefer to browse the full digital collection?
-        <a
-          href={ELECTRONIC_CATALOG_URL}
-          class="text-[var(--color-terracotta)] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-forest)] inline-flex items-center gap-1 ml-1"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <TbExternalLink aria-hidden="true" className="inline-block" />
-          {ELECTRONIC_CATALOG_TEXT}
-        </a>.
-      </p>
+      {externalCatalogs.length > 0 && (
+        <p class="type-body-sm text-[var(--color-charcoal)]/60 mb-6 flex flex-wrap items-center gap-x-2 gap-y-1">
+          <span>Prefer to browse the full catalogs?</span>
+          {externalCatalogs.map((catalog, index) => (
+            <span class="inline-flex items-center gap-2">
+              {index > 0 && (
+                <span aria-hidden="true" class="hidden sm:inline text-[var(--color-stone)]">
+                  &bull;
+                </span>
+              )}
+              <a
+                href={catalog.url}
+                class="text-[var(--color-terracotta)] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-forest)] inline-flex items-center gap-1"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {catalog.text}
+                <TbExternalLink aria-hidden="true" className="inline-block" />
+              </a>
+            </span>
+          ))}
+        </p>
+      )}
       <SearchWidget client:load showResultsInline={true} />
     </main>
 

@@ -4,6 +4,8 @@ import {
   BOOKWORM_LIBRARY_SLUG,
   BOOKWORM_PASSWORD,
   BOOKWORM_USERNAME,
+  ELECTRONIC_CATALOG_TEXT,
+  ELECTRONIC_CATALOG_URL,
   SEARCH_DOWN_CTA_TEXT,
   SEARCH_DOWN_CTA_URL,
 } from '../../config';
@@ -343,6 +345,13 @@ const SearchWidget: React.FC<SearchWidgetProps> = ({ showResultsInline = false }
     return counts.physical + counts.digital;
   };
 
+  // When the search service is down, offer the full external catalogs instead:
+  // the physical catalogue (OPAC) and the digital collection (CloudLibrary).
+  const catalogLinks = [
+    { url: ctaUrl, text: SEARCH_DOWN_CTA_TEXT, className: 'btn btn-secondary' },
+    { url: ELECTRONIC_CATALOG_URL, text: ELECTRONIC_CATALOG_TEXT, className: 'btn btn-outline' },
+  ].filter((link) => Boolean(link.url) && Boolean(link.text));
+
   /* ── Service unavailable ─────────────────────────────────────────────── */
 
   if (healthStatus === 'down') {
@@ -350,11 +359,24 @@ const SearchWidget: React.FC<SearchWidgetProps> = ({ showResultsInline = false }
       <div className="p-4 border border-[var(--color-terracotta)] bg-[var(--color-terracotta)]/10 rounded-lg">
         <p className="type-body-sm text-[var(--color-terracotta-dark)] mb-3">
           The on-site search service is currently unavailable.
+          {catalogLinks.length > 0 && ' You can still browse the full catalogs:'}
         </p>
-        <a href={ctaUrl} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
-          {SEARCH_DOWN_CTA_TEXT}
-          <TbExternalLink aria-hidden="true" className="w-5 h-5" />
-        </a>
+        {catalogLinks.length > 0 && (
+          <div className="flex flex-wrap gap-3">
+            {catalogLinks.map((link) => (
+              <a
+                key={link.url}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={link.className}
+              >
+                {link.text}
+                <TbExternalLink aria-hidden="true" className="w-5 h-5" />
+              </a>
+            ))}
+          </div>
+        )}
       </div>
     );
   }

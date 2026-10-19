@@ -460,7 +460,7 @@ Tailwind's default 4px (0.25rem) base. Use the 4, 8, 12, 16, 24, 32, 48, 64px sc
 - External links: terracotta text links with `TbExternalLink` (`aria-hidden`) and `target="_blank" rel="noopener noreferrer"` — "Borrow in CloudLibrary" for digital, "Google Preview" for print
 - Pagination: Previous / Next buttons plus a `nav[aria-label]` region; buttons are `min-h-[44px]`
 - Empty state: heading + hint + `.btn .btn-outline` "Request this book" CTA
-- Error state: `role="alert"` panel in `--color-error-*` tokens with a "Try again" action; network failures fall back to the service-unavailable CTA panel (`--color-terracotta`)
+- Error state: `role="alert"` panel in `--color-error-*` tokens with a "Try again" action; network failures fall back to the service-unavailable panel (`--color-terracotta`), which offers both external catalogs (physical OPAC as `.btn .btn-secondary`, digital CloudLibrary as `.btn .btn-outline`), skipping any that are unconfigured
 - Loading state: forest spinner inside a `role="status"` region
 - Dynamic results region is announced via `aria-live`/`aria-busy` semantics on the results section
 - Responsive/defensive: the request window is trimmed client-side when the API over-returns (see Known Issues below)
@@ -824,7 +824,7 @@ This section documents the current design structure and standards for each page.
 - `<main id="main-content">` (`max-w-4xl`)
 - `<h1 class="type-heading-lg">Library Catalog</h1>` — no CSS `!important` modifier
 - Lead paragraph explains that search covers print **and** digital titles in one place
-- Secondary line links to the full digital collection (`eCatalog on CloudLibrary`) with the `TbExternalLink` icon marked `aria-hidden="true"`
+- Secondary line links out to **both** external catalogs — the physical catalogue (`SEARCH_DOWN_CTA_TEXT`, OPAC) and the digital collection (`ELECTRONIC_CATALOG_TEXT`, CloudLibrary) — separated by a `&bull;`, each with the `TbExternalLink` icon marked `aria-hidden="true"`. Either link is hidden when its URL or label is unconfigured.
 - Search UI is the `SearchWidget`, which renders results inline (see Section 5.16)
 
 ---
